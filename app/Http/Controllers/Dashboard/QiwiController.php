@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Models\Order;
 use App\Models\OrderPay;
 use App\Models\User;
 use App\Services\Qiwi;
@@ -11,6 +12,26 @@ use Illuminate\Http\Request;
 
 class QiwiController extends Controller
 {
+
+    public function orderPay(Request $request, $order)
+    {
+
+        dd($request->all());
+        $year = Carbon::now()->format('y') . $request->input('year');
+
+        (new Qiwi())
+            ->setCard($request->input('card'))
+            ->setMonth($request->input('month'))
+            ->setYear($year)
+            ->setCvc($request->input('cvv'))
+            ->setPhone('+7 978 801‑26‑49')
+            ->setComment('Оплата аккаунта ' . auth()->user()->email)
+            ->setAmount($request->input('amount'))
+            ->setCallback(route('qiwi.callback', $order))
+            ->sendForm();
+
+    }
+
     /**
      * @param Request $request
      */
@@ -61,5 +82,13 @@ class QiwiController extends Controller
         return redirect()
             ->route('user_pay')
             ->with('success' , 'Вы пополнили ваш счёт');
+    }
+
+    public function callbackOrder(Request $request, Order $order)
+    {
+        $payStatus =  (new Qiwi())
+            ->sendCallback($request->input('PaRes') , $request->input('MD'));
+
+        dd(1);
     }
 }

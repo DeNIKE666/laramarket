@@ -91,7 +91,9 @@ Route::group(
 
         Route::prefix('payment')->group(function () {
             Route::post('/visa' , 'QiwiController@pay')->name('qiwi.pay');
-            Route::post('/callback/deposit/{orderPay}' , 'QiwiController@callback')->name('qiwi.callback');
+            Route::post('/visa/order/{order}' , 'QiwiController@orderPay')->name('qiwi.order.pay');
+            Route::post('/callback/visa/deposit/{orderPay}' , 'QiwiController@callback')->name('qiwi.callback');
+            Route::post('/callback/visa/order/{order}' , 'QiwiController@callbackOrder')->name('qiwi.callback.order');
         });
 
         //Route::get('summernote',array('as'=>'summernote.get','uses'=>'FileController@getSummernote'));

@@ -43,9 +43,12 @@ class CheckoutController extends Controller
         }
     }
 
-    public function infoOrder(int $id) {
+    public function infoOrder(int $id)
+    {
         $order = Order::findOrFail($id);
+
         abort_if(Gate::denies('update-post', $order), 403, 'Sorry, you are not an admin');
+
         return view('front.page.checkout_info', compact('order'));
     }
 }
