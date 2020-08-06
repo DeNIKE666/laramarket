@@ -1,0 +1,42 @@
+.popUp__inp.is-invalid {
+    outline: 1px solid red;
+    margin-bottom: 10px;
+}
+.popUp__inp {
+    margin-bottom: 10px !important;
+}
+.invalid-feedback {
+    display: block;
+    margin-bottom: 10px;
+    font-family: "Geometria";
+    font-size: 13px;
+    color: red;
+}
+.burgerDropNav__item input {
+    display: none;
+}
+.lcPageContentTop__btn {
+    display: block;
+    line-height: 60px;
+    text-align: center;
+}
+.lcPageContentDataChange__inp .btn-svg {
+    width: 18px;
+}
+input.form-control {
+    display: block;
+    margin-bottom: 10px;
+    background-color: #eeeffa;
+    padding: 8px 15px;
+    border-radius: 4px;
+    width: 100%;
+}
+textarea.form-control {
+    display: block;
+    margin-bottom: 10px;
+    background-color: #eeeffa;
+    padding: 8px 15px;
+    border-radius: 4px;
+    width: 100%;
+    height: 100px;
+}

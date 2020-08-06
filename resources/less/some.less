@@ -1,0 +1,360 @@
+.lc{
+    .lg-block({
+        right: -30px;
+    });
+    .sm-block({
+        right: -15px;
+    });
+    .xs-block({
+        top: -14px;
+    });
+    position: absolute;
+    z-index: 99;
+    top: -18px;
+    right: 0;
+    background: @white;
+    box-shadow: 0px 0px 5px 0px rgba(90,84,255,0.2);
+    padding: 15px 30px 45px 40px;
+    display: none;
+}
+
+.lcWrap{
+    display: flex;
+    flex-direction: column;
+}
+
+.lc__close{
+    align-self: flex-end;
+    margin-bottom: 15px;
+    cursor: pointer;
+    svg path{
+        transition: 0.5s;
+    }
+    &:hover svg path{
+        fill: @yellow
+    }
+}
+
+.lc__user{
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    img{
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        margin-right: 15px;
+    }
+    span{
+        color: #333;
+        font-weight: 800;
+        font-size: 16px;
+    }
+}
+
+.lc__menu{
+    a{
+        display: block;
+        color: #333;
+        font-family: "Geometria";
+        margin-bottom: 15px;
+        font-size: 14px;
+        &:hover{
+            color: @yellow;
+        }
+    }
+}
+
+.lc__link{
+    font-weight: 800;
+    color: @blue;
+    margin-top: 15px;
+    &:hover{
+        color: @yellow;
+    }
+}
+
+.popUp{
+    position: fixed;
+    z-index: 99;
+    display: none;
+}
+
+.popUp__layer{
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    z-index: 98;
+    background: rgba(0, 0, 0, 0.6);
+    cursor: pointer;
+}
+
+.popUp__content{
+    .xs-block({
+        height: 450px;
+        max-width: 350px;
+        padding: 60px;
+    });
+    .xxs-block({
+        height: 400px;
+        max-width: 290px;
+        padding: 30px;
+    });
+    position: fixed;
+    z-index: 99;
+    background: @white;
+    border-radius: 4px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    height: 560px;
+    width: 100%;
+    max-width: 480px;
+    box-shadow: 0px 0px 5px 0px rgba(90,84,255,0.2);
+    padding: 90px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.popUp__title{
+    font-size: 24px;
+    font-weight: 800;
+    color: #333;
+    margin-bottom: 40px;
+}
+
+.popUp__inp{
+    .xxs-block({
+        width: 250px;
+    });
+    padding: 15px;
+    width: 278px;
+    height: 48px;
+    font-size: 14px;
+    font-family: "Geometria";
+    color: #333;
+    background: #eaeaef;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+.popUp__link{
+    margin: 10px 0px 30px;
+    font-size: 14px;
+    font-family: "Geometria";
+    color: @blue;
+    text-decoration: underline;
+    &:hover{
+        text-decoration: none;
+    }
+}
+
+.popUp__btn{
+    width: 220px;
+    height: 50px;
+    border-radius: 25px;
+}
+
+.popUp__check{
+    .xs-block({
+        width: 278px;
+    });
+    .xxs-block({
+        width: 250px;
+    });
+    .catalogFilter__check{
+        .xxs-block({
+            font-size: 10px;
+        });
+        font-size: 12px;
+        margin: 10px 0 30px;
+    }
+}
+
+.catalogDropWrap{
+    padding: 40px 40px 50px;
+    box-shadow: 0px 0px 5px 0px rgba(90,84,255,0.2);
+    border-radius: 4px;
+    background: @white;
+    position: absolute;
+    z-index: 99;
+    top: 127px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    width: ~'calc(100% - 30px)';
+    max-width: 1180px;
+    display: none;
+}
+
+.catalogDrop{
+    display: flex;
+    align-items: flex-start;
+}
+
+.catalogDrop__left{
+    border-right: 1px solid #cccccc;
+    width: ~'calc(100% / 4)';
+    margin-right: 40px;
+    padding-right: 40px;
+}
+
+.catalogDrop__item{
+    display: block;
+    font-weight: 800;
+    font-size: 14px;
+    margin-bottom: 20px;
+    color: #333;
+    &:last-child{
+        margin-bottom: 0;
+    }
+}
+
+.catalogDrop__item-active{
+    color: @blue;
+}
+
+.catalogDrop__right{
+    width: ~'calc(100% / 4 * 3 - 40px)';
+    margin: 0 -15px;
+    column-count: 2;
+    display: none;
+}
+
+.catalogDrop__right-show{
+    display: block;
+}
+
+.catalogDrop__menu{
+    display: inline-block;
+    margin: 0 15px 15px;
+    vertical-align: top;
+    font-size: 14px;
+    a{
+        display: block;
+        margin-bottom: 20px;
+        color: #333;
+        &:first-child{
+            font-weight: 800;
+            color: @black;
+        }
+        &:hover{
+            color: @yellow;
+        }
+    }
+}
+
+.burgerDropWrap{
+    position: absolute;
+    z-index: 99;
+    width: auto;
+    width: 320px;
+    top: 0;
+    left: 0;
+    background: @white;
+    box-shadow: 0px 0px 5px 0px rgba(90,84,255,0.2);
+    padding: 25px 20px 40px 40px;
+    display: none;
+}
+
+.burgerDrop__btn{
+    width: 150px;
+    height: 40px;
+    border-radius: 20px;
+    margin: 0 65px 0 45px;
+}
+
+.burgerDrop__close{
+    margin-bottom: 20px;
+    cursor: pointer;
+    svg path{
+        transition: 0.5s;
+    }
+    &:hover svg path{
+        fill: @yellow;
+    }
+}
+
+.burgerDrop__title{
+    font-size: 18px;
+    font-weight: 800;
+    margin-bottom: 25px;
+}
+
+.burgerDropNav{
+    .burgerDropNav{
+        display: none;
+        padding-left: 20px;
+        padding-top: 20px;
+    }
+    .burgerDropNav-show{
+        display: block !important;
+    }
+}
+
+.burgerDropNav-active{
+    &>.burgerDropNav__item{
+        display: none;
+    }
+    &>.burgerDropNav__item-active{
+        display: flex;
+        &>.burgerDropNav{
+            display: block;
+        }
+    }
+}
+
+.burgerDropNav__item{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    font-family: "Geometria";
+    font-size: 13px;
+    margin-bottom: 20px;
+    transition: 0.5s;
+    color: #333;
+    cursor: pointer;
+    &:hover{
+        color: @yellow;
+    }
+    &>span{
+        width: ~'calc(100% - 24px)';
+    }
+    .radio{
+        width: 14px;
+        min-width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        border: 2px solid #cecece;
+        margin-right: 10px;
+        span{
+            display: block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #eaeaef;
+            border: 2px solid #eaeaef;
+        }
+        .active{
+            background: @blue;
+        }
+    }
+}
+
+.burgerDropNav__item-hide{
+    display: none;
+}
+
+.burgerDropNav__item-active{
+    &>.radio{
+        &>span{
+            background: @blue;
+        }
+    }
+}
