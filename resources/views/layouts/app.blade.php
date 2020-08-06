@@ -35,9 +35,11 @@
     @yield('content')
 </main>
 @include('layouts.partials.front.footer')
+
+
 @include('layouts.partials.front.auth')
 @include('layouts.partials.front.register')
-@include('layouts.partials.js_footer__front')
-@stack('scripts')
+
+    @include('layouts.partials.js_footer__front')
 </body>
 </html>

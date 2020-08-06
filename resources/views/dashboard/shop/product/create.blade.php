@@ -18,16 +18,16 @@
         <div class="lcPageAddContent">
             <div class="lcPageAddContentToggle lcPageAddInps">
                 <div class="lcPageAddInp">
-                        <span>
-                            Название товара
-                        </span>
-                    <input type="text" placeholder="Введите название">
+                    <span>
+                        Название товара
+                    </span>
+                    {{ Form::text('title', '', ['placeholder' => 'Введите название', 'required' => 'required']) }}
                 </div>
                 <div class="lcPageAddInp">
                     <span>
                         Производитель
                     </span>
-                    <input type="text" placeholder="Введите бренд">
+                    {{ Form::text('brand', '', ['placeholder' => 'Введите бренд', 'required' => 'required']) }}
                 </div>
                 <div class="lcPageAddInp">
                     <span>
