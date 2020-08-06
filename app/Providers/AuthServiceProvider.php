@@ -32,7 +32,10 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         Gate::define('role-shop', function (User $user) {
-            return $user->role == User::ROLE_SHOP ? true : false;
+            if($user->role == User::ROLE_SHOP || $user->role == User::ROLE_ADMIN){
+                return true;
+            }
+            return false;
         });
 
         Gate::define('role-admin', function (User $user) {
