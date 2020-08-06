@@ -15,7 +15,7 @@ class CreateOrderPaysTable extends Migration
     {
         Schema::create('order_pays', function (Blueprint $table) {
             $table->id();
-            $table->un('user_id')->unsigned();
+            $table->integer('user_id')->unsigned();
             $table->string('pay_system')->nullable();
             $table->decimal('amount', 6, 2)->default(0);
             $table->integer('status')->default(0);
