@@ -534,6 +534,7 @@
             var year = cardform.year;
             var cvv = cardform.cvv;
             var amount = cardform.amount;
+
             for (var i in ['input', 'change', 'blur', 'keyup']) {
                 cc.addEventListener('input', formatCardCode, false);
                 month.addEventListener('input', formatMonth, false);
@@ -545,11 +546,13 @@
                 cardCode = cardCode != '' ? cardCode.match(/.{1,4}/g).join(' ') : '';
                 this.value = cardCode;
             }
+
             function formatMonth() {
                 var month = this.value.replace(/[^\d]/g, '').substring(0,2);
                 month = month != '' ? month.match(/.{1,2}/g) : '';
                 this.value = month;
             }
+
             function formatYear() {
                 var year = this.value.replace(/[^\d]/g, '').substring(0,2);
                 year = year != '' ? year.match(/.{1,2}/g) : '';
@@ -560,11 +563,14 @@
                 cvv = cvv != '' ? cvv.match(/.{1,3}/g) : '';
                 this.value = cvv;
             }
+
+
             $('form[id="cardform"]').validate({
                 //wrapper: 'div',
                 errorElement: "div",
                 errorElementClass: "error",
                 errorLabelContainer: '.error-div',
+
                 //errorClass: "error",
                 errorPlacement: function(error, element) {
                     //error.insertAfter($('.credit-cards'));
@@ -575,6 +581,8 @@
                     //     error.insertAfter(element);
                     // }
                 },
+
+
                 rules: {
                     card: {
                         required: true,
