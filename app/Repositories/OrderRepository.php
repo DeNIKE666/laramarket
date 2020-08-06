@@ -31,7 +31,7 @@ class OrderRepository extends BaseRepository implements OrderContract
             'address'           =>  $params['address'],
             'delivery'          =>  $params['delivery'],
             'phones'            =>  $params['phones'],
-            'notes'             =>  $params['notes']
+            //'notes'             =>  $params['notes']
         ]);
 
         if ($order) {
