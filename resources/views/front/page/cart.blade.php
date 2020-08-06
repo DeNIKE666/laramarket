@@ -63,7 +63,7 @@
                         Для оформления заказа необходимо
                         вторизоваться или зарегистрироваться
                     </div>
-                    <a class="cartPay__btn btn">
+                    <a class="cartPay__btn btn" href="{{ route('checkout') }}">
                         <span>Оформить заказ</span>
                         <svg
                                 xmlns="http://www.w3.org/2000/svg"

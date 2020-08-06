@@ -11,9 +11,7 @@
         </div>
         @include('dashboard.user.profile')
 
-        @can('role-shop', $user)
-            @include('dashboard.user.shop_date')
-        @endcan
+
     </div>
 
 @endsection

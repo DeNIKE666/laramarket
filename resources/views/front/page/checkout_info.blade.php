@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <h1>Заказ #{{ $order->id }}</h1>
+    @include('front.partials.breadcrumbs')
+    <div class="block-cart">
+        <div class="wrapper">
+                <h1 class="title">Заказ #{{ $order->id }}</h1>
 
-            </div>
+
         </div>
     </div>
 @endsection
