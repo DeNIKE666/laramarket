@@ -19,7 +19,7 @@ class QiwiController extends Controller
 
         $orderPay = OrderPay::create([
             'user_id' => auth()->user()->id,
-            'pay_system' => 'Кркдитная карта',
+            'pay_system' => 'Кредитная карта',
             'amount' => $order->cost,
             'status' => 0,
         ]);
@@ -96,7 +96,7 @@ class QiwiController extends Controller
 
     public function callbackOrder(Request $request, Order $order, OrderPay $orderPay)
     {
-        
+
         $payStatus =  (new Qiwi())
             ->sendCallback($request->input('PaRes') , $request->input('MD'));
 
