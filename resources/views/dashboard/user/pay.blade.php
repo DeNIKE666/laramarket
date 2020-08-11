@@ -12,25 +12,19 @@
     <div class="lcPageContentPayChoose">
         <div class="lcPageContentPayChoose__item lcPageContentPayChoose__item-active">
             <div class="lcPageContentPayChoose__check">
-                                    <span>
-
-                                    </span>
+                <span>
+                </span>
                 <input name="choose" type="radio">
             </div>
-            <span>
-                                    Пополнение счёта:
-                                </span>
+            <span>Пополнение счёта:</span>
         </div>
         <div class="lcPageContentPayChoose__item">
             <div class="lcPageContentPayChoose__check">
-                                    <span>
-
-                                    </span>
+                <span>
+                </span>
                 <input name="choose" type="radio">
             </div>
-            <span>
-                                    Вывод средств:
-                                </span>
+            <span>Вывод средств:</span>
         </div>
     </div>
     <div class="lcPageContentPay lcPageContentPay-active">
@@ -42,104 +36,42 @@
                 История транзакций
             </button>
         </div>
-        <div class="lcPageContentPayMiddle">
-            <div class="lcPageContentPayMiddle__item lcPageContentPayMiddle__item-active">
-                <div class="lcPageContentPayMiddle__check ">
-                                        <span>
-
-                                        </span>
-                    <input name="choose" type="radio">
-                </div>
-                <div class="lcPageContentPayMiddle__inf" data-modal="#modal3">
-                    Банковские карты
+        <div id="payRefill" class="lcPageContentPayMiddle">
+            @foreach ($refills as $k=>$refill)
+                <div class="lcPageContentPayMiddle__item @if($k == 0) lcPageContentPayMiddle__item-active @endif" >
+                    <div class="lcPageContentPayMiddle__check ">
                     <span>
-                                            Комиссия 20%
-                                        </span>
+                    </span>
+                        <input @if($k == 0) checked @endif
+                                name="choose"
+                                type="radio"
+                                value="{{ $refill->title }}"
+                                data-percent="{{ $refill->percent }}"
+                        >
+                    </div>
+                    <div class="lcPageContentPayMiddle__inf" data-modal="#modal3">
+                        {{ $refill->title }}
+                        <span>Комиссия {{ $refill->percent }}%</span>
+                    </div>
+                    @if($refill->ico != '')
+                    <div class="lcPageContentPayMiddle__img">
+                        <img src="{{ asset($refill->ico) }}" alt="">
+                    </div>
+                    @endif
                 </div>
-                <div class="lcPageContentPayMiddle__img">
-                    <img src="{{ asset('img/pay/mastercard1.png') }}" alt="">
-                </div>
-            </div>
-            <div class="lcPageContentPayMiddle__item">
-                <div class="lcPageContentPayMiddle__check">
-                                        <span>
+            @endforeach
 
-                                        </span>
-                    <input name="choose" type="radio">
-                </div>
-                <div class="lcPageContentPayMiddle__inf">
-                    Яндекс деньги
-                    <span>
-                                            Комиссия 20%
-                                        </span>
-                </div>
-                <div class="lcPageContentPayMiddle__img">
-                    <img src="{{ asset('img/pay/yandex1.png') }}" alt="">
-                </div>
-            </div>
-            <div class="lcPageContentPayMiddle__item">
-                <div class="lcPageContentPayMiddle__check">
-                                        <span>
-
-                                        </span>
-                    <input name="choose" type="radio">
-                </div>
-                <div class="lcPageContentPayMiddle__inf">
-                    Qiwi
-                    <span>
-                                            Комиссия 20%
-                                        </span>
-                </div>
-                <div class="lcPageContentPayMiddle__img">
-                    <img src="{{ asset('img/pay/qiwi1.png') }}" alt="">
-                </div>
-            </div>
-            <div class="lcPageContentPayMiddle__item">
-                <div class="lcPageContentPayMiddle__check">
-                                        <span>
-
-                                        </span>
-                    <input name="choose" type="radio">
-                </div>
-                <div class="lcPageContentPayMiddle__inf">
-                    Криптовалюта:
-                    <span>
-                                            Комиссия 20%
-                                        </span>
-                </div>
-                <div class="lcPageContentPayMiddle__img">
-                    <img src="{{ asset('img/pay/crypto.png') }}" alt="">
-                </div>
-            </div>
-            <div class="lcPageContentPayMiddle__item">
-                <div class="lcPageContentPayMiddle__check">
-                                        <span>
-
-                                        </span>
-                    <input name="choose" type="radio">
-                </div>
-                <div class="lcPageContentPayMiddle__inf">
-                    Безналичный расчет:
-                    <span>
-                                            Комиссия 20%
-                                        </span>
-                </div>
-            </div>
         </div>
         <div class="lcPageContentPayBottom">
             <div class="lcPageContentPayBottom__item">
-                                    <span>
-                                        Пополнить счёт на:
-                                    </span>
-                <input type="text" placeholder="1 000 000 руб.">
+                <span>Пополнить счёт на:</span>
+                <input id="account_refill_cost" type="number" placeholder="1 000 000 руб.">
             </div>
             <div class="lcPageContentPayBottom__item">
-                                    <span>
-                                        Будет списанно:
-                                    </span>
-                <input type="text" placeholder="1 000 000 руб.">
+                <span>Будет списанно:</span>
+                <input id="account_refill_cost_percent" type="number" placeholder="1 000 000 руб.">
             </div>
-            <button class="lcPageContentPayBottom__btn btn">
+            <button id="payModal" class="lcPageContentPayBottom__btn btn">
                 Пополнить
             </button>
         </div>
@@ -506,20 +438,57 @@
         </div>
     </div>
 
+    <div class="popUp popUp-pay">
+        <div class="popUp__content">
+            <div class="popUp__title">
+                Пополнение<br/>
+                банковские карты
+            </div>
+            <form id="cardform" name="cardform" action="{{ route('qiwi.pay') }}" method="POST" class="cartBlockPay">
+                <div class="cardform__row">
+                    <div class="cardform__row__col1">
+                        <label for="card">Номер карты</label>
+                        <input type="text" class="input-card-full" name="card" id="card" placeholder="2222 2222 2222 2222">
+                    </div>
+                </div>
 
+                <div class="cardform__row">
+                    <div class="cardform__row__col2">
+                        <label for="month">Месяц</label>
+                        <input type="text" class="input-card-full" name="month" id="month" placeholder="Месяц" maxlength="2">
+                    </div>
+                    <div class="cardform__row__col2">
+                        <label for="year">Год</label>
+                        <input type="text" class="input-card-full" placeholder="Год" maxlength="2" name="year" id="year">
+                    </div>
+                    <div class="cardform__row__col2">
+                        <label for="cvv">cvv</label>
+                        <input type="text" class="input-card-full" placeholder="cvv" maxlength="3" name="cvv" id="cvv">
+                    </div>
+                </div>
 
-    <form id="cardform" name="cardform"  action="{{ route('qiwi.pay') }}" method="POST"  class="cartBlock cartAddress">
-        <input type="text" class="input-card-full"  name="card" id="card"  placeholder="2222 2222 2222 2222">
-        <input type="text" class="input-card-full"  name="month" id="month" placeholder="Месяц" maxlength="2">
-        <input type="text" class="input-card-full" placeholder="Год" maxlength="2" name="year" id="year">
-        <input type="text" class="input-card-full"  placeholder="Защитный код" maxlength="3" name="cvv" id="cvv">
-        <input type="text" class="input-card-full"  placeholder="Сумма ввода" name="amount" id="amount">
-        <button class="btn lcPageMenu__btn form-submit " id="pay_button">Пополнить</button>
+                <div class="cardform__row">
+                    <div class="cardform__row__col1">
+                        <label for="amount">Сумма пополнения (руб.)</label>
+                        <input type="text" class="input-card-full input-card-full--big" placeholder="Сумма ввода" name="amount" id="amount">
+                    </div>
+                </div>
+                <div class="cardform__foot">
+                    <button class="btn lcPageMenu__btn form-submit " id="pay_button">Пополнить счёт</button>
 
-        <div class="mt-20 text-danger text-sm error-div" style="display: none">
-            <span>Исправьте ошибки, выделенные красной рамкой:</span>
+                    <div class="mt-20 text-danger text-sm error-div" style="display: none">
+                        <span>Исправьте ошибки, выделенные красной рамкой:</span>
+                    </div>
+                </div>
+            </form>
         </div>
-    </form>
+        <div class="popUp__layer">
+
+        </div>
+    </div>
+
+
+
 
 
     @push('scripts')
@@ -541,25 +510,27 @@
                 year.addEventListener('input', formatYear, false);
                 cvv.addEventListener('input', formatCvv, false);
             }
+
             function formatCardCode() {
-                var cardCode = this.value.replace(/[^\d]/g, '').substring(0,18);
+                var cardCode = this.value.replace(/[^\d]/g, '').substring(0, 18);
                 cardCode = cardCode != '' ? cardCode.match(/.{1,4}/g).join(' ') : '';
                 this.value = cardCode;
             }
 
             function formatMonth() {
-                var month = this.value.replace(/[^\d]/g, '').substring(0,2);
+                var month = this.value.replace(/[^\d]/g, '').substring(0, 2);
                 month = month != '' ? month.match(/.{1,2}/g) : '';
                 this.value = month;
             }
 
             function formatYear() {
-                var year = this.value.replace(/[^\d]/g, '').substring(0,2);
+                var year = this.value.replace(/[^\d]/g, '').substring(0, 2);
                 year = year != '' ? year.match(/.{1,2}/g) : '';
                 this.value = year;
             }
+
             function formatCvv() {
-                var cvv = this.value.replace(/[^\d]/g, '').substring(0,3);
+                var cvv = this.value.replace(/[^\d]/g, '').substring(0, 3);
                 cvv = cvv != '' ? cvv.match(/.{1,3}/g) : '';
                 this.value = cvv;
             }
@@ -572,7 +543,7 @@
                 errorLabelContainer: '.error-div',
 
                 //errorClass: "error",
-                errorPlacement: function(error, element) {
+                errorPlacement: function (error, element) {
                     //error.insertAfter($('.credit-cards'));
                     // var placement = $(element).data('error');
                     // if (placement) {
@@ -616,7 +587,7 @@
                     cvv: '- CVV-код указан неправильно',
                     amount: '- Сумма не указана'
                 },
-                submitHandler: function(form) {
+                submitHandler: function (form) {
                     $("#pay_button").after('<img id="loader" src="img/spinner.gif">');
                     $("#pay_button").remove();
                     form.submit();

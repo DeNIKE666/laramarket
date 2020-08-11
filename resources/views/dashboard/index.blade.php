@@ -2,11 +2,11 @@
 
 @section('content')
 
-        <div class="row">
-            @include('dashboard.user.profile')
-            @can('role-user', $user)
-            @include('dashboard.user.edit_form')
-            @endcan
+    <div class="lcPageContentData">
+        <div class="lcPageContentData__title">
+            Личные данные
         </div>
+        @include('dashboard.user.profile')
+    </div>
 
 @endsection

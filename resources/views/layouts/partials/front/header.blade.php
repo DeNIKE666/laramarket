@@ -24,7 +24,7 @@
                                     Войти
                                 </a>
                             @else
-                                <a href="{{ route('adminIndex') }}" >
+                                <a href="@cannot('role-admin') {{ route('adminIndex') }} @endcannot @can('role-admin') {{ route('admin.home') }} @endcan" >
                                     Личный кабинет
                                 </a>
                                 <a href="{{ route('logout') }}"

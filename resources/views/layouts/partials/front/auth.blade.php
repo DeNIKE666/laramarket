@@ -24,14 +24,17 @@
                     id="passwordInput2"
             >
             <span class="invalid-feedback" id="passwordError2"></span>
+
+            <button class="popUp__btn btn btn-center">
+                Войти
+            </button>
+            <div class="form-center__footer">
             @if (Route::has('password.request'))
-                <a href="{{ route('password.request') }}" class="popUp__link">
+                <a href="{{ route('password.request') }}" class="text-primary">
                     Забыли пароль
                 </a>
             @endif
-            <button class="popUp__btn btn">
-                Войти
-            </button>
+            </div>
         </form>
     </div>
     <div class="popUp__layer">

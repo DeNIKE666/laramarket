@@ -4,9 +4,8 @@
     @include('front.partials.breadcrumbs')
     <div class="block-cart">
         <div class="wrapper">
-                <h1 class="title">Заказ #{{ $order->id }}</h1>
+            <h1 class="title">Заказ #{{ $order->id }}</h1>
 
-            {{ dd($amount) }}
             @include('front.partials.pay_methods')
 
             @push('styles')

@@ -1,21 +1,23 @@
 @extends('layouts.admin')
 
 @section('content')
-    <div class="row">
-        <div class="col-lg-12 grid-margin stretch-card">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Редактирование категории</h4>
-                    {{ Form::open(['route' => ['categories.update', $category], 'method' => 'put', 'class' => 'forms-sample']) }}
+    <div class="lcPageContentData">
+        <div class="lcPageContentData__title">
+            Редактирование категории
+        </div>
+        <br>
+        <br>
 
-                    <div class="form-group">
-                        <label>Название категории</label>
-                        {{ Form::text('title', $category->title, ['class' => 'form-control', 'required' => 'required']) }}
+        {{ Form::open(['route' => ['categories.update', $category], 'method' => 'put', 'class' => 'forms-sample']) }}
 
-                        @if ($errors->has('title'))
-                            <span class="invalid-feedback"><strong>{{ $errors->first('title') }}</strong></span>
-                        @endif
-                    </div>
+        <div class="form-group">
+            <label>Название категории</label>
+            {{ Form::text('title', $category->title, ['class' => 'form-control', 'required' => 'required']) }}
+
+            @if ($errors->has('title'))
+                <span class="invalid-feedback"><strong>{{ $errors->first('title') }}</strong></span>
+            @endif
+        </div>
                     <div class="form-group">
                         <label for="parent">Родительская категория</label>
                         <select  name="parent" class="form-control {{ $errors->has('parent') ? ' is-invalid' : '' }}" id="parent">
@@ -35,26 +37,22 @@
                         {{ Form::textarea('content', $category->content, ['class' => 'form-control']) }}
                     </div>
                     <div class="form-group">
-                        <button type="submit" class="btn btn-primary">Сохранить</button>
+                        <button type="submit" style=" width: 200px" class="lcPageContentSort__btn btn">Сохранить</button>
                     </div>
                     {{ Form::close() }}
-                </div>
-            </div>
-        </div>
-    </div>
+
+
+
+
+    {!! Form::open(['route' => ['categories.destroy', $category->id], 'method' => 'delete']) !!}
+    <button onclick="return confirm('Точно удалить?')" type="submit"  style=" width: 200px" class="lcPageContentSort__btn btn" title="">Удалить</button>
+    {!! Form::close() !!}
 @endsection
 
-@section('js')
-    @parent
+@push('scripts')
     <script src="{{ asset('/vendor/unisharp/laravel-ckeditor/ckeditor.js') }}"></script>
     <script src="{{ asset('/vendor/unisharp/laravel-ckeditor/adapters/jquery.js') }}"></script>
     <script>
         $('textarea').ckeditor();
-        // $('.textarea').ckeditor(); // if class is prefered.
-        /*CKEDITOR.replace( 'description', {
-            filebrowserUploadUrl: "route('upload', ['_token' => csrf_token() ])",
-            filebrowserUploadMethod: 'form'
-        });*/
-
     </script>
-@endsection
+@endpush

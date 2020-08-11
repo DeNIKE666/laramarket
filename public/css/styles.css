@@ -8900,3 +8900,65 @@ img {
 .text-center {
   text-align: center;
 }
+.lcPageContentCol.lcPageContentCol--max-width {
+    flex-grow: 1;
+    width: auto;
+    text-align: left;
+  display: block;
+}
+.order-cat {
+  padding: 5px;
+}
+.order-cat__btn {
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: 5px;
+  text-align: center;
+  background-color: transparent;
+  border: 1px solid #000;
+  line-height: 28px;
+  color: #000;
+}
+.form-group {
+  padding-bottom: 20px;
+}
+select.form-control {
+  display: block;
+  width: 100%;
+  height: 30px;
+  font-family: "Gilroy";
+}
+.popUp-pay .popUp__title {
+  text-align: center;
+  border-bottom: 1px solid #c7c7c7;
+  padding-bottom: 30px;
+  display: block;
+  width: 100%;
+}
+.cardform__row {
+  display: flex;
+  margin: 0 -10px;
+}
+.cardform__row__col1 {
+  padding: 0 10px;
+  flex-basis: 100%;
+}
+.cardform__row__col2 {
+  padding: 0 10px;
+  flex-basis: 33%;
+}
+.cardform__row label {
+  display: block;
+  font-size: 14px;
+  font-family: "Gilroy";
+  padding-bottom: 5px;
+  font-weight: bold;
+}
+.input-card-full.input-card-full--big {
+  font-family: "Gilroy";
+  font-weight: bold;
+  font-size: 24px;
+  line-height: 1.2;
+  color: #5a54ff;
+}

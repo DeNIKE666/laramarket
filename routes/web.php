@@ -45,7 +45,7 @@ Route::get('/register/{referral}', 'Auth\RegisterController@showRegistrationForm
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/checkout', 'CheckoutController@getCheckout')->name('checkout');
     Route::post('/checkout/order/', 'CheckoutController@placeOrder')->name('placeOrder');
-    Route::get('/checkout/order/{id}', 'CheckoutController@infoOrder')->name('infoOrder');
+    Route::any('/checkout/order/{id}', 'CheckoutController@infoOrder')->name('infoOrder');
 });
 
 /**
@@ -112,7 +112,7 @@ Route::group(
         'as' => 'admin.'
     ],
     function () {
-        Route::get('/', 'AdminController@index')->name('home');
+        Route::get('/index', 'AdminController@index')->name('home');
         Route::get('/users', 'AdminController@getUsers')->name('users');
         Route::get('/user/{id}', 'AdminController@infoUser')->name('info_user');
         Route::get('/request_seller', 'AdminController@index')->name('request_seller');

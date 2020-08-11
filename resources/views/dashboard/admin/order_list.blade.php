@@ -1,29 +1,31 @@
 @extends('layouts.admin')
 
 @section('content')
-    <div class="row">
-        <div class="col-lg-12 grid-margin stretch-card">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Список заказаов</h4>
-                    <table class="table table-hover">
-                        <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Сумма</th>
-                            <th>Статус</th>
-                            <th>Дата</th>
-                            <th></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @each('dashboard.admin.block.item_order', $orders, 'order')
-                        </tbody>
-                    </table>
-                    <hr>
-                    {{ $orders->links() }}
+    <div class="lcPageContentData">
+        <div class="lcPageContentData__title">
+            Список заказаов
+        </div>
+
+        <div class="lcPageContentTable">
+            <div class="lcPageContentRow">
+                <div class="lcPageContentCol">
+                    #
+                </div>
+                <div class="lcPageContentCol">
+                    Сумма
+                </div>
+                <div class="lcPageContentCol">
+                    Статус
+                </div>
+                <div class="lcPageContentCol">
+                    Дата
+                </div>
+                <div class="lcPageContentCol">
                 </div>
             </div>
+            @each('dashboard.admin.block.item_order', $orders, 'order')
         </div>
+        {{ $orders->links() }}
+
     </div>
 @endsection

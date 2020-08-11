@@ -7,10 +7,12 @@ use Illuminate\Http\Request;
 use App\Models\Category;
 use Illuminate\Support\Facades\Gate;
 use Kalnoy\Nestedset\NodeTrait;
+use App\Traits\UniqueModelSlug;
 
 class CategoryController extends Controller
 {
     use NodeTrait;
+    use UniqueModelSlug;
 
     /**
      * Display a listing of the resource.
@@ -57,11 +59,14 @@ class CategoryController extends Controller
                 'title' => $request['title'],
                 'parent_id' => $request['parent'],
                 'content' => $request['content'],
+                'slug' => $this->generateSlug(
+                    Category::class,
+                    $request['title']
+                )
+                //'slug' => Str::of($request['title'])->slug('-')->__toString()
             ],
             Category::getStatusUser()
         );
-
-        //dd($data);
 
         $category = Category::create($data);
 
@@ -96,11 +101,14 @@ class CategoryController extends Controller
         $this->validate($request, [
             'title' => 'required|string|max:255',
             'parent' => 'nullable|integer|exists:categories,id',
+            'slug' => 'required|string|max:255',
         ]);
 
         $category->update([
             'title' => $request['title'],
             'parent_id' => $request['parent'],
+            'content' => $request['content'],
+            'slug' => $request['slug']
         ]);
 
         return redirect()->back()->with('status', 'Категория обновлена');
@@ -140,8 +148,9 @@ class CategoryController extends Controller
 
     public function destroy(Category $category)
     {
-        //$category->delete();
-
+        if (Gate::allows('role-admin')) {
+            $category->delete();
+        }
         return redirect()->route('categories.index');
     }
 }

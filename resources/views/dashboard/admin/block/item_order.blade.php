@@ -1,24 +1,12 @@
-<tr>
-    <td>{{ $order->id }}</td>
-    <td>{{ $order->cost }}</td>
-    <td>{{ $order->status }}</td>
-    <td>{{ $order->created_at }}</td>
-    <td>
-        @can('role-user')
+<div class="lcPageContentRow">
+    <div class="lcPageContentCol">{{ $order->id }}</div>
+    <div class="lcPageContentCol">{{ $order->cost }}</div>
+    <div class="lcPageContentCol">{{ $order->status }}</div>
+    <div class="lcPageContentCol">{{ $order->created_at }}</div>
+    <div class="lcPageContentCol">
         <a href="">
             Подробнее
         </a>
-        @endcan
-        @can('role-shop')
-            <a href="{{ route('order.detail', [$order]) }}">
-                Подробнее
-            </a>
-        @endcan
-        @can('role-admin')
-        <a href="">
-            Подробнее
-        </a>
-        @endcan
-    </td>
-</tr>
+    </div>
+</div>
 
