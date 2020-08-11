@@ -76,6 +76,7 @@
                     <div><label>{{ Form::radio('delivery', 'ЭНЕРГИЯ') }} ЭНЕРГИЯ</label></div>
                     <div><label>{{ Form::radio('delivery', 'Курьером до двери ') }} Курьером до двери </label></div>
                 </div>
+
                 <div class="title">
                     Способ оплаты
                 </div>
@@ -92,7 +93,7 @@
                     Сумма итого:
                 </div>
                 <div class="cartPay__price">
-                    {{ \Cart::getSubTotal() }}
+                    {{ \Cart::getSubTotal() }} Руб
                 </div>
                 <button class="cartPay__btn btn" type="submit">
                     <span>Оформить заказ</span>

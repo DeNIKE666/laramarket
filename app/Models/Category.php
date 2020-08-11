@@ -4,8 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Kalnoy\Nestedset\NodeTrait;
- use Cviebrock\EloquentSluggable\Sluggable;
+// use Cviebrock\EloquentSluggable\Sluggable;
 use Auth;
+use Illuminate\Support\Str;
 
 
 class Category extends Model
@@ -24,16 +25,8 @@ class Category extends Model
 
     public  $path;
 
-    /**
-     * Return the sluggable configuration array for this model.
-     *
-     * @return array
-     */
 
-    public function setTitleAttribute($value)
-    {
-        return $this->attributes['title'] = Str::of($value)->slug('-');
-    }
+
 
 
     public function getPath(): string
@@ -87,6 +80,10 @@ class Category extends Model
        return false;
     }
 
+    public static function getSlug ($value)
+    {
+        return Str::of($value)->slug('-');
+    }
 
 
     /*protected static function boot()

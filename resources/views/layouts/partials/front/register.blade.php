@@ -62,7 +62,7 @@
                 </label>
                 <span class="invalid-feedback"  id="ofertaError"></span>
             </div>
-            <button class="popUp__btn btn">
+            <button class="popUp__btn btn btn-center">
                 Зарегистрироваться
             </button>
         </form>

@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 use App\Models\Property;
 use App\Models\User;
 use App\Contracts\OrderContract;
+use App\Models\PaymentOption;
 
 
 class UserController extends Controller
@@ -121,9 +122,13 @@ class UserController extends Controller
 
     public function userPay()
     {
+        $refills = PaymentOption::getPaymentsRefill();
+        //dd($refill);
         return view(
-            'dashboard.user.pay'
-
+            'dashboard.user.pay',
+            compact(
+                'refills'
+            )
         );
     }
 
