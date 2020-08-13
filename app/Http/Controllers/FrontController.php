@@ -20,7 +20,9 @@ class FrontController extends Controller
 
     public function index()
     {
-        return view('home');
+        $products_popular = Product::getProductsById(Product::getPopularProductById());
+        $products_views = Product::getProductsById(Product::ViewsId());
+        return view('front.page.home', compact('products_views', 'products_popular'));
     }
 
     public function catalog($slug)
@@ -40,6 +42,7 @@ class FrontController extends Controller
         if (!$this->productRepository->hasCookieViews()) {
             event('productHasViewed', $product);
         }
+
         $this->productRepository->addCookieViews($product->id);
         return view('front.page.product', compact('product'));
     }

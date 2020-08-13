@@ -1,6 +1,8 @@
 <div class="popular">
     <a class="popular__img" href="{{ $product->getUrl() }}">
-        {!! $product->getImage('medium') !!}
+        @if($product->getImageSrc('medium') != '')
+            <img alt="" src="{{ $product->getImageSrc('medium') }}">
+        @endif
     </a>
     <div class="popular__name">
         {{ $product->category->title }}
@@ -12,9 +14,11 @@
         <div class="popular__price">
             {{ $product->getCost() }}
         </div>
+        @if($product->old_price != '')
         <div class="popular__old">
-            7 378 ₽
+            {{ $product->old_price }} руб
         </div>
+        @endif
         <form action="{{ route('cart.store') }}" method="POST" class="js_add_product">
             {{ csrf_field() }}
             <input type="hidden" value="{{ $product->id }}"  name="id">

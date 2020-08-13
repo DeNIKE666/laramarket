@@ -7,6 +7,7 @@ use Kalnoy\Nestedset\NodeTrait;
 // use Cviebrock\EloquentSluggable\Sluggable;
 use Auth;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Cache;
 
 
 class Category extends Model
@@ -72,7 +73,9 @@ class Category extends Model
     }
 
     public static function getAllCategory() {
-        return Category::defaultOrder()->withDepth()->get();
+        return Cache::remember('getAllCategory', 21600, function() {
+            return Category::defaultOrder()->withDepth()->get();
+        });
     }
 
     public function isActive() {

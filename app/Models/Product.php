@@ -47,7 +47,8 @@ class Product extends Model implements HasMedia
         'group_product',
         'part_cashback',
         'slug',
-        'brand'
+        'brand',
+        'status'
     ];
 
     public function author()
@@ -140,6 +141,13 @@ class Product extends Model implements HasMedia
     }
 
     public function getImage($size='') {
+        $img = $this->getMedia('image')->first();
+        if($img) {
+            return '<img class="img-fluid" alt="" src="' . $img->getUrl($size) . '" >';
+        }
+    }
+
+    public function getImageAdmin($size='') {
         if($this->getMedia('image')->first()) {
             return '<div class="lcPageAddImg">
                             <div class="lcPageAddImg__btns">
@@ -168,4 +176,51 @@ class Product extends Model implements HasMedia
     {
         return number_format($this->price, 0, '', ' ') . ' руб';
     }
+
+    public  static function getProductsById(array $ids=[])
+    {
+        if (count($ids) > 0) {
+            foreach ($ids as $id) {
+                $result[] = self::staticFindProductById($id);
+            }
+            return $result;
+        }
+    }
+
+    public  static function ViewsId()
+    {
+        if (isset($_COOKIE[Product::COOKVIEWS])) {
+            $value = $_COOKIE[Product::COOKVIEWS];
+            return explode("|", $value);
+        }
+    }
+
+    /**
+     * @param int $id
+     * @return mixed
+     */
+    public static function staticFindProductById(int $id)
+    {
+        try {
+            return \Cache::remember('product_id_' . $id, 3600, function() use ($id) {
+                return Product::findOrFail($id);
+            });
+        } catch (ModelNotFoundException $e) {
+            throw new ModelNotFoundException($e);
+        }
+
+    }
+
+    public  static function getPopularProductById()
+    {
+        return \Cache::remember('popular_products_id', 3600, function() {
+            return Product::where('status', Product::STATUS_PRODUCT_ACTIVE)
+                ->orderByDesc('views')
+                ->limit(4)
+                ->pluck('id')
+                ->toArray();
+        });
+    }
+
+
 }

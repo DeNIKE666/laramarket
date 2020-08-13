@@ -81,7 +81,7 @@
                 <div class="lcPageAddImgs__title">
                     Добавьте изображения товара:
                 </div>
-                {!! $product->getImage('thumb') !!}
+                {!! $product->getImageAdmin('thumb') !!}
                 <div class="lcPageAddImgs__wrap">
                     <div class="userRegRow">
                         <div class="userRegInp userRegInp-photo">

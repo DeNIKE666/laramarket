@@ -1854,7 +1854,7 @@ footer {
 }
 
 .productImg img {
-  width: 100%;
+  width: auto;
   max-height: 360px;
 }
 
