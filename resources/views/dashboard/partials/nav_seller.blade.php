@@ -9,7 +9,7 @@
 <a href="">
     Мои продажи
 </a>
-<a href="">
+<a href="{{ route('data_sellers') }}">
     Данные продавца
 </a>
 <a href="{{ route('tasks.index') }}"

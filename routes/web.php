@@ -81,6 +81,8 @@ Route::group(
         Route::get('/active_partner', 'UserController@active_partner')->name('active_partner');
         Route::get('/application_to_sellers', 'UserController@application_to_sellers')->name('application_to_sellers');
         Route::put('/application_to_sellers', 'UserController@request_application_to_sellers')->name('request_application_to_sellers');
+        //Route::get('/data_seller', 'UserController@data_seller')->name('data_seller');
+
         Route::resource('/tasks', 'TaskController');
         Route::resource('/messages', 'MessageController');
 
@@ -163,6 +165,7 @@ Route::group(
         );
 
         Route::get('/index', 'SellerController@seller_status')->name('seller_status');
+        Route::get('/data_sellers', 'SellerController@data_sellers')->name('data_sellers');
     }
 );
 

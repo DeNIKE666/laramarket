@@ -6184,8 +6184,9 @@ $(function () {
     $(document).ready(function () {
         $('.tooltip').tooltipster();
     });
-    $('.userRegInp-photo .btn').on('click', function () {
+    $('.userRegInp-photo .btn').on('click', function (event) {
         $(this).prev().click();
+        event.preventDefault();
     }); // $('input[type="file"]').on('input', function(){
     //     console.log($(this).val());
     //     $(this).next().html($(this).val());
@@ -6198,7 +6199,7 @@ $(function () {
             names.push($(this).get(0).files[i].name);
             names.push(', ');
         }
-
+    console.log($(this).next());
         $(this).next().html(names);
     });
     var flag = true;
