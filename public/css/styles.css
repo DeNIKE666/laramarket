@@ -1854,7 +1854,7 @@ footer {
 }
 
 .productImg img {
-  width: 100%;
+  width: auto;
   max-height: 360px;
 }
 
@@ -6118,7 +6118,8 @@ footer {
   position: relative;
 }
 
-.userRegInp-photo button {
+.userRegInp-photo button,
+.userRegInp-photo .btn {
   position: absolute;
   display: -webkit-box;
   display: -webkit-flex;
@@ -6142,7 +6143,8 @@ footer {
   right: 0;
 }
 
-.userRegInp-photo button svg {
+.userRegInp-photo button svg,
+.userRegInp-photo .btn svg {
   display: block !important;
 }
 
@@ -8961,4 +8963,17 @@ select.form-control {
   font-size: 24px;
   line-height: 1.2;
   color: #5a54ff;
+}
+.select2.select2-container {
+  width: 100% !important;
+  min-height: 40px;
+  margin-bottom: 0 !important;
+}
+.userRegRow--gallery {
+  flex-grow: 1;
+  flex-basis: 100%;
+}
+.dropzone,
+.userRegRow--gallery .userRegInp {
+  width: 100%;
 }

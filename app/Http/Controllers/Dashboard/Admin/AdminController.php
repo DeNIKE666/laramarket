@@ -68,8 +68,9 @@ class AdminController extends Controller
             dd($e);
         }
         $user->role = User::ROLE_SHOP;
+        $user->request_shop = 0;
         $user->save();
-        redirect()->back()->with('status', 'Заявка одобрена');
+        return redirect()->back()->with('status', 'Заявка одобрена');
     }
 
     public function orders() {

@@ -15,7 +15,9 @@
     </div>
     <div class="lcPageContentCol">
         <a href="{{ route('products.edit', $product->id) }}">
-            {!! $product->getImage('thumb') !!}
+            @if($product->getImageSrc('thumb') != '')
+                <img alt="" src="{{ $product->getImageSrc('thumb') }}">
+            @endif
         </a>
     </div>
     <div class="lcPageContentCol">

@@ -1,4 +1,4 @@
-<select name="category_id" required>
+<select name="category_id" required class="select">
     @foreach ($categories as $category)
         @if($category->isActive())
             <option value="{{ $category->id }}" @if($category->id == $active) selected @endif>

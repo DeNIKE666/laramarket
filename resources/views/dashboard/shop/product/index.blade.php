@@ -8,7 +8,7 @@
     <div class="lcPageContentTable lcPageContentTable-products">
         <div class="lcPageContentRow">
             <div class="lcPageContentCol">
-                <img src="img/icons/check.png" alt="">
+                <img src="{{ asset('img/icons/check.png') }}" alt="">
             </div>
             <div class="lcPageContentCol">
                 Изображение

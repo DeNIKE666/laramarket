@@ -14,7 +14,10 @@
     </div>
     <div class="lcPageContentCol">
         @if($user->request_shop == 1 && $user->role == \App\Models\User::ROLE_USER)
-            <a class="btn btn-info btn-sm" href="">Подтвердить</a>
+            {{ Form::open(['route' => ['admin.approved_seller'], 'method' => 'put', 'class' => 'forms-sample']) }}
+            {{ Form::hidden('user_id', $user->id) }}
+            <button type="submit" class="lcPageContentSort__btn btn">Подтвердить</button>
+            {{ Form::close() }}
         @endif
     </div>
 </div>

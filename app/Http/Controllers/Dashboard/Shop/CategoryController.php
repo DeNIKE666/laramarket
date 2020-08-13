@@ -8,6 +8,7 @@ use App\Models\Category;
 use Illuminate\Support\Facades\Gate;
 use Kalnoy\Nestedset\NodeTrait;
 use App\Traits\UniqueModelSlug;
+use Illuminate\Support\Facades\Cache;
 
 class CategoryController extends Controller
 {

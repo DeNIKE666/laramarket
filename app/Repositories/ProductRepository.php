@@ -23,10 +23,10 @@ class ProductRepository extends BaseRepository
     public function findProductById(int $id)
     {
         try {
-            return $this->findOneOrFail($id);
-
+            return \Cache::remember('product_id_' . $id, 3600, function() use ($id) {
+                return $this->findOneOrFail($id);
+            });
         } catch (ModelNotFoundException $e) {
-
             throw new ModelNotFoundException($e);
         }
 
@@ -103,9 +103,9 @@ class ProductRepository extends BaseRepository
      */
     public function findProductBySlug($slug)
     {
-        $product = Product::where('slug', $slug)->first();
-
-        return $product;
+        return \Cache::remember('product_slug_' . $slug, 3600, function() use ($slug) {
+            return Product::where('slug', $slug)->first();
+        });
     }
 
     /**
@@ -158,6 +158,21 @@ class ProductRepository extends BaseRepository
             throw new InvalidArgumentException($exception->getMessage());
         }
     }
+
+    /**
+     * @param $id
+     * @return array
+     */
+    public function getCookieViews()
+    {
+        if ($this->hasCookieViews()) {
+            $value = $_COOKIE[Product::COOKVIEWS];
+            return explode("|", $value);
+        }
+        return false;
+    }
+
+
 
 
 }

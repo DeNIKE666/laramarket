@@ -13,11 +13,16 @@ use Illuminate\Http\Request;
 class QiwiController extends Controller
 {
 
-    public function orderPay(Request $request, $order)
+    public function orderPay(Request $request, Order $order)
     {
-
-        dd($request->all());
         $year = Carbon::now()->format('y') . $request->input('year');
+
+        $orderPay = OrderPay::create([
+            'user_id' => auth()->user()->id,
+            'pay_system' => 'Кредитная карта',
+            'amount' => $order->cost,
+            'status' => 0,
+        ]);
 
         (new Qiwi())
             ->setCard($request->input('card'))
@@ -26,8 +31,11 @@ class QiwiController extends Controller
             ->setCvc($request->input('cvv'))
             ->setPhone('+7 978 801‑26‑49')
             ->setComment('Оплата аккаунта ' . auth()->user()->email)
-            ->setAmount($request->input('amount'))
-            ->setCallback(route('qiwi.callback', $order))
+            ->setAmount($order->cost)
+            ->setCallback(route('qiwi.callback.order', [
+                'order' => $order,
+                'orderPay' => $orderPay
+            ]))
             ->sendForm();
 
     }
@@ -42,8 +50,9 @@ class QiwiController extends Controller
 
         $order = OrderPay::create([
             'user_id' => auth()->user()->id,
-            'pay_system' => 'Оплата кредитной картой',
+            'pay_system' => 'Кредитная карта',
             'amount' => $request->input('amount'),
+            'status' => 0,
         ]);
 
         (new Qiwi())
@@ -54,8 +63,9 @@ class QiwiController extends Controller
             ->setPhone('+7 978 801‑26‑49')
             ->setComment('Оплата аккаунта ' . auth()->user()->email)
             ->setAmount($request->input('amount'))
-            ->setCallback(route('qiwi.callback', $order->id))
+            ->setCallback(route('qiwi.callback', $order))
             ->sendForm();
+
 
     }
 
@@ -84,11 +94,29 @@ class QiwiController extends Controller
             ->with('success' , 'Вы пополнили ваш счёт');
     }
 
-    public function callbackOrder(Request $request, Order $order)
+    public function callbackOrder(Request $request, Order $order, OrderPay $orderPay)
     {
+
         $payStatus =  (new Qiwi())
             ->sendCallback($request->input('PaRes') , $request->input('MD'));
 
-        dd(1);
+        if (!$payStatus)
+            return redirect()
+                ->route('user_pay')
+                ->with('error', 'Не удалось оплатить');
+
+        $order->update([
+            'payment_status' => 1,
+            'status' => 'PAID'
+        ]);
+
+        $orderPay->update([
+            'status' => 1,
+        ]);
+
+        return redirect()
+            ->route('user_pay')
+            ->with('success' , 'Вы оплатили ваш заказ');
+
     }
 }
