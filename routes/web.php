@@ -59,9 +59,9 @@ Route::group(
     function () {
         Route::get('/cart', 'CartController@cart')->name('index');
         Route::post('/add', 'CartController@add')->name('store');
-        //Route::post('/update', 'CartController@update')->name('update');
-        //Route::post('/remove', 'CartController@remove')->name('remove');
-        Route::post('/clear', 'CartController@clearCart')->name('clear');
+        Route::post('/update', 'CartController@update')->name('update');
+        Route::post('/remove', 'CartController@removeItem')->name('remove');
+        //Route::post('/clear', 'CartController@clearCart')->name('clear');
     }
 );
 

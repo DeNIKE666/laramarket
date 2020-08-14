@@ -1857,6 +1857,10 @@ footer {
   width: auto;
   max-height: 360px;
 }
+.cartContent__img img {
+  max-height: 70px;
+  width: auto;
+}
 
 .productImg span {
   display: -webkit-box;
@@ -8976,4 +8980,28 @@ select.form-control {
 .dropzone,
 .userRegRow--gallery .userRegInp {
   width: 100%;
+}
+.cartContent__img{
+  width: 130px;
+  flex-shrink: 0;
+}
+
+.cartContent__inf{
+  flex-grow: 1;
+}
+
+.cartContent__nums{
+  width: 87px;
+  flex-shrink: 0;
+}
+
+.cartContent__price{
+  width: 160px;
+  flex-shrink: 0;
+}
+
+@media screen and (max-width: 920px){
+  .cartContent__price{
+    width: 110px;
+  }
 }

@@ -7,37 +7,48 @@
             <div class="title">
                 Ваша корзина
             </div>
-            <div class="cartBlock cartContent">
+            <div
+                    id="js_cart"
+                    class="cartBlock cartContent"
+                    data-update="{{ route('cart.update') }}"
+                    data-remove="{{ route('cart.remove') }}"
+            >
                 @if(count($cartCollection) > 0)
                 <div class="cartContentWrap">
                     @foreach(\Cart::getContent() as $item)
-                    <div class="cartContent__item">
+                    <div class="cartContent__item cartContent__item--id{{$item->id}}">
                         <div class="cartContent__img">
                             <img src="{{ $item->attributes->image }}" alt="">
                         </div>
                         <div class="cartContent__inf">
-                            <div class="cartContent__name">
+                            <!--div class="cartContent__name">
                                 Видеокарта
-                            </div>
+                            </div-->
                             <div class="cartContent__title">
                                 {{$item->name}}
                             </div>
                         </div>
                         <div class="cartContent__nums">
-                            <button>
+
+                            <button
+                                    class="js_minus_product"
+                                    data-id="{{$item->id}}"
+                            >
                                 -
                             </button>
-                            <span>
-                                    {{$item->quantity}}
-                                </span>
-                            <button>
+                            <span class="cartContent__quantity">{{$item->quantity}}</span>
+                            <button
+                                    class="js_plus_product"
+                                    data-id="{{$item->id}}"
+                            >
                                 +
                             </button>
+
                         </div>
                         <div class="cartContent__price">
                             {{ \Cart::get($item->id)->getPriceSum() }} рублей
                         </div>
-                        <div class="cartContent__delete">
+                        <div class="cartContent__delete js_del_product" data-id="{{$item->id}}">
                             <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -56,7 +67,7 @@
                     <div class="cartPay__text">
                         Сумма итого:
                     </div>
-                    <div class="cartPay__price">
+                    <div id="totalPrice" class="cartPay__price">
                         {{ \Cart::getTotal() }} рублей
                     </div>
                     <div class="cartSum__inf">
@@ -75,7 +86,7 @@
                     </a>
                 </div>
                 @else
-                    Your Cart is Empty
+                    Корзина пустая
                 @endif
             </div>
 
@@ -83,3 +94,9 @@
     </div>
 
 @endsection
+
+@push('scripts')
+<script>
+
+</script>
+@endpush
