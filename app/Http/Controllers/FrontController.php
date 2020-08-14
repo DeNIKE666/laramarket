@@ -21,7 +21,9 @@ class FrontController extends Controller
     public function index()
     {
         $products_popular = Product::getProductsById(Product::getPopularProductById());
+        //dd(Product::ViewsId());
         $products_views = Product::getProductsById(Product::ViewsId());
+        //$products_views = [];
         return view('front.page.home', compact('products_views', 'products_popular'));
     }
 

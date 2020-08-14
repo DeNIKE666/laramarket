@@ -181,9 +181,11 @@ class Product extends Model implements HasMedia
     {
         if (count($ids) > 0) {
             foreach ($ids as $id) {
-                $result[] = self::staticFindProductById($id);
+                $result[] = Product::staticFindProductById($id);
             }
             return $result;
+        } else {
+            return [];
         }
     }
 
@@ -192,6 +194,8 @@ class Product extends Model implements HasMedia
         if (isset($_COOKIE[Product::COOKVIEWS])) {
             $value = $_COOKIE[Product::COOKVIEWS];
             return explode("|", $value);
+        } else {
+            return [];
         }
     }
 
