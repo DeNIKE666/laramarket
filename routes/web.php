@@ -139,7 +139,8 @@ Route::group(
     function () {
         Route::resource('/categories', 'CategoryController');
         Route::resource('/products', 'ProductController');
-        //Route::post('/products/update/{product}', 'ProductController@update_post')->name('update_post');
+
+        Route::post('/products/attributes', 'ProductController@getAttributeProduct')->name('product_attributes');
 
         Route::group(
             [

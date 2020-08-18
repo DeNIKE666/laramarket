@@ -25,4 +25,13 @@ class ProductAttribute extends Model
     {
         return $this->belongsTo(Product::class);
     }
+
+    public  static function add($fields)
+    {
+        $productAttribute = new static;
+        $productAttribute->fill($fields);
+        $productAttribute->save();
+
+        return $productAttribute;
+    }
 }

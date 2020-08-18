@@ -37,31 +37,17 @@
                         {{ $product->title }}
                     </h1>
                     <div class="product__infs">
-                        <div class="product__inf">
-                            <span>Автор</span>
-                            <span></span>
-                            <span>Кудашкина Таисия</span>
-                        </div>
-                        <div class="product__inf">
-                            <span>Издательство</span>
-                            <span></span>
-                            <span>Websarafan</span>
-                        </div>
-                        <div class="product__inf">
-                            <span>Автор на обложке</span>
-                            <span></span>
-                            <span>Кудашкина Таисия</span>
-                        </div>
-                        <div class="product__inf">
-                            <span>Возрастные ограничения</span>
-                            <span></span>
-                            <span>16+</span>
-                        </div>
-                        <div class="product__inf">
-                            <span>Язык издания</span>
-                            <span></span>
-                            <span>Русский</span>
-                        </div>
+                        @foreach ($arDataProductAttr as $attr)
+                            @if ($loop->index > 5)
+                                @break
+                            @endif
+                                <div class="product__inf">
+                                    <span>{{ $attr['name'] }}</span>
+                                    <span></span>
+                                    <span>{{ $attr['value'] }}</span>
+                                </div>
+                        @endforeach
+
                     </div>
                     <div class="product__btns">
                         <div class="product__set">
@@ -134,21 +120,37 @@
                     </div>
                 </div>
                 <div class="productChar__line">
-                        <span>
-
-                        </span>
+                    <span></span>
                 </div>
                 <div class="productChar__text productChar__text-show">
                     {!! $product->content !!}
                 </div>
                 <div class="productChar__text">
-
+                    @foreach ($arDataProductAttr as $attr)
+                        <div class="product__inf">
+                            <span>{{ $attr['name'] }}</span>
+                            <span></span>
+                            <span>{{ $attr['value'] }}</span>
+                        </div>
+                    @endforeach
                 </div>
             </div>
         </div>
     </div>
 
-    @include('front.partials.relevant_products')
-    @include('front.partials.viewed_products')
+    @if($products_views)
+        <div class="block-5">
+            <div class="wrapper">
+                <div class="title">
+                    Вы недавно смотрели
+                </div>
+                <div class="populars">
+                    @foreach($products_views as $product)
+                        @include('front.partials.item_product', ['product' => $product])
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    @endif
 
 @endsection

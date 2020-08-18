@@ -44,9 +44,18 @@ class FrontController extends Controller
         if (!$this->productRepository->hasCookieViews()) {
             event('productHasViewed', $product);
         }
-
+        $products_views = Product::getProductsById(Product::ViewsId());
         $this->productRepository->addCookieViews($product->id);
-        return view('front.page.product', compact('product'));
+        $arDataProductAttr = [];
+        foreach($product->product_attributes()->get() as $productAttr) {
+            //dump($productAttr->attribute->name);
+            $arDataProductAttr[] = [
+                'name' => $productAttr->attribute->name,
+                'value' => $productAttr->value
+            ];
+        }
+
+        return view('front.page.product', compact('product', 'products_views', 'arDataProductAttr'));
     }
 
 
