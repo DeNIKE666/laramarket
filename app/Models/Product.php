@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Spatie\MediaLibrary\Models\Media;
+use App\Models\ProductAttribute;
 
 class Product extends Model implements HasMedia
 {
@@ -56,6 +57,11 @@ class Product extends Model implements HasMedia
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function product_attributes()
+    {
+        return $this->hasMany(Attribute::class, 'attribute_id');
     }
 
     /**

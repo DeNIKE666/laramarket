@@ -15,4 +15,8 @@
        class="{{ (request()->is('dashboard/categories*')) ? 'active' : '' }}">
         Категории
     </a>
+    <a href="{{ route('admin.attributes.index') }}"
+       class="{{ (request()->is('dashboard/admin/attributes*')) ? 'active' : '' }}">
+        Характеристики
+    </a>
 </div>
