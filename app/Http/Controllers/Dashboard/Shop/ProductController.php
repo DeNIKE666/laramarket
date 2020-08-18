@@ -80,12 +80,14 @@ class ProductController extends Controller
 
         if (isset($request['attribute'])) {
             foreach ($request['attribute'] as $attribute_id=>$attribute_value) {
-                $dataAttr = [
-                    'product_id' => $product->id,
-                    'attribute_id' => $attribute_id,
-                    'value' => $attribute_value
-                ];
-                ProductAttribute::add($dataAttr);
+                if($attribute_value != '') {
+                    $dataAttr = [
+                        'product_id' => $product->id,
+                        'attribute_id' => $attribute_id,
+                        'value' => $attribute_value
+                    ];
+                    ProductAttribute::add($dataAttr);
+                }
             }
         }
 
@@ -176,12 +178,14 @@ class ProductController extends Controller
         ProductAttribute::where('product_id', $product->id)->delete();
         if (isset($request['attribute'])) {
             foreach ($request['attribute'] as $attribute_id=>$attribute_value) {
-                $dataAttr = [
-                    'product_id' => $product->id,
-                    'attribute_id' => $attribute_id,
-                    'value' => $attribute_value
-                ];
-                ProductAttribute::add($dataAttr);
+                if($attribute_value != '') {
+                    $dataAttr = [
+                        'product_id' => $product->id,
+                        'attribute_id' => $attribute_id,
+                        'value' => $attribute_value
+                    ];
+                    ProductAttribute::add($dataAttr);
+                }
             }
         }
 
