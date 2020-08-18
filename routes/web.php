@@ -124,6 +124,11 @@ Route::group(
         Route::resource('/settings', 'SettingController');
         Route::resource('/setting_schedules', 'PaymentScheduleController');
         Route::resource('/attributes', 'AttributeController');
+
+        Route::get('/clear-cache', function() {
+            Artisan::call('cache:clear');
+            return redirect()->back();
+        })->name('clear-cache');
     }
 );
 
