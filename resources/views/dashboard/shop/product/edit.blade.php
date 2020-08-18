@@ -138,7 +138,11 @@
                     Сохранить
                 </button>
             </div>
-            <div class="lcPageAddContentToggle lcPageAddContentToggle-hide lcPageAddChars">
+            <div id="editProductAttribute"
+                 class="lcPageAddContentToggle lcPageAddContentToggle-hide lcPageAddChars js_list_attributes"
+                 data-url="{{ route('product_attributes') }}"
+                 data-id="{{ $product->id }}"
+            >
                 <div class="lcPageAddChars__title">
                     Техническое характеристики
                 </div>
@@ -149,47 +153,3 @@
 
 
 @endsection
-
-
-@push('scripts')
-
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.css" rel="stylesheet"/>
-    <script src="{{ asset('/vendor/unisharp/laravel-ckeditor/ckeditor.js') }}"></script>
-    <script src="{{ asset('/vendor/unisharp/laravel-ckeditor/adapters/jquery.js') }}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.js"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
-
-    <script>
-        $('.textarea').ckeditor(); // if class is prefered.
-
-        $('.select').select2();
-
-        var uploadedDocumentMap = {}
-        Dropzone.options.documentDropzone = {
-            url: '{{ route('gallery') }}',
-            maxFilesize: 2, // MB
-            addRemoveLinks: true,
-            headers: {
-                'X-CSRF-TOKEN': "{{ csrf_token() }}"
-            },
-            success: function (file, response) {
-                $('form').append('<input type="hidden" name="gallery[]" value="' + response.name + '">')
-                uploadedDocumentMap[file.name] = response.name
-            },
-            removedfile: function (file) {
-                file.previewElement.remove()
-                var name = ''
-                if (typeof file.file_name !== 'undefined') {
-                    name = file.file_name
-                } else {
-                    name = uploadedDocumentMap[file.name]
-                }
-                $('form').find('input[name="gallery[]"][value="' + name + '"]').remove()
-            },
-            init: function () {
-            }
-        }
-    </script>
-@endpush
-

@@ -140,37 +140,13 @@
                     Сохранить
                 </button>
             </div>
-            <div class="lcPageAddContentToggle lcPageAddContentToggle-hide lcPageAddChars">
+            <div
+                    id="createProductAttribute"
+                    class="lcPageAddContentToggle lcPageAddContentToggle-hide lcPageAddChars js_list_attributes"
+                    data-url="{{ route('product_attributes') }}"
+            >
                 <div class="lcPageAddChars__title">
                     Техническое характеристики
-                </div>
-                <div class="lcPageAddChar">
-                    <span>
-                        Максимальное разрешение
-                    </span>
-                    <div class="catalogTop__sort">
-                        <div class="catalogSort">
-                            <span></span>
-                            <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    xmlns:xlink="http://www.w3.org/1999/xlink"
-                                    width="12px" height="6px">
-                                <path fill-rule="evenodd" fill="rgb(153, 153, 153)"
-                                      d="M-0.000,-0.000 L12.000,-0.000 L6.000,6.000 L-0.000,-0.000 Z"/>
-                            </svg>
-                            <div class="catalogSort__drop">
-                                                    <span>
-                                                        Ещё одна категория
-                                                    </span>
-                                <span>
-                                                        Другие товары
-                                                    </span>
-                                <span>
-                                                        Новый продукт
-                                                    </span>
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
             </div>

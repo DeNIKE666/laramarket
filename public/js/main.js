@@ -152,4 +152,42 @@ $(function () {
         });
     });
 
+    if ($('#createProductAttribute').length > 0) {
+        loadProductAttributes($('#createProductAttribute').data('url'), 0);
+        $('#category_id').on('change', function() {
+            loadProductAttributes($('#createProductAttribute').data('url'), 0);
+        });
+    }
+
+    if ($('#editProductAttribute').length > 0) {
+        loadProductAttributes($('#editProductAttribute').data('url'), $('#editProductAttribute').data('id'));
+        $('#category_id').on('change', function() {
+            loadProductAttributes($('#editProductAttribute').data('url'), $('#editProductAttribute').data('id'));
+        });
+    }
+
 });
+
+function loadProductAttributes(url, id) {
+    $.ajax({
+        method: "POST",
+        headers: {
+            Accept: "application/json",
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        url: url,
+        data: {
+            'id' : id,
+            'category_id' : $('#category_id').val()
+        },
+        success:function(data){
+            if(data.msg === 'ok') {
+                $('.js_list_attributes').html(data.returnHTML);
+            } else {
+                window.location.reload();
+            }
+        }
+    });
+
+
+}

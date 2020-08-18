@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Models\Category;
 use Gate;
 use App\Traits\UniqueModelSlug;
+use App\Models\ProductAttribute;
 
 class ProductController extends Controller
 {
@@ -45,7 +46,7 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //dump($request['image']);
+        //dd($request['attribute']);
 
         $this->validate($request, [
             'title' => 'required|string|max:255',
@@ -75,6 +76,18 @@ class ProductController extends Controller
                 ];
         //dd($request['gallery']);
         $product = Product::create($data);
+
+
+        if (isset($request['attribute'])) {
+            foreach ($request['attribute'] as $attribute_id=>$attribute_value) {
+                $dataAttr = [
+                    'product_id' => $product->id,
+                    'attribute_id' => $attribute_id,
+                    'value' => $attribute_value
+                ];
+                ProductAttribute::add($dataAttr);
+            }
+        }
 
         if (isset($request['image'])) {
             $product->addMediaFromRequest('image')->toMediaCollection('image');
@@ -123,6 +136,8 @@ class ProductController extends Controller
             }
         }
 
+        //dump($product->category->attributes);
+
         return view('dashboard.shop.product.edit', compact('categories', 'product', 'gallery'));
     }
 
@@ -158,6 +173,17 @@ class ProductController extends Controller
             'status' => Product::STATUS_PRODUCT_ACTIVE,
         ];
 
+        ProductAttribute::where('product_id', $product->id)->delete();
+        if (isset($request['attribute'])) {
+            foreach ($request['attribute'] as $attribute_id=>$attribute_value) {
+                $dataAttr = [
+                    'product_id' => $product->id,
+                    'attribute_id' => $attribute_id,
+                    'value' => $attribute_value
+                ];
+                ProductAttribute::add($dataAttr);
+            }
+        }
 
         if (isset($request['image'])) {
             if ($product->getMedia('image')->first()) {
@@ -185,5 +211,25 @@ class ProductController extends Controller
     {
         $product = Product::findOrFail($id);
         abort_if(Gate::denies('update-post', $product), 403, 'Sorry, you are not an admin');
+    }
+
+    public function getAttributeProduct(Request $request) {
+        $attributes = Category::findOrFail($request->input('category_id'))->attributes->all();
+
+        if($request->input('id')) {
+            $product = Product::findOrFail($request->input('id'));
+            $productAttr = ProductAttribute::where('product_id', $product->id)->pluck('value', 'attribute_id');
+        } else {
+            $productAttr = [];
+        }
+
+        $returnHTML = view("dashboard.shop.product.attributes", compact('attributes', 'productAttr'))->render();
+        $resArray = [
+            'msg'=> "ok",
+            'returnHTML' => $returnHTML,
+            'attributes' => $attributes,
+            'productAttr' => $productAttr
+        ];
+        return response()->json($resArray, 200);
     }
 }
