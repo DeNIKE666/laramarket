@@ -26,7 +26,10 @@ class Category extends Model
 
     public  $path;
 
-
+    public function attributes()
+    {
+        return $this->belongsToMany('App\Models\Attribute');
+    }
 
 
 
@@ -89,26 +92,4 @@ class Category extends Model
     }
 
 
-    /*protected static function boot()
-    {
-        static::saving(function (self $model) {
-            if ($model->isDirty('slug', 'parent_id')) {
-                $model->generatePath();
-            }
-        });
-
-        static::saved(function (self $model) {
-            // Данная переменная нужна для того, чтобы потомки не начали вызывать
-            // метод, т.к. для них путь также изменится
-            static $updating = false;
-
-            if ( ! $updating && $model->isDirty('path')) {
-                $updating = true;
-
-                $model->updateDescendantsPaths();
-
-                $updating = false;
-            }
-        });
-    }*/
 }
