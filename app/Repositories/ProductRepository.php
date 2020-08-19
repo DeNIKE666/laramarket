@@ -114,8 +114,7 @@ class ProductRepository extends BaseRepository
      */
     public function getProductsByCategory(array $arParentCat)
     {
-        $products = Product::whereIn('category_id', $arParentCat)->paginate(Product::PAGINATE);
-
+        $products = Product::whereIn('category_id', $arParentCat)->paginate(1);
         return $products;
     }
 

@@ -12,7 +12,7 @@
                 @include('front.partials.catalog_sort')
 
                 <div class="catalogTop__sum">
-                    1946 товаров
+                    {{ $products->total() }} товаров
                 </div>
             </div>
             <div class="catalog">
@@ -31,6 +31,6 @@
             </div>
         </div>
     </div>
-
+    @include('pagination.default', ['paginator' => $products->withQueryString()])
 
 @endsection
