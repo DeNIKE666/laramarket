@@ -1,5 +1,7 @@
 @extends('layouts.app')
-
+@section('breadcrumbs')
+    {{ Breadcrumbs::render('page', 'Заказ') }}
+@endsection
 @section('content')
 
     @include('front.partials.breadcrumbs')
