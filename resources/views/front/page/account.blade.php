@@ -29,6 +29,9 @@
                         <a class="active" href="">
                             Пополнение/снятие
                         </a>
+                        <a href=""{{ route('history.withdraw') }}>
+                            История выводов
+                        </a>
                         <a href="">
                             Помощь
                         </a>

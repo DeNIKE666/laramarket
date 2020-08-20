@@ -82,7 +82,7 @@ Route::group(
         Route::get('/application_to_sellers', 'UserController@application_to_sellers')->name('application_to_sellers');
         Route::put('/application_to_sellers', 'UserController@request_application_to_sellers')->name('request_application_to_sellers');
         Route::resource('/tasks', 'TaskController');
-        Route::resource('/messages', 'MessageController'); 
+        Route::resource('/messages', 'MessageController');
 
         Route::get('/orders', 'UserController@listOrder')->name('user_orders_list');
         Route::get('/history_orders', 'UserController@historyOrder')->name('user_history_order');

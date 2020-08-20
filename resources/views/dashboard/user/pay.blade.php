@@ -38,15 +38,15 @@
         </div>
         <div id="payRefill" class="lcPageContentPayMiddle">
             @foreach ($refills as $k=>$refill)
-                <div class="lcPageContentPayMiddle__item @if($k == 0) lcPageContentPayMiddle__item-active @endif" >
+                <div class="lcPageContentPayMiddle__item @if($k == 0) lcPageContentPayMiddle__item-active @endif">
                     <div class="lcPageContentPayMiddle__check ">
                     <span>
                     </span>
                         <input @if($k == 0) checked @endif
-                                name="choose"
-                                type="radio"
-                                value="{{ $refill->title }}"
-                                data-percent="{{ $refill->percent }}"
+                        name="choose"
+                               type="radio"
+                               value="{{ $refill->title }}"
+                               data-percent="{{ $refill->percent }}"
                         >
                     </div>
                     <div class="lcPageContentPayMiddle__inf" data-modal="#modal3">
@@ -54,9 +54,9 @@
                         <span>Комиссия {{ $refill->percent }}%</span>
                     </div>
                     @if($refill->ico != '')
-                    <div class="lcPageContentPayMiddle__img">
-                        <img src="{{ asset($refill->ico) }}" alt="">
-                    </div>
+                        <div class="lcPageContentPayMiddle__img">
+                            <img src="{{ asset($refill->ico) }}" alt="">
+                        </div>
                     @endif
                 </div>
             @endforeach
@@ -76,117 +76,121 @@
             </button>
         </div>
     </div>
-    <div class="lcPageContentPay">
-        <div class="lcPageContentPayTop">
-            <div class="lcPageContentPayTop__text">
-                Выберите способ вывода:
+    <form action="{{ route('withdraw') }}" method="POST">
+        @CSRF
+        <div class="lcPageContentPay">
+            <div class="lcPageContentPayTop">
+                <div class="lcPageContentPayTop__text">
+                    Выберите способ вывода:
+                </div>
+                <button class="lcPageContentPayTop__btn btn">
+                    История транзакций
+                </button>
             </div>
-            <button class="lcPageContentPayTop__btn btn">
-                История транзакций
-            </button>
-        </div>
-        <div class="lcPageContentPayMiddle">
-            <div class="lcPageContentPayMiddle__item lcPageContentPayMiddle__item-active">
-                <div class="lcPageContentPayMiddle__check">
+            <div class="lcPageContentPayMiddle">
+                <div class="lcPageContentPayMiddle__item lcPageContentPayMiddle__item-active">
+                    <div class="lcPageContentPayMiddle__check">
                                         <span>
 
                                         </span>
-                    <input name="choose" type="radio">
-                </div>
-                <div class="lcPageContentPayMiddle__inf">
-                    Банковские карты
-                    <span>
+                        <input name="choose" type="radio">
+                    </div>
+                    <div class="lcPageContentPayMiddle__inf">
+                        Банковские карты
+                        <span>
                                             Комиссия 20%
                                         </span>
+                    </div>
+                    <div class="lcPageContentPayMiddle__img">
+                        <img src="{{ asset('img/pay/mastercard1.png') }}" alt="">
+                    </div>
                 </div>
-                <div class="lcPageContentPayMiddle__img">
-                    <img src="{{ asset('img/pay/mastercard1.png') }}" alt="">
-                </div>
-            </div>
-            <div class="lcPageContentPayMiddle__item">
-                <div class="lcPageContentPayMiddle__check">
+                <div class="lcPageContentPayMiddle__item">
+                    <div class="lcPageContentPayMiddle__check">
                                         <span>
 
                                         </span>
-                    <input name="choose" type="radio">
-                </div>
-                <div class="lcPageContentPayMiddle__inf">
-                    Яндекс деньги
-                    <span>
+                        <input name="choose" type="radio">
+                    </div>
+                    <div class="lcPageContentPayMiddle__inf">
+                        Яндекс деньги
+                        <span>
                                             Комиссия 20%
                                         </span>
+                    </div>
+                    <div class="lcPageContentPayMiddle__img">
+                        <img src="{{ asset('img/pay/yandex1.png') }}" alt="">
+                    </div>
                 </div>
-                <div class="lcPageContentPayMiddle__img">
-                    <img src="{{ asset('img/pay/yandex1.png') }}" alt="">
-                </div>
-            </div>
-            <div class="lcPageContentPayMiddle__item">
-                <div class="lcPageContentPayMiddle__check">
+                <div class="lcPageContentPayMiddle__item">
+                    <div class="lcPageContentPayMiddle__check">
                                         <span>
 
                                         </span>
-                    <input name="choose" type="radio">
-                </div>
-                <div class="lcPageContentPayMiddle__inf">
-                    Qiwi
-                    <span>
+                        <input name="pay_system" type="radio" value="QIWI Кошелёк">
+                    </div>
+                    <div class="lcPageContentPayMiddle__inf">
+                        Qiwi
+                        <span>
                                             Комиссия 20%
                                         </span>
+                    </div>
+                    <div class="lcPageContentPayMiddle__img">
+                        <img src="{{ asset('img/pay/qiwi1.png') }}" alt="">
+                    </div>
                 </div>
-                <div class="lcPageContentPayMiddle__img">
-                    <img src="{{ asset('img/pay/qiwi1.png') }}" alt="">
-                </div>
-            </div>
-            <div class="lcPageContentPayMiddle__item">
-                <div class="lcPageContentPayMiddle__check">
+                <div class="lcPageContentPayMiddle__item">
+                    <div class="lcPageContentPayMiddle__check">
                                         <span>
 
                                         </span>
-                    <input name="choose" type="radio">
-                </div>
-                <div class="lcPageContentPayMiddle__inf">
-                    Криптовалюта:
-                    <span>
+                        <input name="choose" type="radio">
+                    </div>
+                    <div class="lcPageContentPayMiddle__inf">
+                        Криптовалюта:
+                        <span>
                                             Комиссия 20%
                                         </span>
+                    </div>
+                    <div class="lcPageContentPayMiddle__img">
+                        <img src="{{ asset('img/pay/crypto.png') }}" alt="">
+                    </div>
                 </div>
-                <div class="lcPageContentPayMiddle__img">
-                    <img src="{{ asset('img/pay/crypto.png') }}" alt="">
-                </div>
-            </div>
-            <div class="lcPageContentPayMiddle__item">
-                <div class="lcPageContentPayMiddle__check">
+                <div class="lcPageContentPayMiddle__item">
+                    <div class="lcPageContentPayMiddle__check">
                                         <span>
 
                                         </span>
-                    <input name="choose" type="radio">
-                </div>
-                <div class="lcPageContentPayMiddle__inf">
-                    Безналичный расчет:
-                    <span>
+                        <input name="choose" type="radio">
+                    </div>
+                    <div class="lcPageContentPayMiddle__inf">
+                        Безналичный расчет:
+                        <span>
                                             Комиссия 20%
                                         </span>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="lcPageContentPayBottom">
-            <div class="lcPageContentPayBottom__item">
+
+            <div class="lcPageContentPayBottom">
+                <div class="lcPageContentPayBottom__item">
                                     <span>
                                         Вывести средства:
                                     </span>
-                <input type="text" placeholder="1 000 000 руб.">
-            </div>
-            <div class="lcPageContentPayBottom__item">
+                    <input type="text" placeholder="1 000 000 руб." name="amount">
+                </div>
+                <div class="lcPageContentPayBottom__item">
                                     <span>
                                         Коммисия:
                                     </span>
-                <input type="text" placeholder="1 000 000 руб.">
+                    <input type="text" placeholder="1 000 000 руб.">
+                </div>
+                <button class="lcPageContentPayBottom__btn btn">
+                    Вывести
+                </button>
             </div>
-            <button class="lcPageContentPayBottom__btn btn">
-                Вывести
-            </button>
         </div>
-    </div>
+    </form>
     <div class="lcPayWrap">
         <div class="lcPageContentSort lcPagePayContentSort">
             <div class="lcPageContentSort__item">
