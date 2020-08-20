@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Models\Order;
+use App\Models\Withdraw;
 use Illuminate\Http\Request;
 use Auth;
 use Illuminate\Support\Str;
@@ -106,9 +108,10 @@ class UserController extends Controller
 
     public function historyOrder()
     {
+        $orders = $this->orderRepository->listOrdersUser();
+
         return view(
             'dashboard.user.history_orders'
-
         );
     }
 
@@ -131,5 +134,28 @@ class UserController extends Controller
             )
         );
     }
+
+    /**
+     * @param Request $request
+     */
+
+    public function withdraw(Request $request)
+    {
+        $request->merge([
+            'user_id' => auth()->user()->id
+        ]);
+
+        Withdraw::create($request->all());
+
+        return redirect()->route('history.withdraw');
+    }
+
+    public function histroryWithdraw()
+    {
+        $withdraws = Withdraw::whereUserId(auth()->user()->id)->get();
+
+        return view('dashboard.user.history_withdraw', compact('withdraws'));
+    }
+
 
 }

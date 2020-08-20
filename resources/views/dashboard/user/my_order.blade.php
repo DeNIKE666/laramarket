@@ -17,19 +17,29 @@
                 Статус заказа
             </div>
         </div>
-        <div class="lcPageContentRow">
-            <div class="lcPageContentCol">
-                80145732180
+
+        @foreach($orders as $order)
+            <div class="lcPageContentRow">
+                <div class="lcPageContentCol">
+                    {{ $order->id }}
+                </div>
+
+                <div class="lcPageContentCol">
+                    {{ $order->created_at }}
+                </div>
+
+                <div class="lcPageContentCol">
+                    {{ $order->cost }} руб.
+                </div>
+
+                <div class="lcPageContentCol">
+                    @if ($order->status == 'pending')
+                        Не оплачен
+                    @elseif($order->status == 'PAID')
+                        Принят в обработку
+                    @endif
+                </div>
             </div>
-            <div class="lcPageContentCol">
-                15.07.2020
-            </div>
-            <div class="lcPageContentCol">
-                1 000 000 руб.
-            </div>
-            <div class="lcPageContentCol">
-                Принят в обработку
-            </div>
-        </div>
+        @endforeach
     </div>
 @endsection

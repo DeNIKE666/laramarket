@@ -84,7 +84,7 @@ Route::group(
         //Route::get('/data_seller', 'UserController@data_seller')->name('data_seller');
 
         Route::resource('/tasks', 'TaskController');
-        Route::resource('/messages', 'MessageController'); 
+        Route::resource('/messages', 'MessageController');
 
         Route::get('/orders', 'UserController@listOrder')->name('user_orders_list');
         Route::get('/history_orders', 'UserController@historyOrder')->name('user_history_order');

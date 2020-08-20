@@ -33,22 +33,32 @@ class CheckoutController extends Controller
             'delivery' => 'required|string|max:255',
         ]);
 
+        $payMethod = $request->input('payment_method');
+
         $order = $this->orderRepository->storeOrderDetails($request->all());
 
         if ($order) {
             Cart::clear();
-            return redirect()->route('infoOrder', [$order])->with('status', 'заказ добавлен');
+            return redirect()->route('infoOrder', [$order, $payMethod])->with('status', 'заказ добавлен');
         } else {
             return redirect()->back()->with('message','Order not placed');
         }
     }
 
-    public function infoOrder(int $id)
+    public function infoOrder(int $id, int $payMethod)
     {
+        $order = Order::findOrFail($id);
+
+        switch ($payMethod) {
+            case '1':
+                $payment = 'visa-payment';
+                break;
+        }
+
         $order = Order::findOrFail($id);
 
         abort_if(Gate::denies('update-post', $order), 403, 'Sorry, you are not an admin');
 
-        return view('front.page.checkout_info', compact('order'));
+        return view('front.page.checkout_info', compact('order', 'payment'));
     }
 }
