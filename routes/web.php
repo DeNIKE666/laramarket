@@ -84,12 +84,15 @@ Route::group(
         //Route::get('/data_seller', 'UserController@data_seller')->name('data_seller');
 
         Route::resource('/tasks', 'TaskController');
-        Route::resource('/messages', 'MessageController');
+        Route::resource('/messages', 'MessageController'); 
 
         Route::get('/orders', 'UserController@listOrder')->name('user_orders_list');
         Route::get('/history_orders', 'UserController@historyOrder')->name('user_history_order');
         Route::get('/list_cashback', 'UserController@userCashback')->name('user_list_cashback');
         Route::get('/user_pay', 'UserController@userPay')->name('user_pay');
+
+        Route::post('/withdraw' , 'UserController@withdraw')->name('withdraw');
+        Route::get('/history/withdraw' , 'UserController@histroryWithdraw')->name('history.withdraw');
 
         Route::prefix('payment')->group(function () {
             Route::post('/visa' , 'QiwiController@pay')->name('qiwi.pay');
@@ -101,7 +104,7 @@ Route::group(
         //Route::get('summernote',array('as'=>'summernote.get','uses'=>'FileController@getSummernote'));
         //Route::post('ckeditor/image_upload','CKEditorController@upload')->name('upload');
     }
-); 
+);
 
 /**
  * функционал админа сайта
