@@ -19,20 +19,8 @@
 @include('layouts.partials.front.header')
 
 <main>
-    @if($errors->any())
-        <div class="alert-danger alert">
-            <ul>
-                @foreach($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-    @if (session('status'))
-        <div class="alert alert-success">
-            {{ session('status') }}
-        </div>
-    @endif
+    @yield('breadcrumbs')
+    @include('layouts.partials.front.alert')
     @yield('content')
 </main>
 @include('layouts.partials.front.footer')

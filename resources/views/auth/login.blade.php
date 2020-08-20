@@ -1,11 +1,13 @@
 @extends('layouts.app')
-
+@section('breadcrumbs')
+    {{ Breadcrumbs::render('page', 'Авторизация') }}
+@endsection
 @section('content')
-    @include('front.partials.breadcrumbs')
+
     <div class="wrapper">
         <form method="POST" class="form-center" action="{{ route('login') }}">
             @csrf
-            <h1 class="form-center__title">Регистрация</h1>
+            <h1 class="form-center__title">Авторизация</h1>
             <div class="form-group">
                 <input
                         id="email"

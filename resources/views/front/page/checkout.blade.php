@@ -1,7 +1,8 @@
 @extends('layouts.app')
-
+@section('breadcrumbs')
+    {{ Breadcrumbs::render('page', 'Оформление заказа') }}
+@endsection
 @section('content')
-    @include('front.partials.breadcrumbs')
     <div class="block-cart">
         <div class="wrapper">
 

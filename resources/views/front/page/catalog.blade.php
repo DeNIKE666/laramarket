@@ -1,8 +1,8 @@
 @extends('layouts.app')
-
+@section('breadcrumbs')
+    {{ Breadcrumbs::render('front_catalog', $category) }}
+@endsection
 @section('content')
-    @include('front.partials.breadcrumbs')
-
     <div class="block-catalog">
         <div class="wrapper">
             <div class="catalogTop">
