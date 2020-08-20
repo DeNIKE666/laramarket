@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    @include('front.partials.breadcrumbs')
+
     <div class="block-cart">
         <div class="wrapper">
             <div class="title">

@@ -1,7 +1,8 @@
 @extends('layouts.app')
-
+@section('breadcrumbs')
+    {{ Breadcrumbs::render('page', 'Оформление заказа') }}
+@endsection
 @section('content')
-    @include('front.partials.breadcrumbs')
     <div class="block-cart">
         <div class="wrapper">
 
@@ -81,7 +82,7 @@
                     Способ оплаты
                 </div>
                 <div class="cartAddress__row">
-                    <div><label>{{ Form::radio('payment_method', '1') }} Viza</label></div>
+                    <div><label>{{ Form::radio('payment_method', '1' ) }} Viza</label></div>
                     <div><label>{{ Form::radio('payment_method', '2') }} Masterkart</label></div>
                     <div><label>{{ Form::radio('payment_method', '3') }} Webmoney</label></div>
                 </div>

@@ -1,7 +1,9 @@
 @extends('layouts.app')
-
+@section('breadcrumbs')
+    {{ Breadcrumbs::render('front_product', $product) }}
+@endsection
 @section('content')
-    @include('front.partials.breadcrumbs')
+
     <div class="block-8">
         <div class="wrapper">
             <div class="product">

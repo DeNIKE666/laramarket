@@ -10,6 +10,10 @@
    class="{{ (request()->is('dashboard/buyer/history_orders*')) ? 'active' : '' }}">
     История заказов
 </a>
+<a href="{{ route('history.withdraw') }}"
+   class="{{ (request()->is('dashboard/buyer/history/withdraw')) ? 'active' : '' }}">
+    История выводов
+</a>
 <a href="{{ route('user_list_cashback') }}"
    class="{{ (request()->is('dashboard/buyer/list_cashback*')) ? 'active' : '' }}">
     Кэшбэк

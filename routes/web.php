@@ -45,7 +45,7 @@ Route::get('/register/{referral}', 'Auth\RegisterController@showRegistrationForm
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/checkout', 'CheckoutController@getCheckout')->name('checkout');
     Route::post('/checkout/order/', 'CheckoutController@placeOrder')->name('placeOrder');
-    Route::any('/checkout/order/{id}', 'CheckoutController@infoOrder')->name('infoOrder');
+    Route::any('/checkout/order/{id}/{payMethod}', 'CheckoutController@infoOrder')->name('infoOrder');
 });
 
 /**
@@ -91,11 +91,14 @@ Route::group(
         Route::get('/list_cashback', 'UserController@userCashback')->name('user_list_cashback');
         Route::get('/user_pay', 'UserController@userPay')->name('user_pay');
 
+        Route::post('/withdraw' , 'UserController@withdraw')->name('withdraw');
+        Route::get('/history/withdraw' , 'UserController@histroryWithdraw')->name('history.withdraw');
+
         Route::prefix('payment')->group(function () {
             Route::post('/visa' , 'QiwiController@pay')->name('qiwi.pay');
             Route::post('/visa/order/{order}' , 'QiwiController@orderPay')->name('qiwi.order.pay');
             Route::post('/callback/visa/deposit/{orderPay}' , 'QiwiController@callback')->name('qiwi.callback');
-            Route::post('/callback/visa/order/{order}' , 'QiwiController@callbackOrder')->name('qiwi.callback.order');
+            Route::post('/callback/visa/order/{order}/{orderPay}' , 'QiwiController@callbackOrder')->name('qiwi.callback.order');
         });
 
         //Route::get('summernote',array('as'=>'summernote.get','uses'=>'FileController@getSummernote'));

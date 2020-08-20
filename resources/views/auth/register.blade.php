@@ -1,7 +1,9 @@
 @extends('layouts.app')
-
+@section('breadcrumbs')
+    {{ Breadcrumbs::render('page', 'Регистрация') }}
+@endsection
 @section('content')
-    @include('front.partials.breadcrumbs')
+
     <div class="wrapper">
 
 

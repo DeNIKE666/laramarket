@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    @include('front.partials.breadcrumbs')
+
     <div class="wrapper">
 
         <form method="POST" class="form-center" action="{{ route('password.update') }}">
