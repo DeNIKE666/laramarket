@@ -1,13 +1,13 @@
 <?php
+
 namespace App\Repositories;
 
-use Cart;
 use App\Models\Order;
-use App\Models\Product;
 use App\Models\OrderItem;
-use App\Contracts\OrderContract;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Pagination\LengthAwarePaginator;
 
-class OrderRepository extends BaseRepository implements OrderContract
+class OrderRepository extends BaseRepository
 {
     public function __construct(Order $model)
     {
@@ -15,48 +15,21 @@ class OrderRepository extends BaseRepository implements OrderContract
         $this->model = $model;
     }
 
-    public function storeOrderDetails($params)
+    /**
+     * Изменить статус заказа
+     *
+     * @param Order       $order
+     * @param int         $status
+     * @param string|null $notes
+     *
+     * @return Order
+     */
+    public function changeOrderStatus(Order $order, int $status, string $notes = null): Order
     {
+        $order->status = $status;
+        $order->notes = $notes ?? $order->notes;
 
-
-        $order = Order::create([
-
-            'user_id'           => auth()->user()->id,
-            'status'            =>  'pending',
-            'cost'              =>  Order::formatCost(Cart::getSubTotal()),
-            //'item_count'        =>  Cart::getTotalQuantity(),
-            'payment_status'    =>  0,
-            'payment_method'    =>  $params['payment_method'],
-            'name'              =>  $params['name'],
-            'address'           =>  $params['address'],
-            'delivery'          =>  $params['delivery'],
-            'phones'            =>  $params['phones'],
-            //'notes'             =>  $params['notes']
-        ]);
-
-        if ($order) {
-
-            $items = Cart::getContent();
-            //dd($items);
-            foreach ($items as $item)
-            {
-
-                try {
-                    $product = Product::findOrFail($item->attributes['product_id']);
-                } catch(ModelNotFoundException $e) {
-                    dd($e);
-                }
-
-
-                $orderItem = new OrderItem([
-                    'product_id'    =>  $item->attributes['product_id'],
-                    'quantity'      =>  $item->quantity,
-                    'price'         =>  Order::formatCost($item->getPriceSum())
-                ]);
-
-                $order->items()->save($orderItem);
-            }
-        }
+        $order->save();
 
         return $order;
     }
@@ -64,6 +37,16 @@ class OrderRepository extends BaseRepository implements OrderContract
     public function listOrders(string $order = 'id', string $sort = 'desc', array $columns = ['*'])
     {
         return $this->all($columns, $order, $sort);
+    }
+
+    /**
+     * @param int $id
+     *
+     * @return Order
+     */
+    public function findOrderById(int $id): Order
+    {
+        return $this->findOneOrFail($id);
     }
 
     public function findOrderByNumber($orderNumber)
@@ -74,15 +57,72 @@ class OrderRepository extends BaseRepository implements OrderContract
     public function listOrdersUser()
     {
         return Order::where('user_id', auth()->user()->id)
-                ->orderBy('id', 'desc')
-                ->paginate(10);
+            ->orderBy('id', 'desc')
+            ->paginate(10);
     }
 
     public function listOrdersShop()
     {
-        return Order::where('status', Order::STATUS_ORDER_START)
-            ->whereHas('items', function($query) {
-                $query->whereHas('product', function($query) {
+        return Order::where('status', Order::STATUS_ORDER_NEW)
+            ->whereHas('items', function ($query) {
+                $query->whereHas('product', function ($query) {
+                    $query->where('user_id', auth()->user()->id);
+                });
+            })
+            ->orderBy('id', 'desc')
+            ->paginate(10);
+    }
+
+    /**
+     * Получить заказ покупателя по id заказа
+     *
+     * @param int $id
+     *
+     * @return Order|null
+     *
+     * @author Anton Reviakin
+     */
+    public function getOwnOrderBuyerById(int $id): ?Order
+    {
+        return Order::where('id', $id)
+            ->where('user_id', auth()->user()->id)
+            ->first();
+    }
+
+    /**
+     * Получить заказ продавца-владельца по id заказа
+     *
+     * @param int $id
+     *
+     * @return Order|null
+     *
+     * @author Anton Reviakin
+     */
+    public function getOwnOrderShopById(int $id): ?Order
+    {
+        return Order::where('id', $id)
+            ->whereHas('items', function (Builder $query) {
+                $query->whereHas('product', function (Builder $query) {
+                    $query->where('user_id', auth()->user()->id);
+                });
+            })
+            ->first();
+    }
+
+    /**
+     * Список заказов продавца по статусам
+     *
+     * @param array $statuses
+     *
+     * @return LengthAwarePaginator
+     *
+     * @author Anton Reviakin
+     */
+    public function listOrdersShopByStatus(array $statuses): LengthAwarePaginator
+    {
+        return Order::whereIn('status', $statuses)
+            ->whereHas('items', function ($query) {
+                $query->whereHas('product', function ($query) {
                     $query->where('user_id', auth()->user()->id);
                 });
             })
@@ -93,8 +133,8 @@ class OrderRepository extends BaseRepository implements OrderContract
     public function getOrderItemsOnlyThisShop(int $order_id)
     {
         return OrderItem::where('order_id', $order_id)
-                ->whereHas('product', function($query) {
-                    $query->where('user_id', auth()->user()->id);
-                })->get();
+            ->whereHas('product', function ($query) {
+                $query->where('user_id', auth()->user()->id);
+            })->get();
     }
 }

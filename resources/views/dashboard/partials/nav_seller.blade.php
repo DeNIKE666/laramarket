@@ -6,7 +6,8 @@
    class="{{ (request()->is('dashboard/shop/products*')) ? 'active' : '' }}">
     Мои товары
 </a>
-<a href="">
+<a href="{{ route('order.list') }}"
+   class="{{ (request()->is('dashboard/shop/order*')) ? 'active' : '' }}">
     Мои продажи
 </a>
 <a href="">

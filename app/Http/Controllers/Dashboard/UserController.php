@@ -3,24 +3,34 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Buyer\OrderChangeStatusRequest;
+use App\Models\Cashback;
 use App\Models\Order;
-use App\Models\Withdraw;
-use Illuminate\Http\Request;
-use Auth;
-use Illuminate\Support\Str;
-use App\Models\Property;
-use App\Models\User;
-use App\Contracts\OrderContract;
 use App\Models\PaymentOption;
+use App\Models\Property;
+use App\Models\Withdraw;
+use App\Repositories\OrderRepository;
+use App\Services\Buyer\Order\OrderChangeStatusService;
+use App\Services\Cashback\CashbackScheduleService;
+use App\Services\Cashback\CashbackService;
+use Auth;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Str;
 
 
 class UserController extends Controller
 {
     protected $orderRepository;
 
-    public function __construct(OrderContract $orderRepository)
+    /** @var OrderChangeStatusService */
+    private $orderChangeStatusService;
+
+    public function __construct(OrderRepository $orderRepository)
     {
         $this->orderRepository = $orderRepository;
+
+        $this->orderChangeStatusService = (new OrderChangeStatusService($orderRepository));
     }
 
     public function edit_profile()
@@ -103,7 +113,30 @@ class UserController extends Controller
                 )
             );
         }
+    }
 
+    /**
+     * Изменить статус заказа
+     *
+     * @param OrderChangeStatusRequest $request
+     *
+     * @return Response
+     *
+     * @author Anton Reviakin
+     */
+    public function changeStatus(OrderChangeStatusRequest $request): Response
+    {
+        $order = $this->orderChangeStatusService->changeStatus($request);
+
+        if ($order->status === Order::STATUS_ORDER_RECEIVED) {
+            //Сохранить период выплат
+            (new CashbackService())->updateCashback($request, $order);
+
+            //Заполнить задания для выплат кешбека
+            (new CashbackScheduleService())->fill($request, $order);
+        }
+
+        return response($order, Response::HTTP_OK);
     }
 
     public function historyOrder()
@@ -142,7 +175,7 @@ class UserController extends Controller
     public function withdraw(Request $request)
     {
         $request->merge([
-            'user_id' => auth()->user()->id
+            'user_id' => auth()->user()->id,
         ]);
 
         Withdraw::create($request->all());

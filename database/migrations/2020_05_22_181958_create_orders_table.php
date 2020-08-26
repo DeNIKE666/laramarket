@@ -21,7 +21,8 @@ class CreateOrdersTable extends Migration
             $table->string('phones');
             $table->string('payment_method');
             $table->string('delivery');
-            $table->integer('cost')->default(0);
+            $table->unsignedInteger('cost')->default(0);
+//            $table->unsignedInteger('avg_percent_fees')->comment('Средний % комиссий по товарам');
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
