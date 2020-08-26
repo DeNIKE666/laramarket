@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Models\OrderItem;
 use App\Models\Category;
+use App\Models\ProductAttribute;
 
 class ProductRepository extends BaseRepository
 {
@@ -114,7 +115,7 @@ class ProductRepository extends BaseRepository
      */
     public function getProductsByCategory(array $arParentCat)
     {
-        $products = Product::whereIn('category_id', $arParentCat)->paginate(Product::PAGINATE);
+        $products = Product::whereIn('category_id', $arParentCat)->active();
         return $products;
     }
 
@@ -171,6 +172,42 @@ class ProductRepository extends BaseRepository
         return false;
     }
 
+    public function getFilterChekbox($catFilter, $arFilterChek, $arIdProduct)
+    {
+
+        $filterProps = [];
+        if($catFilter->count() > 0) {
+            foreach ($catFilter as $attribute) {
+                //dump($attribute->name);
+
+                $listAttr = ProductAttribute::whereIn('product_id', $arIdProduct)
+                    ->where('attribute_id', $attribute->id)
+                    //->pluck('value')
+                    ->get('value')
+                    ->unique('value')
+                    ->toArray();
+                //dump($listAttr);
+                if (count($listAttr) > 0) {
+                    $listAttrFull = [];
+                    foreach ($listAttr as $attr) {
+                        $status = 0;
+                        if (isset($arFilterChek[$attribute->id]) && in_array($attr['value'], $arFilterChek[$attribute->id])) {
+                            $status = 1;
+                        }
+                        $listAttrFull[] = [
+                            'value' =>  $attr['value'],
+                            'status' => $status
+                        ];
+                    }
+                    $filterProps[$attribute->id] = [
+                        'name' => $attribute->name,
+                        'list' => $listAttrFull
+                    ];
+                }
+            }
+        }
+        return $filterProps;
+    }
 
 
 
