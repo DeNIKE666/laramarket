@@ -31,6 +31,6 @@
 
     @include('layouts.partials.js_footer__front')
 
-@stack('scripts')
+
 </body>
 </html>

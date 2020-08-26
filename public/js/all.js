@@ -6015,13 +6015,19 @@ $(function () {
         $(this).find('div').addClass('active');
     }); // Ползунок в фильтре
 
+    let minPrice = $('.filterPrices').data('min');
+    let maxPrice = $('.filterPrices').data("max");
+    let minPriceInp = $('.filterPrice-min').val();
+    let maxPriceInp = $('.filterPrice-max').val();
+
+
     $('.filterRange').slider({
         animate: "slow",
         range: true,
-        values: [20000, 60000],
-        step: 100,
-        min: 0,
-        max: 100000,
+        values: [minPriceInp, maxPriceInp],
+        step: 1,
+        min: minPrice,
+        max: maxPrice,
         slide: function slide(event, ui) {
             var values = ui.values;
             $("#result-polzunok").text(ui.value);
