@@ -88,7 +88,7 @@ class BaseRepository implements BaseContract
      * @param array $data
      * @return mixed
      */
-    public function findOneBy(array $data)
+    public function findOneBy(array $data): Model
     {
         return $this->model->where($data)->first();
     }

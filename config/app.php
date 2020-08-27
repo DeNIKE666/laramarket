@@ -176,8 +176,8 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         Barryvdh\Debugbar\ServiceProvider::class,
-        //Collective\Html\HtmlServiceProvider::class,
-        //Artesaos\SEOTools\Providers\SEOToolsServiceProvider::class,
+        Collective\Html\HtmlServiceProvider::class,
+        Artesaos\SEOTools\Providers\SEOToolsServiceProvider::class,
 
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
      //   Unisharp\Ckeditor\ServiceProvider::class,
