@@ -89,7 +89,7 @@
             </div>
 
             <div class="lcPageContentPayMiddle">
-                @foreach ($refills as $k=>$refill)
+                @foreach ($withdrawals as $k=>$withdrawal)
                     <div class="lcPageContentPayMiddle__item @if($k == 0) lcPageContentPayMiddle__item-active @endif">
                         <div class="lcPageContentPayMiddle__check ">
                     <span>
@@ -97,17 +97,17 @@
                             <input @if($k == 0) checked @endif
                             name="choose"
                                    type="radio"
-                                   value="{{ $refill->title }}"
-                                   data-percent="{{ $refill->withdrawMoney }}"
+                                   value="{{ $withdrawal->title }}"
+                                   data-percent="{{ $withdrawal->withdrawMoney }}"
                             >
                         </div>
                         <div class="lcPageContentPayMiddle__inf" data-modal="#modal3">
-                            {{ $refill->title }}
-                            <span>Комиссия {{ $refill->withdrawMoney * 100 }}%</span>
+                            {{ $withdrawal->title }}
+                            <span>Комиссия {{ $withdrawal->withdrawMoney * 100 }}%</span>
                         </div>
-                        @if($refill->ico != '')
+                        @if($withdrawal->ico != '')
                             <div class="lcPageContentPayMiddle__img">
-                                <img src="{{ asset($refill->ico) }}" alt="">
+                                <img src="{{ asset($withdrawal->ico) }}" alt="">
                             </div>
                         @endif
                     </div>
