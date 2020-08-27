@@ -159,11 +159,13 @@ class UserController extends Controller
     public function userPay()
     {
         $refills = PaymentOption::getPaymentsRefill();
+        $withdrawals = PaymentOption::getPaymentWithdrawal();
         //dd($refill);
         return view(
             'dashboard.user.pay',
             compact(
-                'refills'
+                'refills',
+                'withdrawals'
             )
         );
     }

@@ -17,8 +17,8 @@
         </div>
         <div class="lcPageContentDataChange__inpWrap">
             <div class="lcPageContentDataChange__inp">
-                {{ Form::open(['route' => [ 'edit_profile_data'], 'method' => 'put']) }}
-                    {{ Form::text('name', '', ['placeholder' => 'Новое имя', 'required' => 'required']) }}
+                {!! Form::open(['route' => [ 'edit_profile_data'], 'method' => 'put']) !!}
+                    {!! Form::text('name', '', ['placeholder' => 'Новое имя', 'required' => 'required']) !!}
                     <button type="submit" class="btn-svg">
                         <svg class="lcPageContentDataChange__icon"
                              xmlns="http://www.w3.org/2000/svg"
@@ -28,7 +28,7 @@
                                   d="M8.833,0.333 C3.963,0.333 -0.000,4.296 -0.000,9.167 C-0.000,14.038 3.963,18.000 8.833,18.000 C13.704,18.000 17.667,14.038 17.667,9.167 C17.667,4.296 13.704,0.333 8.833,0.333 ZM13.758,6.221 L8.322,12.336 C8.188,12.487 8.002,12.564 7.814,12.564 C7.665,12.564 7.515,12.515 7.389,12.415 L3.992,9.697 C3.699,9.463 3.652,9.035 3.886,8.742 C4.120,8.449 4.548,8.402 4.841,8.636 L7.735,10.951 L12.742,5.317 C12.991,5.037 13.421,5.012 13.701,5.261 C13.982,5.511 14.007,5.940 13.758,6.221 Z"/>
                         </svg>
                     </button>
-                {{ Form::close() }}
+                {!! Form::close() !!}
             </div>
         </div>
     </div>

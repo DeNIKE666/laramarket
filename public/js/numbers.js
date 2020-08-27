@@ -1,6 +1,6 @@
 $(function(){
     // Цифры при скролле
-
+    console.log('1111');
     var doCount = true;
     $(document).on("scroll", function(){
         let scrnWidth = $(window).height();

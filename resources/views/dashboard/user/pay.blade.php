@@ -46,12 +46,12 @@
                         name="choose"
                                type="radio"
                                value="{{ $refill->title }}"
-                               data-percent="{{ $refill->percent }}"
+                               data-percent="{{ $refill->depositeMoney }}"
                         >
                     </div>
                     <div class="lcPageContentPayMiddle__inf" data-modal="#modal3">
                         {{ $refill->title }}
-                        <span>Комиссия {{ $refill->percent }}%</span>
+                        <span>Комиссия {{ $refill->depositeMoney * 100 }}%</span>
                     </div>
                     @if($refill->ico != '')
                         <div class="lcPageContentPayMiddle__img">
@@ -87,89 +87,32 @@
                     История транзакций
                 </button>
             </div>
+
             <div class="lcPageContentPayMiddle">
-                <div class="lcPageContentPayMiddle__item lcPageContentPayMiddle__item-active">
-                    <div class="lcPageContentPayMiddle__check">
-                                        <span>
+                @foreach ($withdrawals as $k=>$withdrawal)
+                    <div class="lcPageContentPayMiddle__item @if($k == 0) lcPageContentPayMiddle__item-active @endif">
+                        <div class="lcPageContentPayMiddle__check ">
+                    <span>
+                    </span>
+                            <input @if($k == 0) checked @endif
+                            name="choose"
+                                   type="radio"
+                                   value="{{ $withdrawal->title }}"
+                                   data-percent="{{ $withdrawal->withdrawMoney }}"
+                            >
+                        </div>
+                        <div class="lcPageContentPayMiddle__inf" data-modal="#modal3">
+                            {{ $withdrawal->title }}
+                            <span>Комиссия {{ $withdrawal->withdrawMoney * 100 }}%</span>
+                        </div>
+                        @if($withdrawal->ico != '')
+                            <div class="lcPageContentPayMiddle__img">
+                                <img src="{{ asset($withdrawal->ico) }}" alt="">
+                            </div>
+                        @endif
+                    </div>
+                @endforeach
 
-                                        </span>
-                        <input name="choose" type="radio">
-                    </div>
-                    <div class="lcPageContentPayMiddle__inf">
-                        Банковские карты
-                        <span>
-                                            Комиссия 20%
-                                        </span>
-                    </div>
-                    <div class="lcPageContentPayMiddle__img">
-                        <img src="{{ asset('img/pay/mastercard1.png') }}" alt="">
-                    </div>
-                </div>
-                <div class="lcPageContentPayMiddle__item">
-                    <div class="lcPageContentPayMiddle__check">
-                                        <span>
-
-                                        </span>
-                        <input name="choose" type="radio">
-                    </div>
-                    <div class="lcPageContentPayMiddle__inf">
-                        Яндекс деньги
-                        <span>
-                                            Комиссия 20%
-                                        </span>
-                    </div>
-                    <div class="lcPageContentPayMiddle__img">
-                        <img src="{{ asset('img/pay/yandex1.png') }}" alt="">
-                    </div>
-                </div>
-                <div class="lcPageContentPayMiddle__item">
-                    <div class="lcPageContentPayMiddle__check">
-                                        <span>
-
-                                        </span>
-                        <input name="pay_system" type="radio" value="QIWI Кошелёк">
-                    </div>
-                    <div class="lcPageContentPayMiddle__inf">
-                        Qiwi
-                        <span>
-                                            Комиссия 20%
-                                        </span>
-                    </div>
-                    <div class="lcPageContentPayMiddle__img">
-                        <img src="{{ asset('img/pay/qiwi1.png') }}" alt="">
-                    </div>
-                </div>
-                <div class="lcPageContentPayMiddle__item">
-                    <div class="lcPageContentPayMiddle__check">
-                                        <span>
-
-                                        </span>
-                        <input name="choose" type="radio">
-                    </div>
-                    <div class="lcPageContentPayMiddle__inf">
-                        Криптовалюта:
-                        <span>
-                                            Комиссия 20%
-                                        </span>
-                    </div>
-                    <div class="lcPageContentPayMiddle__img">
-                        <img src="{{ asset('img/pay/crypto.png') }}" alt="">
-                    </div>
-                </div>
-                <div class="lcPageContentPayMiddle__item">
-                    <div class="lcPageContentPayMiddle__check">
-                                        <span>
-
-                                        </span>
-                        <input name="choose" type="radio">
-                    </div>
-                    <div class="lcPageContentPayMiddle__inf">
-                        Безналичный расчет:
-                        <span>
-                                            Комиссия 20%
-                                        </span>
-                    </div>
-                </div>
             </div>
 
             <div class="lcPageContentPayBottom">
