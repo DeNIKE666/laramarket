@@ -2,21 +2,31 @@
 
 namespace App\Http\Controllers\Dashboard\Shop;
 
-use App\Contracts\OrderContract;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\Shop\OrderChangeStatusRequest;
 use App\Models\Order;
-use Gate;
-use Auth;
+use App\Repositories\OrderRepository;
+use App\Services\Cashback\CashbackService;
+use App\Services\Shop\OrderService;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\View\View;
 
 class OrderShopController extends Controller
 {
+    /** @var OrderRepository $orderRepository */
     protected $orderRepository;
 
-    public function __construct(OrderContract $orderRepository)
+    /** @var OrderService $orderService */
+    private $orderService;
+
+    public function __construct(OrderRepository $orderRepository)
     {
         $this->orderRepository = $orderRepository;
+
+        $this->orderService = (new OrderService($orderRepository));
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -24,15 +34,60 @@ class OrderShopController extends Controller
      */
     public function index()
     {
-        $orders = $this->orderRepository->listOrdersShop();
+        return redirect()->route('order.list.in-progress');
+
+//        $orders = $this->orderRepository->listOrdersShop();
+//        return view(
+//            'dashboard.shop.orders.index',
+//            compact(
+//                'orders'
+//            )
+//        );
+    }
+
+    /**
+     * Заказы в работе
+     *
+     * @return View
+     * @author Anton Reviakin
+     *
+     */
+    public function listInProgress(): View
+    {
+        $statuses = [
+            Order::STATUS_ORDER_PAYED,
+            Order::STATUS_ORDER_CONFIRMED,
+            Order::STATUS_ORDER_SENT,
+        ];
+
+        $orders = $this->orderRepository->listOrdersShopByStatus($statuses);
+
         return view(
-            'dashboard.admin.order_list',
+            'dashboard.shop.orders.list_in_progress',
             compact(
                 'orders'
             )
         );
     }
 
+    /**
+     * Изменить статус
+     *
+     * @param OrderChangeStatusRequest $request
+     *
+     * @return Response
+     */
+    public function changeStatus(OrderChangeStatusRequest $request): Response
+    {
+        $order = $this->orderService->changeStatus($request);
+
+        //Если Отправлено - добавить кешбек
+        if ($order->status === Order::STATUS_ORDER_SENT) {
+            (new CashbackService)->storeCashback($order);
+        }
+
+        return response($order, Response::HTTP_OK);
+    }
 
     public function detail(Order $order)
     {
@@ -50,7 +105,8 @@ class OrderShopController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -61,7 +117,8 @@ class OrderShopController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -72,8 +129,9 @@ class OrderShopController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int                      $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -84,7 +142,8 @@ class OrderShopController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

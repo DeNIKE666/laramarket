@@ -42,7 +42,7 @@ class User extends Authenticatable
 
 
     /**
-     * тип подовцов
+     * Тип продавцов
      */
     public const TYPE1 = 'persona';
     public const TYPE2 = 'individual';
