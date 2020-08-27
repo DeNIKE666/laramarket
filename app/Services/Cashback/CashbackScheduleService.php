@@ -6,7 +6,6 @@ namespace App\Services\Cashback;
 
 use App\Models\Cashback;
 use App\Models\CashbackSchedule;
-use App\Models\CashbackShedule;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\PaymentSchedule;
@@ -14,8 +13,20 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
+/**
+ * Class CashbackScheduleService
+ *
+ * @package App\Services\Cashback
+ * @author Anton Reviakin
+ */
 class CashbackScheduleService
 {
+    /**
+     * Заполнить таблицу заданиями выплат для заказа
+     *
+     * @param Request $request
+     * @param Order   $order
+     */
     public function fill(Request $request, Order $order)
     {
         //Товары в заказе
@@ -51,7 +62,7 @@ class CashbackScheduleService
      *
      * @return array
      */
-    public function calcPayoutPeriods(Request $request, OrderItem $orderItem): array
+    private function calcPayoutPeriods(Request $request, OrderItem $orderItem): array
     {
         $periods = $this->getPayoutPeriod($request, $orderItem);
 
