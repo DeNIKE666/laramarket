@@ -87,6 +87,7 @@ Route::group(
         Route::resource('/messages', 'MessageController');
 
         Route::get('/orders', 'UserController@listOrder')->name('user_orders_list');
+        Route::patch('/order/{order}/status', 'UserController@changeStatus')->name('user_change_status');
         Route::get('/history_orders', 'UserController@historyOrder')->name('user_history_order');
         Route::get('/list_cashback', 'UserController@userCashback')->name('user_list_cashback');
         Route::get('/user_pay', 'UserController@userPay')->name('user_pay');
@@ -170,6 +171,8 @@ Route::group(
             ],
             function () {
                 Route::get('/list', 'OrderShopController@index')->name('list');
+                Route::get('/list/in-progress', 'OrderShopController@listInProgress')->name('list.in-progress');
+                Route::patch('/{order}/status', 'OrderShopController@changeStatus')->name('change-status');
                 Route::get('/item/{order}', 'OrderShopController@detail')->name('detail');
             }
         );
