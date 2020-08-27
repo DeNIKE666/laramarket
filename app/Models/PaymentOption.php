@@ -26,4 +26,15 @@ class PaymentOption extends Model
     {
         return PaymentOption::Refill()->get();
     }
+
+    public function scopeWithdrawal($query) {
+        return $this->where('is_withdrawal', 1)->orderBy("sort", "asc");
+    }
+
+    public static function getPaymentWithdrawal()
+    {
+        return PaymentOption::Withdrawal()->get();
+    }
+
+
 }

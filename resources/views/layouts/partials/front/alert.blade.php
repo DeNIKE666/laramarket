@@ -1,14 +1,16 @@
 @if($errors->any())
-    <div class="alert-danger alert">
-        <ul>
+    @push('scripts')
+        <script>
             @foreach($errors->all() as $error)
-                <li>{{ $error }}</li>
+            toastr.error("{{ $error }}")
             @endforeach
-        </ul>
-    </div>
+        </script>
+    @endpush
 @endif
 @if (session('status'))
-    <div class="alert alert-success">
-        {{ session('status') }}
-    </div>
+    @push('scripts')
+        <script>
+            toastr.success("{{ session('status') }}")
+        </script>
+    @endpush
 @endif

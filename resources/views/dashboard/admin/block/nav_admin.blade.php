@@ -19,4 +19,8 @@
        class="{{ (request()->is('dashboard/admin/attributes*')) ? 'active' : '' }}">
         Характеристики
     </a>
+    <a href="{{ route('admin.payment_option.index') }}"
+       class="{{ (request()->is('dashboard/admin/payment_option*')) ? 'active' : '' }}">
+        Платёжная система
+    </a>
 </div>

@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderPay;
-use App\Models\User;
 use App\Services\Qiwi;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -15,13 +14,15 @@ class QiwiController extends Controller
 
     public function orderPay(Request $request, Order $order)
     {
-        $year = Carbon::now()->format('y') . $request->input('year');
+        // Не правильно, если в now() будет 2021 год, то итоговый год будет 21ХХ
+        // $year = Carbon::now()->format('y') . $request->input('year');
+        $year = substr(Carbon::now()->format('Y'), 0, 2) . $request->input('year');
 
         $orderPay = OrderPay::create([
-            'user_id' => auth()->user()->id,
+            'user_id'    => auth()->user()->id,
             'pay_system' => 'Кредитная карта',
-            'amount' => $order->cost,
-            'status' => 0,
+            'amount'     => $order->cost,
+            'status'     => 0,
         ]);
 
         (new Qiwi())
@@ -33,8 +34,8 @@ class QiwiController extends Controller
             ->setComment('Оплата аккаунта ' . auth()->user()->email)
             ->setAmount($order->cost)
             ->setCallback(route('qiwi.callback.order', [
-                'order' => $order,
-                'orderPay' => $orderPay
+                'order'    => $order,
+                'orderPay' => $orderPay,
             ]))
             ->sendForm();
 
@@ -49,10 +50,10 @@ class QiwiController extends Controller
         $year = Carbon::now()->format('y') . $request->input('year');
 
         $order = OrderPay::create([
-            'user_id' => auth()->user()->id,
+            'user_id'    => auth()->user()->id,
             'pay_system' => 'Кредитная карта',
-            'amount' => $request->input('amount'),
-            'status' => 0,
+            'amount'     => $request->input('amount'),
+            'status'     => 0,
         ]);
 
         (new Qiwi())
@@ -70,35 +71,35 @@ class QiwiController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param Request  $request
      * @param OrderPay $orderPay
+     *
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Exception
      */
 
     public function callback(Request $request, OrderPay $orderPay)
     {
-       $payStatus =  (new Qiwi())
-            ->sendCallback($request->input('PaRes') , $request->input('MD'));
+        $payStatus = (new Qiwi())
+            ->sendCallback($request->input('PaRes'), $request->input('MD'));
 
-       if (!$payStatus)
-           return redirect()
-               ->route('user_pay')
-               ->with('error', 'Не удалось оплатить');
+        if (!$payStatus)
+            return redirect()
+                ->route('user_pay')
+                ->with('error', 'Не удалось оплатить');
 
-       $orderPay->user()->increment('personal_account', $orderPay->amount);
-       $orderPay->update(['status' => 1]);
+        $orderPay->user()->increment('personal_account', $orderPay->amount);
+        $orderPay->update(['status' => 1]);
 
         return redirect()
             ->route('user_pay')
-            ->with('success' , 'Вы пополнили ваш счёт');
+            ->with('success', 'Вы пополнили ваш счёт');
     }
 
     public function callbackOrder(Request $request, Order $order, OrderPay $orderPay)
     {
-
-        $payStatus =  (new Qiwi())
-            ->sendCallback($request->input('PaRes') , $request->input('MD'));
+        $payStatus = (new Qiwi())
+            ->sendCallback($request->input('PaRes'), $request->input('MD'));
 
         if (!$payStatus)
             return redirect()
@@ -107,7 +108,7 @@ class QiwiController extends Controller
 
         $order->update([
             'payment_status' => 1,
-            'status' => 'PAID'
+            'status'         => Order::STATUS_ORDER_PAYED,
         ]);
 
         $orderPay->update([
@@ -116,7 +117,7 @@ class QiwiController extends Controller
 
         return redirect()
             ->route('user_pay')
-            ->with('success' , 'Вы оплатили ваш заказ');
+            ->with('success', 'Вы оплатили ваш заказ');
 
     }
 }

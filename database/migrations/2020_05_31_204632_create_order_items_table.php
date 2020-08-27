@@ -19,7 +19,12 @@ class CreateOrderItemsTable extends Migration
             $table->unsignedBigInteger('order_id')->index();
             $table->unsignedBigInteger('product_id')->index();
             $table->unsignedInteger('quantity');
-            $table->integer('price');
+            $table->unsignedInteger('price');
+
+            $table->unsignedInteger('product_percent_fee')
+                ->default(0)
+                ->comment('Зафиксированный % комиссии за товар');
+
             $table->date('delivery_date')->nullable();
             $table->string('status')->nullable();
             $table->foreign('order_id')->references('id')->on('orders');
@@ -28,8 +33,8 @@ class CreateOrderItemsTable extends Migration
             $table->timestamps();
         });
 
-        Schema::table('orders', function(Blueprint $table){
-            $table->string('status')->default('pending');
+        Schema::table('orders', function (Blueprint $table) {
+            $table->tinyInteger('status')->default(0);
             $table->text('notes')->nullable();
             $table->boolean('payment_status')->default(0);
             $table->string('select_cashback')->nullable();
@@ -46,7 +51,7 @@ class CreateOrderItemsTable extends Migration
     {
         Schema::dropIfExists('order_items');
 
-        Schema::table('orders', function(Blueprint $table) {
+        Schema::table('orders', function (Blueprint $table) {
             $table->dropColumn('status');
             $table->dropColumn('notes');
             $table->dropColumn('payment_status');
