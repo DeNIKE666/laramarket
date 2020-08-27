@@ -18,12 +18,12 @@ Breadcrumbs::for('front_catalog', function ($trail, $category) {
 Breadcrumbs::for('front_product', function ($trail, $product) {
     //dd($product->category);
     $trail->parent('front_catalog', $product->category);
-    $trail->push($product->title, '');
+    $trail->push($product->title);
 });
 
 Breadcrumbs::for('page', function ($trail, $title) {
     $trail->parent('front_index');
-    $trail->push($title, '');
+    $trail->push($title);
 });
 
 Breadcrumbs::for('login', function ($trail) {

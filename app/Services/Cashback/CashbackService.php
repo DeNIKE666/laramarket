@@ -6,11 +6,19 @@ namespace App\Services\Cashback;
 
 use App\Models\Cashback;
 use App\Models\Order;
+use App\Repositories\CashbackRepository;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class CashbackService
 {
+    private $cashbackRepository;
+
+    public function __construct()
+    {
+        $this->cashbackRepository = app(CashbackRepository::class);
+    }
+
     /**
      * Добавить Кешбек
      *
@@ -20,11 +28,11 @@ class CashbackService
      */
     public function storeCashback(Order $order): Cashback
     {
-        return Cashback::create([
-            'order_id' => $order->id,
-            'cost'     => $order->cost,
-            'status'   => Cashback::STATUS_WAIT_FOR_RECEIVE,
-        ]);
+        return $this->cashbackRepository->store(
+            $order->id,
+            $order->cost,
+            Cashback::STATUS_WAIT_FOR_RECEIVE
+        );
     }
 
     /**
@@ -35,19 +43,18 @@ class CashbackService
      *
      * @return bool
      */
-    public function updateCashback(Request $request, Order $order): bool
+    public function setPayoutsPeriod(Order $order): bool
     {
-        if (!$this->periodExist($request->input('period'))) {
+        $period = \request('period');
+
+        if (!$this->periodExist($period)) {
             abort(Response::HTTP_UNPROCESSABLE_ENTITY, 'Не правильный период выплат');
         }
 
-        $cashbackItem = Cashback::where('order_id', $order->id)->first();
-
-        \Log::info(__METHOD__, $cashbackItem->toArray());
-
-        return $cashbackItem->update([
-            'period' => $request->input('period'),
-        ]);
+        return $this->cashbackRepository->setPayoutsPeriod(
+            $order->id,
+            $period
+        );
     }
 
     /**
