@@ -232,5 +232,10 @@ class Product extends Model implements HasMedia
         });
     }
 
+    public function scopeActive($query)
+    {
+        return $query->where('status', 'active');
+    }
+
 
 }

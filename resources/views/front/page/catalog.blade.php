@@ -16,7 +16,13 @@
                 </div>
             </div>
             <div class="catalog">
-                @include('front.partials.catalog_filter')
+                @include('front.partials.catalog_filter',
+                        [
+                            'filterProps' => $filterProps,
+                            'maxPrice' => $maxPrice,
+                            'minPrice' => $minPrice
+                        ]
+                )
                 <div class="catalogContentWrap">
                     <div class="catalogContent">
                         @if (count($products))

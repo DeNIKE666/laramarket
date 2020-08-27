@@ -128,6 +128,7 @@ Route::group(
         Route::resource('/settings', 'SettingController');
         Route::resource('/setting_schedules', 'PaymentScheduleController');
         Route::resource('/attributes', 'AttributeController');
+        Route::resource('/payment_option', 'PaymentOptionController');
 
         Route::get('/clear-cache', function() {
             Artisan::call('cache:clear');

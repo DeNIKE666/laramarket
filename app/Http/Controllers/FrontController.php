@@ -7,6 +7,8 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Repositories\ProductRepository;
 use Illuminate\Support\Facades\Cookie;
+use App\Models\Attribute;
+use App\Models\ProductAttribute;
 
 
 class FrontController extends Controller
@@ -27,15 +29,38 @@ class FrontController extends Controller
         return view('front.page.home', compact('products_views', 'products_popular'));
     }
 
-    public function catalog($slug)
+    public function catalog(string $slug, Request $request)
     {
         $category = Category::where('slug', $slug)->firstOrFail();
         $arParentCat = $category->descendants()->defaultOrder()->pluck('id')->toArray();
         $arParentCat[] = $category->id;
 
         $products = $this->productRepository->getProductsByCategory($arParentCat);
+        $arIdProduct = $products->pluck('id')->toArray();
 
-        return view('front.page.catalog', compact('category', 'products'));
+        $maxPrice = intval($products->max('price'));
+        $minPrice = intval($products->min('price'));
+
+        $catFilter = $category->attributes()->where('is_filter', 1)->get();
+        //dump($catFilter);
+
+        $arFilterChek = [];
+        if(!empty($request->input('attr'))) {
+            $arFilterChek = $request->input('attr');
+        }
+
+        $filterProps = $this->productRepository->getFilterChekbox($catFilter, $arFilterChek, $arIdProduct);
+
+        $products = $products->paginate(Product::PAGINATE);
+        return view('front.page.catalog',
+            compact(
+            'category',
+                    'products',
+                    'filterProps',
+                    'maxPrice',
+                    'minPrice'
+            )
+        );
     }
 
     public function product($slug)
