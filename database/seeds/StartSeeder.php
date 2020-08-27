@@ -12,17 +12,28 @@ class StartSeeder extends Seeder
      */
     public function run()
     {
-        $categories = array(
-            array('id' => '1','user_id' => '1','title' => 'Электроника','slug' => 'elektronika','status' => 'active','content' => NULL,'created_at' => '2020-07-14 21:42:37','updated_at' => '2020-07-14 21:42:37','_lft' => '1','_rgt' => '14','parent_id' => NULL),
-            array('id' => '2','user_id' => '1','title' => 'Телефоны','slug' => 'telefony','status' => 'active','content' => NULL,'created_at' => '2020-07-14 21:43:27','updated_at' => '2020-07-14 21:43:27','_lft' => '2','_rgt' => '9','parent_id' => '1'),
-            array('id' => '3','user_id' => '1','title' => 'Смартфоны','slug' => 'smartfony','status' => 'active','content' => NULL,'created_at' => '2020-07-14 21:43:56','updated_at' => '2020-07-14 21:43:56','_lft' => '3','_rgt' => '4','parent_id' => '2'),
-            array('id' => '4','user_id' => '1','title' => 'Смарт-часы и фитнес-браслеты','slug' => 'smart-chasy-i-fitnes-braslety','status' => 'active','content' => NULL,'created_at' => '2020-07-14 21:44:10','updated_at' => '2020-07-14 21:44:10','_lft' => '5','_rgt' => '6','parent_id' => '2'),
-            array('id' => '5','user_id' => '1','title' => 'Аксессуары для смартфонов и телефонов','slug' => 'aksessuary-dlya-smartfonov-i-telefonov','status' => 'active','content' => NULL,'created_at' => '2020-07-14 21:44:31','updated_at' => '2020-07-14 21:44:31','_lft' => '7','_rgt' => '8','parent_id' => '2'),
-            array('id' => '6','user_id' => '1','title' => 'Ноутбуки, планшеты и электронные книги','slug' => 'noutbuki-planshety-i-elektronnye-knigi','status' => 'active','content' => NULL,'created_at' => '2020-07-14 21:45:21','updated_at' => '2020-07-14 21:45:21','_lft' => '10','_rgt' => '13','parent_id' => '1'),
-            array('id' => '7','user_id' => '1','title' => 'Ноутбуки','slug' => 'noutbuki','status' => 'active','content' => NULL,'created_at' => '2020-07-14 21:45:36','updated_at' => '2020-07-14 21:45:36','_lft' => '11','_rgt' => '12','parent_id' => '6'),
-            array('id' => '8','user_id' => '1','title' => 'Дом и сад','slug' => 'dom-i-sad','status' => 'active','content' => NULL,'created_at' => '2020-07-14 21:46:10','updated_at' => '2020-07-14 21:46:10','_lft' => '15','_rgt' => '16','parent_id' => NULL),
-            array('id' => '9','user_id' => '1','title' => 'Детские товары','slug' => 'detskie-tovary','status' => 'active','content' => NULL,'created_at' => '2020-07-14 21:46:36','updated_at' => '2020-07-14 21:46:36','_lft' => '17','_rgt' => '18','parent_id' => NULL)
-        );
+        $users = [
+            [
+                'name'       => 'Demo User',
+                'email'      => 'demo@domain.com',
+                'password'   => \Illuminate\Support\Facades\Hash::make('password'),
+                'created_at' => \Illuminate\Support\Carbon::now(),
+            ],
+        ];
+
+        DB::table('users')->insert($users);
+
+        $categories = [
+            ['id' => '1', 'user_id' => '1', 'title' => 'Электроника', 'slug' => 'elektronika', 'status' => 'active', 'content' => null, 'created_at' => '2020-07-14 21:42:37', 'updated_at' => '2020-07-14 21:42:37', '_lft' => '1', '_rgt' => '14', 'parent_id' => null],
+            ['id' => '2', 'user_id' => '1', 'title' => 'Телефоны', 'slug' => 'telefony', 'status' => 'active', 'content' => null, 'created_at' => '2020-07-14 21:43:27', 'updated_at' => '2020-07-14 21:43:27', '_lft' => '2', '_rgt' => '9', 'parent_id' => '1'],
+            ['id' => '3', 'user_id' => '1', 'title' => 'Смартфоны', 'slug' => 'smartfony', 'status' => 'active', 'content' => null, 'created_at' => '2020-07-14 21:43:56', 'updated_at' => '2020-07-14 21:43:56', '_lft' => '3', '_rgt' => '4', 'parent_id' => '2'],
+            ['id' => '4', 'user_id' => '1', 'title' => 'Смарт-часы и фитнес-браслеты', 'slug' => 'smart-chasy-i-fitnes-braslety', 'status' => 'active', 'content' => null, 'created_at' => '2020-07-14 21:44:10', 'updated_at' => '2020-07-14 21:44:10', '_lft' => '5', '_rgt' => '6', 'parent_id' => '2'],
+            ['id' => '5', 'user_id' => '1', 'title' => 'Аксессуары для смартфонов и телефонов', 'slug' => 'aksessuary-dlya-smartfonov-i-telefonov', 'status' => 'active', 'content' => null, 'created_at' => '2020-07-14 21:44:31', 'updated_at' => '2020-07-14 21:44:31', '_lft' => '7', '_rgt' => '8', 'parent_id' => '2'],
+            ['id' => '6', 'user_id' => '1', 'title' => 'Ноутбуки, планшеты и электронные книги', 'slug' => 'noutbuki-planshety-i-elektronnye-knigi', 'status' => 'active', 'content' => null, 'created_at' => '2020-07-14 21:45:21', 'updated_at' => '2020-07-14 21:45:21', '_lft' => '10', '_rgt' => '13', 'parent_id' => '1'],
+            ['id' => '7', 'user_id' => '1', 'title' => 'Ноутбуки', 'slug' => 'noutbuki', 'status' => 'active', 'content' => null, 'created_at' => '2020-07-14 21:45:36', 'updated_at' => '2020-07-14 21:45:36', '_lft' => '11', '_rgt' => '12', 'parent_id' => '6'],
+            ['id' => '8', 'user_id' => '1', 'title' => 'Дом и сад', 'slug' => 'dom-i-sad', 'status' => 'active', 'content' => null, 'created_at' => '2020-07-14 21:46:10', 'updated_at' => '2020-07-14 21:46:10', '_lft' => '15', '_rgt' => '16', 'parent_id' => null],
+            ['id' => '9', 'user_id' => '1', 'title' => 'Детские товары', 'slug' => 'detskie-tovary', 'status' => 'active', 'content' => null, 'created_at' => '2020-07-14 21:46:36', 'updated_at' => '2020-07-14 21:46:36', '_lft' => '17', '_rgt' => '18', 'parent_id' => null],
+        ];
 
         DB::table('categories')->insert($categories);
 

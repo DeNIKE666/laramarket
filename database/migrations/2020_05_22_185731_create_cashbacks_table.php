@@ -15,7 +15,22 @@ class CreateCashbacksTable extends Migration
     {
         Schema::create('cashbacks', function (Blueprint $table) {
             $table->bigIncrements('id');
+//            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('order_id');
+
+            $table->unsignedInteger('cost')->default(0);
+
+            $table->unsignedTinyInteger('status')
+                ->default(0)
+                ->comment('0 - ожидает получения товара покупателем; 1 - отмена заказа; 2 - идут выплаты; 3 - выплаты завершены');
+
+            $table->unsignedTinyInteger('period')
+                ->nullable()
+                ->comment('0 - каждый мес.; 1 - каждый квартал; 2 - каждые 6 мес.; 3 - единоразовая выплата');
+
             $table->timestamps();
+
+            $table->foreign('order_id')->references('id')->on('orders');
         });
     }
 
