@@ -11,12 +11,11 @@
                             <table class="table table-hover">
                                 <thead>
                                 <tr>
-                                    <th>min %</th>
-                                    <th>max %</th>
-                                    <th>ежемесячно</th>
-                                    <th>квартал</th>
-                                    <th>полгода</th>
-                                    <th>единожды</th>
+                                    <th>Комиссия</th>
+                                    <th>@lang('cashback/periods.0')</th>
+                                    <th>@lang('cashback/periods.1')</th>
+                                    <th>@lang('cashback/periods.2')</th>
+                                    <th>@lang('cashback/periods.3')</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -30,26 +29,22 @@
 
                             <div class="form-group">
                                 <label>min %</label>
-                                {{ Form::number('min_percent', '', ['class' => 'form-control']) }}
+                                {{ Form::number('percent', '', ['class' => 'form-control']) }}
                             </div>
                             <div class="form-group">
-                                <label>max %</label>
-                                {{ Form::number('max_percent', '', ['class' => 'form-control']) }}
-                            </div>
-                            <div class="form-group">
-                                <label>Ежемесячно</label>
+                                <label>@lang('cashback/periods.0')</label>
                                 {{ Form::number('quantity_pay_every_month', '', ['class' => 'form-control']) }}
                             </div>
                             <div class="form-group">
-                                <label>В квартал</label>
+                                <label>@lang('cashback/periods.1')</label>
                                 {{ Form::number('quantity_pay_each_quarter', '', ['class' => 'form-control']) }}
                             </div>
                             <div class="form-group">
-                                <label>В полгода</label>
+                                <label>@lang('cashback/periods.2')</label>
                                 {{ Form::number('quantity_pay_every_six_months', '', ['class' => 'form-control']) }}
                             </div>
                             <div class="form-group">
-                                <label>Разова</label>
+                                <label>@lang('cashback/periods.3')</label>
                                 {{ Form::number('quantity_pay_single', '', ['class' => 'form-control']) }}
                             </div>
                             <div class="form-group">
