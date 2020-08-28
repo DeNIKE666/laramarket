@@ -27,6 +27,9 @@
             <span>Вывод средств:</span>
         </div>
     </div>
+
+    <div class="error" id="paymentErrors" style="display: none;"></div>
+
     <div class="lcPageContentPay lcPageContentPay-active">
         <div class="lcPageContentPayTop">
             <div class="lcPageContentPayTop__text">
@@ -38,12 +41,13 @@
         </div>
         <div id="payRefill" class="lcPageContentPayMiddle">
             @foreach ($refills as $k=>$refill)
-                <div class="lcPageContentPayMiddle__item @if($k == 0) lcPageContentPayMiddle__item-active @endif">
+                <div class="payMethods lcPageContentPayMiddle__item @if($k == 0) lcPageContentPayMiddle__item-active @endif">
                     <div class="lcPageContentPayMiddle__check ">
                     <span>
                     </span>
                         <input @if($k == 0) checked @endif
                         name="choose"
+                               data-id="{{ $refill->id }}"
                                type="radio"
                                value="{{ $refill->title }}"
                                data-percent="{{ $refill->depositeMoney }}"
@@ -65,11 +69,11 @@
         <div class="lcPageContentPayBottom">
             <div class="lcPageContentPayBottom__item">
                 <span>Пополнить счёт на:</span>
-                <input id="account_refill_cost" type="number" placeholder="1 000 000 руб.">
+                <input id="account_refill_cost" type="number" min="0" placeholder="1 000 000 руб.">
             </div>
             <div class="lcPageContentPayBottom__item">
-                <span>Будет списанно:</span>
-                <input id="account_refill_cost_percent" type="number" placeholder="1 000 000 руб.">
+                <span>Будет списано:</span>
+                <input id="account_refill_cost_percent" type="number" min="0" placeholder="1 000 000 руб.">
             </div>
             <button id="payModal" class="lcPageContentPayBottom__btn btn">
                 Пополнить
@@ -444,14 +448,16 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/additional-methods.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/jquery.inputmask.bundle.min.js"></script>
 
-        <script>
-            var cc = cardform.card;
-            var month = cardform.month;
-            var year = cardform.year;
-            var cvv = cardform.cvv;
-            var amount = cardform.amount;
+        <script src="{{ asset('js/dashboard/buyer/pay_in_out.js') }}"></script>
 
-            for (var i in ['input', 'change', 'blur', 'keyup']) {
+        <script>
+            let cc = cardform.card;
+            let month = cardform.month;
+            let year = cardform.year;
+            let cvv = cardform.cvv;
+            let amount = cardform.amount;
+
+            for (let i in ['input', 'change', 'blur', 'keyup']) {
                 cc.addEventListener('input', formatCardCode, false);
                 month.addEventListener('input', formatMonth, false);
                 year.addEventListener('input', formatYear, false);

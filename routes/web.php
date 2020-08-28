@@ -11,6 +11,16 @@
 |
 */
 
+Route::post('/comission/payin', 'ComissionsPayInOutController@getPayinFee')->name('get-payin-fee');
+
+//Route::get('/comission/payin', function () {
+//    $comission = (new \App\Services\Comission())
+//        ->amount(1000)
+//        ->payMethod(1000)
+//        ->withdrawComission('QIWI');
+//
+//    dd($comission);
+//});
 
 Route::get('/','FrontController@index')->name('front_index');
 Route::get('catalog/{path}', 'FrontController@catalog')
