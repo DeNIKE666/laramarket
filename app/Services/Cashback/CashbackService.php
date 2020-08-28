@@ -20,7 +20,7 @@ class CashbackService
     }
 
     /**
-     * Добавить Кешбек
+     * Добавить Кешбэк
      *
      * @param Order $order
      *
@@ -36,7 +36,7 @@ class CashbackService
     }
 
     /**
-     * Установить период выплат в кешбеке
+     * Установить период выплат в кешбэке
      *
      * @param Request $request
      * @param Order   $order
@@ -52,6 +52,21 @@ class CashbackService
         return $this->cashbackRepository->setPayoutsPeriod(
             $order->id,
             request('period')
+        );
+    }
+
+    /**
+     * Статус "Идут выплаты"
+     *
+     * @param Order $order
+     *
+     * @return bool
+     */
+    public function setInProgressStatus(Order $order):bool
+    {
+        return $this->cashbackRepository->setPayoutsStatus(
+            $order->id,
+            Cashback::STATUS_PAYOUTS_IN_PROGRESS
         );
     }
 
