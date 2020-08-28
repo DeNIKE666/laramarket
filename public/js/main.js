@@ -58,10 +58,10 @@ $(function () {
         })
     });
 
-    $('#account_refill_cost').on('change', function(){
-         let choose = $('#payRefill').find('input[name="choose"]:checked').data('percent') / 100;
-        $('#account_refill_cost_percent').val(Number($('#account_refill_cost').val()) + $('#account_refill_cost').val() * choose);
-    });
+    // $('#account_refill_cost').on('change', function(){
+    //      let choose = $('#payRefill').find('input[name="choose"]:checked').data('percent') / 100;
+    //     $('#account_refill_cost_percent').val(Number($('#account_refill_cost').val()) + $('#account_refill_cost').val() * choose);
+    // });
 
     $('#payModal').on('click', function(){
         $('.popUp-pay').fadeIn();

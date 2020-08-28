@@ -20,6 +20,7 @@
                             <div data-parent="{{ $category->id }}" class="catalogDrop__right catalogDrop__right-show">
                         @else
                             @if($navbarCategories[$k-1]->depth - $category->depth > 0)
+
                                 </div>
                             @endif
                             </div>
@@ -43,6 +44,9 @@
 
                 @endif
             @endforeach
+            @if($category->depth > 0)
+                </div>
+            @endif
 
             </div>
         @endif

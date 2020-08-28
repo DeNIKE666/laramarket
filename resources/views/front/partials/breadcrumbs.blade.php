@@ -1,11 +1,14 @@
-@if (count($breadcrumbs))
+
+{{--{{ dd($breadcrumbs) }}--}}
+
+
+@isset($breadcrumbs)
 <div class="block-bc">
     <div class="wrapper">
         <div class="bc">
             @foreach ($breadcrumbs as $breadcrumb)
-
                 @if ($breadcrumb->url && !$loop->last)
-                    <a href="{{ $breadcrumb->url }}">{{ $breadcrumb->title }}</a>
+                    <a href="">{{ $breadcrumb->title }}</a>
                     <span>></span>
                 @else
                     <a class="active">{{ $breadcrumb->title }}</a>
@@ -14,4 +17,4 @@
         </div>
     </div>
 </div>
-@endif
+@endisset
