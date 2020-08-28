@@ -19,6 +19,7 @@ class Cashback extends Model
     public const PERIOD_SINGLE = 3;
 
     protected $fillable = [
+        'user_id',
         'order_id',
         'cost',
         'status',
@@ -28,5 +29,10 @@ class Cashback extends Model
     public function shedules()
     {
         return $this->hasMany(CashbackSchedule::class);
+    }
+
+    public function users()
+    {
+        return $this->hasOne(User::class);
     }
 }

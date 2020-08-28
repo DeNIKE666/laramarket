@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Services\Cashback\CashbackScheduleService;
 use Illuminate\Console\Command;
 
 class CashbackPayoutsCommand extends Command
@@ -18,7 +19,7 @@ class CashbackPayoutsCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Выплата кешбека';
+    protected $description = 'Начислить кешбэк пользователям';
 
     /**
      * Create a new command instance.
@@ -37,6 +38,8 @@ class CashbackPayoutsCommand extends Command
      */
     public function handle()
     {
+        (new CashbackScheduleService())->addPeriodicBalance();
+
         return 0;
     }
 }

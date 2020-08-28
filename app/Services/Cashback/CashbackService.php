@@ -29,6 +29,7 @@ class CashbackService
     public function storeCashback(Order $order): Cashback
     {
         return $this->cashbackRepository->store(
+            $order->user_id,
             $order->id,
             $order->cost,
             Cashback::STATUS_WAIT_FOR_RECEIVE

@@ -5,10 +5,12 @@ namespace App\Services\Cashback;
 
 
 use App\Models\Cashback;
+use App\Models\CashbackSchedule;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Repositories\CashbackScheduleRepository;
 use App\Repositories\PaymentsScheduleRepository;
+use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Carbon;
@@ -59,6 +61,31 @@ class CashbackScheduleService
             }
 
             $this->cashbackScheduleRepository->fill($schedules);
+        });
+    }
+
+    /**
+     * Начислить кешбэк по периодам выплат
+     */
+    public function addPeriodicBalance(): void
+    {
+        //Получить список для начисления кешбэка
+        $payouts = $this->cashbackScheduleRepository->getSchedulesForPayout();
+
+        if ($payouts->isEmpty()) {
+            return;
+        }
+
+        $UserRepository = app(UserRepository::class);
+
+        $payouts->each(function (CashbackSchedule $payout) use ($UserRepository) {
+            //Добавить на баланс кешбэка пользователю
+            $UserRepository->addCashback(
+                $payout->cashback->user_id,
+                $payout->payout_amount
+            );
+
+            $this->cashbackScheduleRepository->setAsCompletePayout($payout->id);
         });
     }
 
