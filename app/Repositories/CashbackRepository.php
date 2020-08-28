@@ -17,15 +17,22 @@ class CashbackRepository extends BaseRepository
     /**
      * Добавить кешбек
      *
+     * @param int $user_id
      * @param int $order_id
      * @param     $cost
      * @param int $status
      *
      * @return Cashback
      */
-    public function store(int $order_id, $cost, int $status): Cashback
+    public function store(int $user_id, int $order_id, $cost, int $status): Cashback
     {
-        return Cashback::create(compact('order_id', 'cost', 'status'));
+        return $this
+            ->create(compact(
+                'user_id',
+                'order_id',
+                'cost',
+                'status'
+            ));
     }
 
     /**

@@ -15,7 +15,7 @@ class CreateCashbacksTable extends Migration
     {
         Schema::create('cashbacks', function (Blueprint $table) {
             $table->bigIncrements('id');
-//            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('order_id');
 
             $table->unsignedInteger('cost')->default(0);
@@ -30,6 +30,7 @@ class CreateCashbacksTable extends Migration
 
             $table->timestamps();
 
+            $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('order_id')->references('id')->on('orders');
         });
     }
