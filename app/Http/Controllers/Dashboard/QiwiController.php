@@ -47,6 +47,7 @@ class QiwiController extends Controller
 
     public function pay(Request $request)
     {
+
         $year = Carbon::now()->format('y') . $request->input('year');
 
         $order = OrderPay::create([

@@ -12,6 +12,7 @@
 */
 
 Route::post('/comission/payin', 'ComissionsPayInOutController@getPayinFee')->name('get-payin-fee');
+Route::post('/comission/payout', 'ComissionsPayInOutController@getPayoutFee')->name('get-payout-fee');
 
 //Route::get('/comission/payin', function () {
 //    $comission = (new \App\Services\Comission())

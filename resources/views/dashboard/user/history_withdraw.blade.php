@@ -36,7 +36,7 @@
                 </div>
 
                 <div class="lcPageContentCol">
-                    {{ $withdraw->pay_system }}
+                    {{ $withdraw->paymentOption->title }}
                 </div>
 
                 <div class="lcPageContentCol">

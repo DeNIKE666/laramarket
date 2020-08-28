@@ -32,13 +32,13 @@ class InOutRequest extends FormRequest
     public function messages()
     {
         return [
-            'method.required' => 'Выберите способ пополнения!',
-            'method.integer'  => 'Выберите способ пополнения!',
-            'method.exists'   => 'Выберите способ пополнения!',
+            'method.required' => 'Выберите платежную систему!',
+            'method.integer'  => 'Выберите платежную систему!',
+            'method.exists'   => 'Выберите платежную систему!',
 
-            'amount.required' => 'Введите сумму пополнения',
-            'amount.integer'  => 'Введите сумму пополнения',
-            'amount.min'      => 'Минимальная сумма пополнения :min руб.',
+            'amount.required' => 'Введите корректно сумму!',
+            'amount.integer'  => 'Введите корректно сумму!',
+            'amount.min'      => 'Минимальная сумма :min руб.',
         ];
     }
 

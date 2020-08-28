@@ -1,43 +1,179 @@
 (function () {
     let loading = false;
 
-    let method;
+    let payinMethod;
+    let payoutMethod;
     let isTotalAmount = false;
 
-    let accountRefillCost;
-    let accountRefillCostPercent;
+    let accountPayinCost;
+    let accountPayinCostPercent;
+    let accountPayoutCost;
+    let accountPayoutCostPercent;
 
     const debounce = 500;
     let timeout;
 
+    /**
+     * Выбор платежной системы пополенния
+     */
+    const watchPayinMethods = () => {
+        payinMethod = $("#payin input[type=radio]:checked").data("id");
+
+        $(".payinMethods").on("click", function () {
+            payinMethod = $("#payin input[type=radio]:checked").data("id");
+            calcPayinFee();
+        });
+    };
+
+    /**
+     * Выбор платежной системы снятия
+     */
+    const watchPayoutMethods = () => {
+        payoutMethod = $("#payout input[type=radio]:checked").data("id");
+
+        $(".payoutMethods").on("click", function () {
+            payoutMethod = $("#payout input[type=radio]:checked").data("id");
+            calcPayoutFee();
+        });
+    };
+
+    /**
+     * Пополнение
+     */
+    const watchForPayin = () => {
+        accountPayinCost = $("#account_payin_cost");
+        accountPayinCostPercent = $("#account_payin_cost_percent");
+
+        /**
+         * Ввод суммы пополнения (без комиссии)
+         */
+        accountPayinCost.on("keyup mouseup", function () {
+            clearTimeout(timeout);
+
+            timeout = window.setTimeout(() => {
+                isTotalAmount = false;
+                calcPayinFee();
+            }, debounce);
+        });
+
+        /**
+         * Ввод суммы пополнения (с учетом комиссии)
+         */
+        accountPayinCostPercent.on("keyup mouseup", function () {
+            clearTimeout(timeout);
+
+            timeout = window.setTimeout(() => {
+                isTotalAmount = true;
+                calcPayinFee();
+            }, debounce);
+        });
+    };
+
+    /**
+     * Вывод
+     */
+    const watchForPayout = () => {
+        accountPayoutCost = $("#account_payout_cost");
+        accountPayoutCostPercent = $("#account_payout_cost_percent");
+
+        /**
+         * Ввод суммы снятия (без комиссии)
+         */
+        accountPayoutCost.on("keyup mouseup", function () {
+            clearTimeout(timeout);
+
+            timeout = window.setTimeout(() => {
+                isTotalAmount = false;
+                calcPayoutFee();
+            }, debounce);
+        });
+
+        /**
+         * Ввод суммы снятия (с учетом комиссии)
+         */
+        accountPayoutCostPercent.on("keyup mouseup", function () {
+            clearTimeout(timeout);
+
+            timeout = window.setTimeout(() => {
+                isTotalAmount = true;
+                calcPayoutFee();
+            }, debounce);
+        });
+    };
+
+    /**
+     * Получить сумму пополнения с комиссией
+     */
     const calcPayinFee = () => {
-        if (loading) return;
+        if (loading || (!accountPayinCost.val().length && !accountPayinCostPercent.val().length)) return;
         loading = true;
+
+        $('.payinMethods').addClass("disabled");
 
         hideErrors();
 
-        const amount = isTotalAmount ? parseInt(accountRefillCostPercent.val()) : parseInt(accountRefillCost.val());
+        const amount = isTotalAmount ? parseInt(accountPayinCostPercent.val()) : parseInt(accountPayinCost.val());
 
         const data = {
             amount         : amount || 0,
-            method         : parseInt(method),
+            method         : parseInt(payinMethod),
             is_total_amount: isTotalAmount
         };
 
         axios.post('/comission/payin', data)
             .then(response => {
                 if (isTotalAmount) {
-                    accountRefillCost.val(response.data.amount);
+                    $("#payinAmount").val(data.amount);
+                    accountPayinCost.val(response.data.amount);
                     return;
                 }
 
-                accountRefillCostPercent.val(response.data.amount);
+                $("#payinAmount").val(response.data.amount);
+                accountPayinCostPercent.val(response.data.amount);
             })
             .catch(error => {
                 showErrors(error);
             })
             .finally(() => {
                 loading = false;
+                $('.payinMethods').removeClass("disabled");
+            });
+    };
+
+    /**
+     * Получить сумму снятия с комиссией
+     */
+    const calcPayoutFee = () => {
+        if (loading || (!accountPayoutCost.val().length && !accountPayoutCostPercent.val().length)) return;
+        loading = true;
+
+        $('.payoutMethods').addClass("disabled");
+
+        hideErrors();
+
+        const amount = isTotalAmount ? parseInt(accountPayoutCostPercent.val()) : parseInt(accountPayoutCost.val());
+
+        const data = {
+            amount         : amount || 0,
+            method         : parseInt(payoutMethod),
+            is_total_amount: isTotalAmount
+        };
+
+        axios.post('/comission/payout', data)
+            .then(response => {
+                if (isTotalAmount) {
+                    accountPayoutCost.val(response.data.amount);
+                    return;
+                }
+
+                accountPayoutCostPercent.val(response.data.amount);
+            })
+            .catch(error => {
+                showErrors(error);
+            })
+            .finally(() => {
+                loading = false;
+                $('.payoutMethods').removeClass("disabled");
             });
     };
 
@@ -69,44 +205,10 @@
     };
 
     $(document).ready(function () {
-        accountRefillCost = $("#account_refill_cost");
-        accountRefillCostPercent = $("#account_refill_cost_percent");
-        method = $("#payRefill input[type=radio]:checked").data("id");
+        watchPayinMethods();
+        watchPayoutMethods();
 
-        /**
-         * Выбор способа оплаты
-         */
-        $(".payMethods").on("click", function () {
-            method = $("#payRefill input[type=radio]:checked").data("id");
-            calcPayinFee();
-        });
-
-        /**
-         * Ввод суммы пополнения (без комиссии)
-         */
-        accountRefillCost.on("keyup mouseup", function () {
-            if (!$(this).val().length) return;
-
-            clearTimeout(timeout);
-
-            timeout = window.setTimeout(() => {
-                isTotalAmount = false;
-                calcPayinFee();
-            }, debounce);
-        });
-
-        /**
-         * Ввод суммы пополнения (с учетом комиссии)
-         */
-        accountRefillCostPercent.on("keyup mouseup", function () {
-            if (!$(this).val().length) return;
-
-            clearTimeout(timeout);
-
-            timeout = window.setTimeout(() => {
-                isTotalAmount = true;
-                calcPayinFee();
-            }, debounce);
-        });
+        watchForPayin();
+        watchForPayout();
     });
 }());

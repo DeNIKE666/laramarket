@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Buyer\OrderChangeStatusRequest;
-use App\Models\Cashback;
 use App\Models\Order;
 use App\Models\PaymentOption;
 use App\Models\Property;
@@ -177,7 +176,8 @@ class UserController extends Controller
     public function withdraw(Request $request)
     {
         $request->merge([
-            'user_id' => auth()->user()->id,
+            'user_id'            => auth()->user()->id,
+            'payment_options_id' => $request->input('method'),
         ]);
 
         Withdraw::create($request->all());
@@ -187,7 +187,10 @@ class UserController extends Controller
 
     public function histroryWithdraw()
     {
-        $withdraws = Withdraw::whereUserId(auth()->user()->id)->get();
+        $withdraws = Withdraw::query()
+            ->with('paymentOption:id,title')
+            ->whereUserId(auth()->user()->id)
+            ->get();
 
         return view('dashboard.user.history_withdraw', compact('withdraws'));
     }

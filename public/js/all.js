@@ -6146,10 +6146,18 @@ $(function () {
         }, 200);
     });
     $('.lcPageContentPayMiddle__item').on('click', function () {
-        $('.lcPageContentPayMiddle__item').removeClass('lcPageContentPayMiddle__item-active');
-        $(this).addClass('lcPageContentPayMiddle__item-active');
-        $('.lcPageContentPayMiddle__check input').removeAttr('checked');
+        if ($(this).hasClass('disabled')) return;
+
+        const parent = $(this).parent();
+
+        parent.find('.lcPageContentPayMiddle__item').removeClass('lcPageContentPayMiddle__item-active');
+        // $('.lcPageContentPayMiddle__item').removeClass('lcPageContentPayMiddle__item-active');
+
+        parent.find('.lcPageContentPayMiddle__check input').removeAttr('checked');
+        // $('.lcPageContentPayMiddle__check input').removeAttr('checked');
+
         $(this).find('.lcPageContentPayMiddle__check input').attr('checked', 'true');
+        $(this).addClass('lcPageContentPayMiddle__item-active');
     });
     $('.lcPageAddTop button').on('click', function () {
         $('.lcPageAddTop button').removeClass('active');
