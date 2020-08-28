@@ -128,11 +128,16 @@ class UserController extends Controller
         $order = $this->orderChangeStatusService->changeStatus($request);
 
         if ($order->status === Order::STATUS_ORDER_RECEIVED) {
-            //Сохранить период выплат
-            (new CashbackService())->setPayoutsPeriod($order);
+            $CashbackService = new CashbackService();
 
-            //Заполнить задания для выплат кешбека
-            (new CashbackScheduleService())->fill($request, $order);
+            //Статус "Идут выплаты"
+            $CashbackService->setInProgressStatus($order);
+
+            //Период выплат
+            $CashbackService->setPayoutsPeriod($order);
+
+            //Заполнить расписание выплат кешбэка
+            (new CashbackScheduleService())->fill($order);
         }
 
         return response($order, Response::HTTP_OK);

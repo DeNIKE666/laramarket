@@ -17,6 +17,7 @@ class StartSeeder extends Seeder
                 'name'       => 'Demo User',
                 'email'      => 'demo@domain.com',
                 'password'   => \Illuminate\Support\Facades\Hash::make('password'),
+                'role'       => 'shop',
                 'created_at' => \Illuminate\Support\Carbon::now(),
             ],
         ];
@@ -37,24 +38,24 @@ class StartSeeder extends Seeder
 
         DB::table('categories')->insert($categories);
 
-        $payment_schedules = array(
-            array('id' => '1','min_percent' => '30','max_percent' => '34','quantity_pay_every_month' => '24','quantity_pay_each_quarter' => '21','quantity_pay_every_six_months' => '17','quantity_pay_single' => '11'),
-            array('id' => '2','min_percent' => '35','max_percent' => '39','quantity_pay_every_month' => '21','quantity_pay_each_quarter' => '18','quantity_pay_every_six_months' => '15','quantity_pay_single' => '10'),
-            array('id' => '3','min_percent' => '40','max_percent' => '44','quantity_pay_every_month' => '16','quantity_pay_each_quarter' => '14','quantity_pay_every_six_months' => '13','quantity_pay_single' => '10'),
-            array('id' => '4','min_percent' => '45','max_percent' => '49','quantity_pay_every_month' => '16','quantity_pay_each_quarter' => '14','quantity_pay_every_six_months' => '12','quantity_pay_single' => '9'),
-            array('id' => '5','min_percent' => '50','max_percent' => '54','quantity_pay_every_month' => '15','quantity_pay_each_quarter' => '13','quantity_pay_every_six_months' => '11','quantity_pay_single' => '9'),
-            array('id' => '6','min_percent' => '55','max_percent' => '59','quantity_pay_every_month' => '13','quantity_pay_each_quarter' => '12','quantity_pay_every_six_months' => '10','quantity_pay_single' => '8'),
-            array('id' => '7','min_percent' => '60','max_percent' => '64','quantity_pay_every_month' => '12','quantity_pay_each_quarter' => '11','quantity_pay_every_six_months' => '9','quantity_pay_single' => '8'),
-            array('id' => '8','min_percent' => '65','max_percent' => '69','quantity_pay_every_month' => '11','quantity_pay_each_quarter' => '10','quantity_pay_every_six_months' => '8','quantity_pay_single' => '7'),
-            array('id' => '9','min_percent' => '70','max_percent' => '70','quantity_pay_every_month' => '11','quantity_pay_each_quarter' => '9','quantity_pay_every_six_months' => '8','quantity_pay_single' => '7')
-        );
+        $payment_schedules = [
+            ['id' => '1', 'percent' => '30', 'quantity_pay_every_month' => '24', 'quantity_pay_each_quarter' => '21', 'quantity_pay_every_six_months' => '17', 'quantity_pay_single' => '11'],
+            ['id' => '2', 'percent' => '35', 'quantity_pay_every_month' => '21', 'quantity_pay_each_quarter' => '18', 'quantity_pay_every_six_months' => '15', 'quantity_pay_single' => '10'],
+            ['id' => '3', 'percent' => '40', 'quantity_pay_every_month' => '16', 'quantity_pay_each_quarter' => '14', 'quantity_pay_every_six_months' => '13', 'quantity_pay_single' => '10'],
+            ['id' => '4', 'percent' => '45', 'quantity_pay_every_month' => '16', 'quantity_pay_each_quarter' => '14', 'quantity_pay_every_six_months' => '12', 'quantity_pay_single' => '9'],
+            ['id' => '5', 'percent' => '50', 'quantity_pay_every_month' => '15', 'quantity_pay_each_quarter' => '13', 'quantity_pay_every_six_months' => '11', 'quantity_pay_single' => '9'],
+            ['id' => '6', 'percent' => '55', 'quantity_pay_every_month' => '13', 'quantity_pay_each_quarter' => '12', 'quantity_pay_every_six_months' => '10', 'quantity_pay_single' => '8'],
+            ['id' => '7', 'percent' => '60', 'quantity_pay_every_month' => '12', 'quantity_pay_each_quarter' => '11', 'quantity_pay_every_six_months' => '9', 'quantity_pay_single' => '8'],
+            ['id' => '8', 'percent' => '65', 'quantity_pay_every_month' => '11', 'quantity_pay_each_quarter' => '10', 'quantity_pay_every_six_months' => '8', 'quantity_pay_single' => '7'],
+            ['id' => '9', 'percent' => '70', 'quantity_pay_every_month' => '11', 'quantity_pay_each_quarter' => '9', 'quantity_pay_every_six_months' => '8', 'quantity_pay_single' => '7'],
+        ];
 
         DB::table('payment_schedules')->insert($payment_schedules);
 
-        $products = array(
-            array('id' => '1','user_id' => '1','category_id' => '3','title' => 'Palit GTX 1660 Super Jet Strim','slug' => 'palit-gtx-1660-super-jet-strim','status' => 'active','content' => NULL,'is_moderation' => '1','moderation_comment' => NULL,'group_product' => 'fiz','price' => '1','created_at' => '2020-07-23 20:30:25','updated_at' => '2020-07-29 19:06:20','part_cashback' => '30','old_price' => NULL,'views' => '6'),
-            array('id' => '2','user_id' => '1','category_id' => '7','title' => 'Телевизоры','slug' => 'televizory','status' => 'active','content' => '<p>1212 q23 qe q2</p>','is_moderation' => '1','moderation_comment' => NULL,'group_product' => 'fiz','price' => '1','created_at' => '2020-08-06 07:27:43','updated_at' => '2020-08-06 07:27:43','part_cashback' => '30','old_price' => NULL,'views' => '0')
-        );
+        $products = [
+            ['id' => '1', 'user_id' => '1', 'category_id' => '3', 'title' => 'Palit GTX 1660 Super Jet Strim', 'slug' => 'palit-gtx-1660-super-jet-strim', 'status' => 'active', 'content' => null, 'is_moderation' => '1', 'moderation_comment' => null, 'group_product' => 'fiz', 'price' => '1', 'created_at' => '2020-07-23 20:30:25', 'updated_at' => '2020-07-29 19:06:20', 'part_cashback' => '30', 'old_price' => null, 'views' => '6'],
+            ['id' => '2', 'user_id' => '1', 'category_id' => '7', 'title' => 'Телевизоры', 'slug' => 'televizory', 'status' => 'active', 'content' => '<p>1212 q23 qe q2</p>', 'is_moderation' => '1', 'moderation_comment' => null, 'group_product' => 'fiz', 'price' => '1', 'created_at' => '2020-08-06 07:27:43', 'updated_at' => '2020-08-06 07:27:43', 'part_cashback' => '30', 'old_price' => null, 'views' => '0'],
+        ];
 
         DB::table('products')->insert($products);
 

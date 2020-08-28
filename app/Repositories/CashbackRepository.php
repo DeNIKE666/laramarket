@@ -29,7 +29,22 @@ class CashbackRepository extends BaseRepository
     }
 
     /**
-     * Установить период выплат в кешбеке
+     * Установить статус выплат в кешбэке
+     *
+     * @param int $order_id
+     * @param int $status
+     *
+     * @return bool
+     */
+    public function setPayoutsStatus(int $order_id, int $status): bool
+    {
+        return $this
+            ->findOneBy(compact('order_id'))
+            ->update(compact('status'));
+    }
+
+    /**
+     * Установить период выплат в кешбэке
      *
      * @param int $order_id
      * @param int $period

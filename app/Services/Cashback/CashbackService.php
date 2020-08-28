@@ -20,7 +20,7 @@ class CashbackService
     }
 
     /**
-     * Добавить Кешбек
+     * Добавить Кешбэк
      *
      * @param Order $order
      *
@@ -36,7 +36,7 @@ class CashbackService
     }
 
     /**
-     * Установить период выплат в кешбеке
+     * Установить период выплат в кешбэке
      *
      * @param Request $request
      * @param Order   $order
@@ -45,26 +45,37 @@ class CashbackService
      */
     public function setPayoutsPeriod(Order $order): bool
     {
-        $period = \request('period');
-
-        if (!$this->periodExist($period)) {
+        if (!$this->periodExist()) {
             abort(Response::HTTP_UNPROCESSABLE_ENTITY, 'Не правильный период выплат');
         }
 
         return $this->cashbackRepository->setPayoutsPeriod(
             $order->id,
-            $period
+            request('period')
+        );
+    }
+
+    /**
+     * Статус "Идут выплаты"
+     *
+     * @param Order $order
+     *
+     * @return bool
+     */
+    public function setInProgressStatus(Order $order):bool
+    {
+        return $this->cashbackRepository->setPayoutsStatus(
+            $order->id,
+            Cashback::STATUS_PAYOUTS_IN_PROGRESS
         );
     }
 
     /**
      * Существует ли период
      *
-     * @param int $period
-     *
      * @return bool
      */
-    private function periodExist(int $period): bool
+    private function periodExist(): bool
     {
         $periods = [
             Cashback::PERIOD_EVERY_MONTH,
@@ -73,6 +84,6 @@ class CashbackService
             Cashback::PERIOD_SINGLE,
         ];
 
-        return in_array($period, $periods);
+        return in_array(request('period'), $periods);
     }
 }
