@@ -132,8 +132,8 @@ class UserController extends Controller
             //Сохранить период выплат
             (new CashbackService())->setPayoutsPeriod($order);
 
-            //Заполнить задания для выплат кешбека
-            (new CashbackScheduleService())->fill($request, $order);
+            //Заполнить расписание выплат кешбэка
+            (new CashbackScheduleService())->fill($order);
         }
 
         return response($order, Response::HTTP_OK);

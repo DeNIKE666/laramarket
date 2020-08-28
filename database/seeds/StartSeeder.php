@@ -38,15 +38,15 @@ class StartSeeder extends Seeder
         DB::table('categories')->insert($categories);
 
         $payment_schedules = array(
-            array('id' => '1','min_percent' => '30','max_percent' => '34','quantity_pay_every_month' => '24','quantity_pay_each_quarter' => '21','quantity_pay_every_six_months' => '17','quantity_pay_single' => '11'),
-            array('id' => '2','min_percent' => '35','max_percent' => '39','quantity_pay_every_month' => '21','quantity_pay_each_quarter' => '18','quantity_pay_every_six_months' => '15','quantity_pay_single' => '10'),
-            array('id' => '3','min_percent' => '40','max_percent' => '44','quantity_pay_every_month' => '16','quantity_pay_each_quarter' => '14','quantity_pay_every_six_months' => '13','quantity_pay_single' => '10'),
-            array('id' => '4','min_percent' => '45','max_percent' => '49','quantity_pay_every_month' => '16','quantity_pay_each_quarter' => '14','quantity_pay_every_six_months' => '12','quantity_pay_single' => '9'),
-            array('id' => '5','min_percent' => '50','max_percent' => '54','quantity_pay_every_month' => '15','quantity_pay_each_quarter' => '13','quantity_pay_every_six_months' => '11','quantity_pay_single' => '9'),
-            array('id' => '6','min_percent' => '55','max_percent' => '59','quantity_pay_every_month' => '13','quantity_pay_each_quarter' => '12','quantity_pay_every_six_months' => '10','quantity_pay_single' => '8'),
-            array('id' => '7','min_percent' => '60','max_percent' => '64','quantity_pay_every_month' => '12','quantity_pay_each_quarter' => '11','quantity_pay_every_six_months' => '9','quantity_pay_single' => '8'),
-            array('id' => '8','min_percent' => '65','max_percent' => '69','quantity_pay_every_month' => '11','quantity_pay_each_quarter' => '10','quantity_pay_every_six_months' => '8','quantity_pay_single' => '7'),
-            array('id' => '9','min_percent' => '70','max_percent' => '70','quantity_pay_every_month' => '11','quantity_pay_each_quarter' => '9','quantity_pay_every_six_months' => '8','quantity_pay_single' => '7')
+            array('id' => '1','percent' => '30', 'quantity_pay_every_month' => '24','quantity_pay_each_quarter' => '21','quantity_pay_every_six_months' => '17','quantity_pay_single' => '11'),
+            array('id' => '2','percent' => '35', 'quantity_pay_every_month' => '21','quantity_pay_each_quarter' => '18','quantity_pay_every_six_months' => '15','quantity_pay_single' => '10'),
+            array('id' => '3','percent' => '40', 'quantity_pay_every_month' => '16','quantity_pay_each_quarter' => '14','quantity_pay_every_six_months' => '13','quantity_pay_single' => '10'),
+            array('id' => '4','percent' => '45', 'quantity_pay_every_month' => '16','quantity_pay_each_quarter' => '14','quantity_pay_every_six_months' => '12','quantity_pay_single' => '9'),
+            array('id' => '5','percent' => '50', 'quantity_pay_every_month' => '15','quantity_pay_each_quarter' => '13','quantity_pay_every_six_months' => '11','quantity_pay_single' => '9'),
+            array('id' => '6','percent' => '55', 'quantity_pay_every_month' => '13','quantity_pay_each_quarter' => '12','quantity_pay_every_six_months' => '10','quantity_pay_single' => '8'),
+            array('id' => '7','percent' => '60', 'quantity_pay_every_month' => '12','quantity_pay_each_quarter' => '11','quantity_pay_every_six_months' => '9','quantity_pay_single' => '8'),
+            array('id' => '8','percent' => '65', 'quantity_pay_every_month' => '11','quantity_pay_each_quarter' => '10','quantity_pay_every_six_months' => '8','quantity_pay_single' => '7'),
+            array('id' => '9','percent' => '70', 'quantity_pay_every_month' => '11','quantity_pay_each_quarter' => '9','quantity_pay_every_six_months' => '8','quantity_pay_single' => '7')
         );
 
         DB::table('payment_schedules')->insert($payment_schedules);
