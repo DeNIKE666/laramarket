@@ -14,8 +14,22 @@ class StartSeeder extends Seeder
     {
         $users = [
             [
-                'name'       => 'Demo User',
-                'email'      => 'demo@domain.com',
+                'name'       => 'Admin User',
+                'email'      => 'admin@domain.com',
+                'password'   => \Illuminate\Support\Facades\Hash::make('password'),
+                'role'       => 'admin',
+                'created_at' => \Illuminate\Support\Carbon::now(),
+            ],
+            [
+                'name'       => 'User',
+                'email'      => 'user@domain.com',
+                'password'   => \Illuminate\Support\Facades\Hash::make('password'),
+                'role'       => 'user',
+                'created_at' => \Illuminate\Support\Carbon::now(),
+            ],
+            [
+                'name'       => 'Shop',
+                'email'      => 'shop@domain.com',
                 'password'   => \Illuminate\Support\Facades\Hash::make('password'),
                 'role'       => 'shop',
                 'created_at' => \Illuminate\Support\Carbon::now(),
