@@ -55,6 +55,8 @@ class CategoryController extends Controller
             'parent' => 'nullable|integer|exists:categories,id',
         ]);
 
+
+
         $data = array_merge(
             [
                 'title' => $request['title'],
@@ -70,7 +72,7 @@ class CategoryController extends Controller
         );
 
         $category = Category::create($data);
-
+        Cache::forget('getAllCategory');
         return redirect()->route('categories.index');
     }
 
@@ -111,7 +113,7 @@ class CategoryController extends Controller
             'content' => $request['content'],
             'slug' => $request['slug']
         ]);
-
+        Cache::forget('getAllCategory');
         return redirect()->back()->with('status', 'Категория обновлена');
     }
 
@@ -120,21 +122,21 @@ class CategoryController extends Controller
         if ($first = $category->siblings()->defaultOrder()->first()) {
             $category->insertBeforeNode($first);
         }
-
+        Cache::forget('getAllCategory');
         return redirect()->route('categories.index');
     }
 
     public function up(Category $category)
     {
         $category->up();
-
+        Cache::forget('getAllCategory');
         return redirect()->route('categories.index');
     }
 
     public function down(Category $category)
     {
         $category->down();
-
+        Cache::forget('getAllCategory');
         return redirect()->route('categories.index');
     }
 
@@ -143,7 +145,7 @@ class CategoryController extends Controller
         if ($last = $category->siblings()->defaultOrder('desc')->first()) {
             $category->insertAfterNode($last);
         }
-
+        Cache::forget('getAllCategory');
         return redirect()->route('categories.index');
     }
 
@@ -152,6 +154,7 @@ class CategoryController extends Controller
         if (Gate::allows('role-admin')) {
             $category->delete();
         }
+        Cache::forget('getAllCategory');
         return redirect()->route('categories.index');
     }
 }

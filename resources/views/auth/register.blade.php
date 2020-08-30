@@ -45,10 +45,26 @@
 
                 @error('email')
                 <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
+                    <strong>{{ $message }}</strong>
+                </span>
                 @enderror
 
+            </div>
+            <div class="form-group">
+
+                <input type="tel"
+                   class="popUp__inp"
+                   placeholder="Телефон"
+                   name="phone"
+                   value="{{ old('phone') }}"
+                   required
+
+                >
+                @error('phone')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+                @enderror
             </div>
 
             <div class="form-group">
@@ -65,8 +81,8 @@
 
                 @error('password')
                 <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
+                    <strong>{{ $message }}</strong>
+                </span>
                 @enderror
 
             </div>
