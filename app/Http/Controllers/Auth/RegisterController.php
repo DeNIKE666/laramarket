@@ -3,13 +3,16 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
 use App\Models\User;
+use App\Providers\RouteServiceProvider;
+use App\Repositories\UserRepository;
 use Illuminate\Foundation\Auth\RegistersUsers;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
 {
@@ -44,16 +47,36 @@ class RegisterController extends Controller
     }
 
     /**
+     * Запомнить партнера
+     *
+     * @param Request $request
+     * @param string  $partnerToken
+     *
+     * @return RedirectResponse
+     * @author Anton Reviakin
+     */
+    public function rememberPartnerToken(string $partnerToken = ''): RedirectResponse
+    {
+        if (!empty($partnerToken)) {
+            Session::put('partner', $partnerToken);
+            Cookie::queue('partner', $partnerToken, (60 * 24 * 365), '/', null, null, false);
+        }
+
+        return redirect()->route('front_index');
+    }
+
+    /**
      * Get a validator for an incoming registration request.
      *
-     * @param  array  $data
+     * @param array $data
+     *
      * @return \Illuminate\Contracts\Validation\Validator
      */
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'phone' => ['required', 'regex:/^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}/'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'phone'    => ['required', 'regex:/^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}/'],
+            'email'    => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:6', 'confirmed'],
         ]);
     }
@@ -61,18 +84,31 @@ class RegisterController extends Controller
     /**
      * Create a new user instance after a valid registration.
      *
-     * @param  array  $data
+     * @param array $data
+     *
      * @return \App\Models\User
      */
     protected function create(array $data)
     {
+        $partnerId = null;
+
+        //Получить токен партнера
+        $partnerToken = Session::get('partner') ?? Cookie::get('partner');
+
+        //Найти партнера по токену
+        if ($partnerToken) {
+            $partner = app(UserRepository::class)->getPartnerByToken($partnerToken);
+
+            if ($partner) {
+                $partnerId = $partner->id;
+            }
+        }
 
         return User::create([
-            //'referral' => $data['referral'],
-            'partner_token' => Str::random(100),
-            'phone' => $data['phone'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
+            'partner_id' => $partnerId,
+            'phone'      => $data['phone'],
+            'email'      => $data['email'],
+            'password'   => Hash::make($data['password']),
         ]);
     }
 
@@ -83,8 +119,6 @@ class RegisterController extends Controller
      */
     public function showRegistrationForm(Request $request)
     {
-        $referral = $request->input('referral');
-        //dump($referral);
-        return view('auth.register', compact('referral'));
+        return view('auth.register');
     }
 }

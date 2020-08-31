@@ -8,8 +8,7 @@ class PaymentSchedule extends Model
 {
 
     protected $fillable = [
-        'min_percent',
-        'max_percent',
+        'percent',
         'quantity_pay_every_month',
         'quantity_pay_each_quarter',
         'quantity_pay_every_six_months',

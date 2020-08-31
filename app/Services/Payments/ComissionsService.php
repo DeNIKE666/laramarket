@@ -37,12 +37,6 @@ class ComissionsService
     }
 
     /**
-     * Узнаем комиссию по платежной системе на ввод
-     *
-     * @param string $payMethod
-     */
-
-    /**
      * Сумма с комиссией пополнения
      *
      * @param bool $isTotalAmount
@@ -63,18 +57,30 @@ class ComissionsService
     }
 
     /**
-     * @param string $payMethod
+     * Сумма с комиссией снятия
      *
-     * @return float|int
-     * Комиссия на вывод
+     * @param bool $isTotalAmount
+     *
+     * @return int
      */
-    public function payoutComission(string $payMethod)
+    public function payoutComission(bool $isTotalAmount = false): int
     {
-        $payment = PaymentOption::query()->where('title', $payMethod)->first();
+        $payment = PaymentOption::find($this->payMethod);
 
-        $comission = $this->amount * $payment->withdrawMoney;
+        if (!$isTotalAmount) {
+            $comission = floor($this->amount + $this->amount * $payment->withdrawMoney);
+        } else {
+            $comission = floor($this->amount / (1 + $payment->withdrawMoney));
+        }
 
-        return $this->amount - $comission;
+        return $comission;
+
+
+//        $payment = PaymentOption::query()->where('title', $payMethod)->first();
+//
+//        $comission = $this->amount * $payment->withdrawMoney;
+//
+//        return $this->amount - $comission;
 
     }
 }

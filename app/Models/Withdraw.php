@@ -8,8 +8,13 @@ class Withdraw extends Model
 {
     protected $fillable = [
         'amount',
-        'pay_system',
+        'payment_options_id',
         'user_id',
         'status'
     ];
+
+    public function paymentOption()
+    {
+        return $this->hasOne(PaymentOption::class, 'id');
+    }
 }

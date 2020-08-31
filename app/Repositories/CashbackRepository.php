@@ -17,19 +17,41 @@ class CashbackRepository extends BaseRepository
     /**
      * Добавить кешбек
      *
+     * @param int $user_id
      * @param int $order_id
      * @param     $cost
      * @param int $status
      *
      * @return Cashback
      */
-    public function store(int $order_id, $cost, int $status): Cashback
+    public function store(int $user_id, int $order_id, $cost, int $status): Cashback
     {
-        return Cashback::create(compact('order_id', 'cost', 'status'));
+        return $this
+            ->create(compact(
+                'user_id',
+                'order_id',
+                'cost',
+                'status'
+            ));
     }
 
     /**
-     * Установить период выплат в кешбеке
+     * Установить статус выплат в кешбэке
+     *
+     * @param int $order_id
+     * @param int $status
+     *
+     * @return bool
+     */
+    public function setPayoutsStatus(int $order_id, int $status): bool
+    {
+        return $this
+            ->findOneBy(compact('order_id'))
+            ->update(compact('status'));
+    }
+
+    /**
+     * Установить период выплат в кешбэке
      *
      * @param int $order_id
      * @param int $period

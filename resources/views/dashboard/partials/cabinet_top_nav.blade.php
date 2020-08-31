@@ -15,8 +15,8 @@
         @endcan
 
         @can('is-partner')
-            <a href="{{ route('partnership.index') }}"
-                class="lcPageContentTop__btn {{ request()->is('dashboard/partnership/*') ? 'lcPageContentTop__btn-active btn-blue' : null }}">
+            <a href="{{ route('partner.index') }}"
+                class="lcPageContentTop__btn {{ request()->is('dashboard/partner', 'dashboard/partner/*') ? 'lcPageContentTop__btn-active btn-blue' : null }}">
                 Кабинет партнёра
             </a>
         @endcan

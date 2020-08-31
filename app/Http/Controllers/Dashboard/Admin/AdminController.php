@@ -3,53 +3,51 @@
 namespace App\Http\Controllers\Dashboard\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
+use App\Repositories\Admin\OrderRepository;
+use App\Repositories\Admin\UserRepository;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
-use App\Repositories\Admin\UserRepository;
-use App\Repositories\Admin\OrderRepository;
+use Illuminate\View\View;
 
 class AdminController extends Controller
 {
-    protected $adminUserRepository;
-    protected $adminOrderRepository;
+    private $userRepository;
+    private $orderRepository;
 
-    public function __construct(
-        UserRepository $adminUserRepository,
-        OrderRepository $adminOrderRepository
-    )
+    public function __construct()
     {
-        $this->adminUserRepository = $adminUserRepository;
-        $this->adminOrderRepository = $adminOrderRepository;
+        $this->userRepository = app(UserRepository::class);
+        $this->orderRepository = app(OrderRepository::class);
     }
 
-    public function index()
+    /**
+     * @return View
+     */
+    public function index(): View
     {
         $user = Auth::user();
-        return view(
-            'dashboard.index',
-            compact(
-                'user'
-            )
-        );
+        return view('dashboard.index', compact('user'));
     }
 
-    public function getUsers()
+    /**
+     * Список пользователей
+     *
+     * @return View
+     */
+    public function getUsers(): View
     {
-        $users = $this->adminUserRepository->listUsers();
-        return view(
-            'dashboard.admin.user_list',
-            compact(
-                'users'
-            )
-        );
+        $users = $this->userRepository->listUsers();
+
+        return view('dashboard.admin.user_list', compact('users'));
     }
 
     public function infoUser(int $id)
     {
         try {
             $user = User::findOrFail($id);
-        } catch(ModelNotFoundException $e) {
+        } catch (ModelNotFoundException $e) {
             dd($e);
         }
         return view(
@@ -60,21 +58,24 @@ class AdminController extends Controller
         );
     }
 
-    public function approved_seller(Request $request)
+    /**
+     * Одобрить заявку на продавца
+     *
+     * @param Request $request
+     *
+     * @return RedirectResponse
+     * @author Anton Reviakin
+     */
+    public function approveAsSeller(Request $request): RedirectResponse
     {
-        try {
-            $user = User::findOrFail($request->input('user_id'));
-        } catch(ModelNotFoundException $e) {
-            dd($e);
-        }
-        $user->role = User::ROLE_SHOP;
-        $user->request_shop = 0;
-        $user->save();
+        $this->userRepository->setAsSeller($request->input('id'));
+
         return redirect()->back()->with('status', 'Заявка одобрена');
     }
 
-    public function orders() {
-        $orders = $this->adminOrderRepository->getAllOrders();
+    public function orders()
+    {
+        $orders = $this->orderRepository->getAllOrders();
         return view(
             'dashboard.admin.order_list',
             compact(

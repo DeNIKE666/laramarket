@@ -8,8 +8,11 @@ use App\Models\Cashback;
 use App\Models\CashbackSchedule;
 use App\Models\Order;
 use App\Models\OrderItem;
-use App\Models\PaymentSchedule;
+use App\Repositories\CashbackScheduleRepository;
+use App\Repositories\PaymentsScheduleRepository;
+use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
@@ -17,17 +20,24 @@ use Illuminate\Support\Collection;
  * Class CashbackScheduleService
  *
  * @package App\Services\Cashback
- * @author Anton Reviakin
+ * @author  Anton Reviakin
  */
 class CashbackScheduleService
 {
+    private $cashbackScheduleRepository;
+
+    public function __construct()
+    {
+        $this->cashbackScheduleRepository = app(CashbackScheduleRepository::class);
+    }
+
     /**
      * Заполнить таблицу заданиями выплат для заказа
      *
      * @param Request $request
      * @param Order   $order
      */
-    public function fill(Request $request, Order $order)
+    public function fill(Order $order)
     {
         //Товары в заказе
         /** @var Collection $productsInOrder */
@@ -36,8 +46,8 @@ class CashbackScheduleService
         //Id кешбека
         $cashbackId = $order->cashback->id;
 
-        $productsInOrder->each(function (OrderItem $orderItem) use ($request, $cashbackId) {
-            $payouts = $this->calcPayoutPeriods($request, $orderItem);
+        $productsInOrder->each(function (OrderItem $orderItem) use ($cashbackId) {
+            $payouts = $this->calcPayoutPeriods($orderItem);
 
             $schedules = [];
 
@@ -50,7 +60,32 @@ class CashbackScheduleService
                 ];
             }
 
-            CashbackSchedule::insert($schedules);
+            $this->cashbackScheduleRepository->fill($schedules);
+        });
+    }
+
+    /**
+     * Начислить кешбэк по периодам выплат
+     */
+    public function addPeriodicBalance(): void
+    {
+        //Получить список для начисления кешбэка
+        $payouts = $this->cashbackScheduleRepository->getSchedulesForPayout();
+
+        if ($payouts->isEmpty()) {
+            return;
+        }
+
+        $UserRepository = app(UserRepository::class);
+
+        $payouts->each(function (CashbackSchedule $payout) use ($UserRepository) {
+            //Добавить на баланс кешбэка пользователю
+            $UserRepository->addToCashbackAccount(
+                $payout->cashback->user_id,
+                $payout->payout_amount
+            );
+
+            $this->cashbackScheduleRepository->setAsCompletePayout($payout->id);
         });
     }
 
@@ -62,9 +97,9 @@ class CashbackScheduleService
      *
      * @return array
      */
-    private function calcPayoutPeriods(Request $request, OrderItem $orderItem): array
+    private function calcPayoutPeriods(OrderItem $orderItem): array
     {
-        $periods = $this->getPayoutPeriod($request, $orderItem);
+        $periods = $this->getPayoutPeriod($orderItem);
 
         $payouts = [];
 
@@ -97,20 +132,22 @@ class CashbackScheduleService
     }
 
     /**
-     * Выбрать период
+     * Получить период выплат по размеру комиссии и выбранной периодичности выплат
      *
-     * @param Request   $request
      * @param OrderItem $orderItem
      *
      * @return array
      */
-    private function getPayoutPeriod(Request $request, OrderItem $orderItem): array
+    private function getPayoutPeriod(OrderItem $orderItem): array
     {
-        $periods = PaymentSchedule::where('min_percent', '<=', $orderItem->product_percent_fee)
-            ->orderByDesc('min_percent')
-            ->first();
+        //Периоды выплат по размеру комиссии
+        $periods = app(PaymentsScheduleRepository::class)->getPeriodsByPercentFee($orderItem->product_percent_fee);
 
-        switch ($request->input('period')) {
+        if (!$periods) {
+            abort(Response::HTTP_NOT_FOUND, 'Не найдены периоды выплат кешбэка с заданным процентом комиссии товара/услуги');
+        }
+
+        switch (request('period')) {
             case Cashback::PERIOD_EVERY_MONTH:
             {
                 return [

@@ -23,4 +23,8 @@
        class="{{ (request()->is('dashboard/admin/payment_option*')) ? 'active' : '' }}">
         Платёжная система
     </a>
+    <a href="{{ route('admin.page.index') }}"
+       class="{{ (request()->is('dashboard/admin/page*')) ? 'active' : '' }}">
+        Текстовые страницы
+    </a>
 </div>

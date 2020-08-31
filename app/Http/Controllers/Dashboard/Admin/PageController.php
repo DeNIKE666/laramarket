@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Dashboard;
+namespace App\Http\Controllers\Dashboard\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Page;
 
 class PageController extends Controller
 {
@@ -14,7 +15,8 @@ class PageController extends Controller
      */
     public function index()
     {
-        //
+        $pages = Page::all();
+        return  view('dashboard.admin.pages.index', compact('pages'));
     }
 
     /**
@@ -24,7 +26,7 @@ class PageController extends Controller
      */
     public function create()
     {
-        //
+        return  view('dashboard.admin.pages.create');
     }
 
     /**
@@ -35,7 +37,20 @@ class PageController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'name' => 'required|string|max:255',
+            'slug' => 'required|string|max:255',
+        ]);
+
+        $data = [
+            'name' => $request['name'],
+            'slug' => $request['slug'],
+            'content' => $request['content'],
+        ];
+
+        $page = Page::create($data);
+
+        return redirect()->route('admin.page.index');
     }
 
     /**
@@ -55,9 +70,9 @@ class PageController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Page $page)
     {
-        //
+        return view('dashboard.admin.pages.edit', compact('page'));
     }
 
     /**
@@ -67,9 +82,22 @@ class PageController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Page $page)
     {
-        //
+        $this->validate($request, [
+            'name' => 'required|string|max:255',
+            'slug' => 'required|string|max:255',
+        ]);
+
+        $data = [
+            'name' => $request['name'],
+            'slug' => $request['slug'],
+            'content' => $request['content']
+        ];
+
+        $page->update($data);
+
+        return redirect()->route('admin.page.index');
     }
 
     /**

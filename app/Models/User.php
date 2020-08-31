@@ -2,30 +2,15 @@
 
 namespace App\Models;
 
-use App\Models\Property;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 
 /**
  * Class User
+ *
  * @package App\Models
- *
- * @property int $id
- * @property string $email
- * @property string $password
- * @property string $role
- * @property string $partner_token
- * @property string $referral
- * @property string $phone
- * @property string $address
- * @property string $postal_code
- * @property int|null $is_partner
- * @property int|null $request_partner
- * @property int|null $request_shop
- *
  */
-
 class User extends Authenticatable
 {
     use Notifiable;
@@ -33,20 +18,19 @@ class User extends Authenticatable
     /**
      * Список ролей
      */
-    public const ROLE_USER = 'user';
-    public const ROLE_SHOP = 'shop';
-    public const ROLE_ADMIN = 'admin';
-
-    public const NAME_ROLE_USER = 'Пользователь';
-    public const NAME_ROLE_SHOP = 'Продавец';
-
+    const ROLE_USER = 'user';
+    const ROLE_USER_PARTNER = 'user_partner';
+    const ROLE_SHOP = 'shop';
+    const ROLE_SHOP_PARTNER = 'shop_partner';
+    const ROLE_MODERATOR = 'moderator';
+    const ROLE_ADMIN = 'admin';
 
     /**
      * Тип продавцов
      */
-    public const TYPE1 = 'persona';
-    public const TYPE2 = 'individual';
-    public const TYPE3 = 'company';
+    const TYPE1 = 'persona';
+    const TYPE2 = 'individual';
+    const TYPE3 = 'company';
 
     /**
      * The attributes that are mass assignable.
@@ -57,16 +41,17 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role',             //роли по умолчанию user
-        'partner_token',    //токен парнера для реферной ссылки
-        'is_partner',       //статус партнера [0, 1]
-        'personal_account', //счёт
-        'referral',         //если пользователь зарегестрировался по реферной ссылке, она связанна с partner_token
+        'partner_token',
+        'partner_id',
+        'role',
+        'request_shop',
+        'personal_account',
+        'cashback_account',
+        'shop_account',
+        'partner_account',
         'phone',
         'address',
         'postal_code',
-        'request_partner',  //запрос на партнера
-        'request_shop',     //запрос на продавца
     ];
 
     /**
@@ -88,29 +73,132 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    /**
+     * Получить имя или почту
+     *
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name ?: $this->email;
+    }
+
+    /**
+     * Является ли пользователь администратором
+     *
+     * @return bool
+     * @author Anton Reviakin
+     */
+    public function isAdmin(): bool
+    {
+        return $this->role === self::ROLE_ADMIN;
+    }
+
+    /**
+     * Является ли пользователь модератором
+     *
+     * @return bool
+     * @author Anton Reviakin
+     */
+    public function isModerator(): bool
+    {
+        return $this->role === self::ROLE_MODERATOR;
+    }
+
+    /**
+     * Является ли пользователь партнером
+     *
+     * @return bool
+     * @author Anton Reviakin
+     */
+    public function isPartner(): bool
+    {
+        $roles = [
+            self::ROLE_USER_PARTNER,
+            self::ROLE_SHOP_PARTNER,
+        ];
+
+        return in_array($this->role, $roles);
+    }
+
+    /**
+     * Является ли пользователь покупателем
+     *
+     * @return bool
+     * @author Anton Reviakin
+     */
+    public function isBuyer(): bool
+    {
+        $roles = [
+            self::ROLE_USER,
+            self::ROLE_USER_PARTNER,
+        ];
+
+        return in_array($this->role, $roles);
+    }
+
+    /**
+     * Является ли пользователь продавцом
+     *
+     * @return bool
+     * @author Anton Reviakin
+     */
+    public function isSeller(): bool
+    {
+        $roles = [
+            self::ROLE_SHOP,
+            self::ROLE_SHOP_PARTNER,
+        ];
+
+        return in_array($this->role, $roles);
+    }
+
+    /**
+     * Получить уникальный токен для партнерской ссылки
+     *
+     * @return string
+     * @author Anton Reviakin
+     */
+    public function getUniquePartnerToken(): string
+    {
+        $tokenLn = mt_rand(7, 9);
+
+        $partner_token = Str::lower(Str::random($tokenLn));
+
+        $tokenExists = $this->query()
+            ->where(compact('partner_token'))
+            ->exists();
+
+        return $tokenExists ? $this->getUniquePartnerToken() : $partner_token;
+    }
+
+    /**
+     * Хватает ли средств на Партнерском счете
+     *
+     * @param int $amount
+     *
+     * @return bool
+     * @author Anton Reviakin
+     */
+    public function checkPartnerAccount($amount = 0): bool
+    {
+        $user = $this
+            ->query()
+            ->where('id', $this->id)
+            ->firstOrFail();
+
+        return $user->partner_account >= $amount;
+    }
+
     public function property()
     {
         return $this->hasOne(\App\Models\Property::class, 'user_id');
-    }
-
-    public function getName() {
-        return ($this->name) ? $this->name : $this->email;
     }
 
     public function edit($fields)
     {
         $this->fill($fields);
         $this->save();
-    }
-
-    public function getType1() {
-        return self::TYPE1;
-    }
-    public function getType2() {
-        return self::TYPE2;
-    }
-    public function getType3() {
-        return self::TYPE3;
     }
 
     public function hasPropery(int $id)
@@ -126,17 +214,6 @@ class User extends Authenticatable
             $userProp = new Property();
             $userProp->user_id = $id;
             return $userProp;
-        }
-    }
-
-    public function getNameRole() {
-        switch ($this->role) {
-            case self::ROLE_USER:
-                return self::NAME_ROLE_USER;
-                break;
-            case self::ROLE_SHOP:
-                return self::NAME_ROLE_SHOP;
-                break;
         }
     }
 }
