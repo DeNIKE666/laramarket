@@ -50,7 +50,7 @@
 
         $("#popup-changeOrderStatus .popUp__body").html(form);
 
-        $('#popup-changeOrderStatus').fadeIn("normal", function () {
+        $("#popup-changeOrderStatus").fadeIn("normal", function () {
             $("#popup-changeOrderStatus form").on("submit", function (e) {
                 e.preventDefault();
                 changeStatus(orderId);

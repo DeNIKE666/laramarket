@@ -80,7 +80,7 @@ class CashbackScheduleService
 
         $payouts->each(function (CashbackSchedule $payout) use ($UserRepository) {
             //Добавить на баланс кешбэка пользователю
-            $UserRepository->addCashback(
+            $UserRepository->addToCashbackAccount(
                 $payout->cashback->user_id,
                 $payout->payout_amount
             );

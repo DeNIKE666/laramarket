@@ -23,7 +23,7 @@ Route::post('/comission/payout', 'ComissionsPayInOutController@getPayoutFee')->n
 //    dd($comission);
 //});
 
-Route::get('/','FrontController@index')->name('front_index');
+Route::get('/', 'FrontController@index')->name('front_index');
 Route::get('catalog/{path}', 'FrontController@catalog')
     ->where('path', '[a-zA-Z0-9/_-]+')->name('front_catalog');
 Route::get('product/{path}', 'FrontController@product')
@@ -52,7 +52,7 @@ Route::group(['middleware' => ['auth']], function () {
 Route::group(
     [
         'prefix' => 'shop',
-        'as' => 'cart.',
+        'as'     => 'cart.',
     ],
     function () {
         Route::get('/cart', 'CartController@cart')->name('index');
@@ -68,9 +68,9 @@ Route::group(
  */
 Route::group(
     [
-        'prefix' => 'dashboard/buyer',
-        'namespace' => 'Dashboard',
-        'middleware' => 'auth'
+        'prefix'     => 'dashboard/buyer',
+        'namespace'  => 'Dashboard',
+        'middleware' => 'auth',
     ],
     function () {
         //Route::get('/', 'DashboardController@index')->name('adminIndex');
@@ -90,14 +90,14 @@ Route::group(
         Route::get('/list_cashback', 'UserController@userCashback')->name('user_list_cashback');
         Route::get('/user_pay', 'UserController@userPay')->name('user_pay');
 
-        Route::post('/withdraw' , 'UserController@withdraw')->name('withdraw');
-        Route::get('/history/withdraw' , 'UserController@histroryWithdraw')->name('history.withdraw');
+        Route::post('/withdraw', 'UserController@withdraw')->name('withdraw');
+        Route::get('/history/withdraw', 'UserController@histroryWithdraw')->name('history.withdraw');
 
         Route::prefix('payment')->group(function () {
-            Route::post('/visa' , 'QiwiController@pay')->name('qiwi.pay');
-            Route::post('/visa/order/{order}' , 'QiwiController@orderPay')->name('qiwi.order.pay');
-            Route::post('/callback/visa/deposit/{orderPay}' , 'QiwiController@callback')->name('qiwi.callback');
-            Route::post('/callback/visa/order/{order}/{orderPay}' , 'QiwiController@callbackOrder')->name('qiwi.callback.order');
+            Route::post('/visa', 'QiwiController@pay')->name('qiwi.pay');
+            Route::post('/visa/order/{order}', 'QiwiController@orderPay')->name('qiwi.order.pay');
+            Route::post('/callback/visa/deposit/{orderPay}', 'QiwiController@callback')->name('qiwi.callback');
+            Route::post('/callback/visa/order/{order}/{orderPay}', 'QiwiController@callbackOrder')->name('qiwi.callback.order');
         });
 
         //Route::get('summernote',array('as'=>'summernote.get','uses'=>'FileController@getSummernote'));
@@ -110,10 +110,10 @@ Route::group(
  */
 Route::group(
     [
-        'prefix' => 'dashboard/admin',
-        'namespace' => 'Dashboard\Admin',
+        'prefix'     => 'dashboard/admin',
+        'namespace'  => 'Dashboard\Admin',
         'middleware' => ['auth', 'super'],
-        'as' => 'admin.'
+        'as'         => 'admin.',
     ],
     function () {
         Route::get('/index', 'AdminController@index')->name('home');
@@ -129,7 +129,7 @@ Route::group(
         Route::resource('/payment_option', 'PaymentOptionController');
         Route::resource('/page', 'PageController');
 
-        Route::get('/clear-cache', function() {
+        Route::get('/clear-cache', function () {
             Artisan::call('cache:clear');
             return redirect()->back();
         })->name('clear-cache');
@@ -141,8 +141,8 @@ Route::group(
  */
 Route::group(
     [
-        'prefix' => 'dashboard/shop',
-        'namespace' => 'Dashboard\Shop',
+        'prefix'     => 'dashboard/shop',
+        'namespace'  => 'Dashboard\Shop',
         'middleware' => ['auth', 'shop'],
     ],
     function () {
@@ -154,7 +154,7 @@ Route::group(
         Route::group(
             [
                 'prefix' => 'categories/{category}',
-                'as' => 'categories.',
+                'as'     => 'categories.',
             ],
             function () {
                 Route::post('/first', 'CategoryController@first')->name('first');
@@ -167,7 +167,7 @@ Route::group(
         Route::group(
             [
                 'prefix' => 'order',
-                'as' => 'order.',
+                'as'     => 'order.',
             ],
             function () {
                 Route::get('/list', 'OrderShopController@index')->name('list');
@@ -183,19 +183,20 @@ Route::group(
 );
 
 /**
- * функционал партнерки
+ * Функционал партнера
  */
 Route::group(
     [
-        'prefix' => 'dashboard/partnership',
-        'namespace' => 'Dashboard\Partnership',
+        'prefix'     => 'dashboard/partner',
+        'namespace'  => 'Dashboard\Partner',
         'middleware' => ['auth'],
-        'as' => 'partnership.'
+        'as'         => 'partner.',
     ],
     function () {
-
-        Route::get('/index', 'PartnershipController@index')->name('index');
-
+        Route::get('/', 'PartnerController@index')->name('index');
+        Route::get('/referrals', 'PartnerController@referrals')->name('referrals');
+        Route::get('/history-account', 'PartnerController@historyAccount')->name('history-account');
+        Route::patch('/account/transfer-to-personal-account', 'PartnerController@transferToPersonalAccount')->name('transfer-to-personal-account');
     }
 );
 
