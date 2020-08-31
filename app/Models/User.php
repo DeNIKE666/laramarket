@@ -74,6 +74,16 @@ class User extends Authenticatable
     ];
 
     /**
+     * Получить имя или почту
+     *
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name ?: $this->email;
+    }
+
+    /**
      * Является ли пользователь администратором
      *
      * @return bool
@@ -162,19 +172,27 @@ class User extends Authenticatable
         return $tokenExists ? $this->getUniquePartnerToken() : $partner_token;
     }
 
+    /**
+     * Хватает ли средств на Партнерском счете
+     *
+     * @param int $amount
+     *
+     * @return bool
+     * @author Anton Reviakin
+     */
+    public function checkPartnerAccount($amount = 0): bool
+    {
+        $user = $this
+            ->query()
+            ->where('id', $this->id)
+            ->firstOrFail();
+
+        return $user->partner_account >= $amount;
+    }
+
     public function property()
     {
         return $this->hasOne(\App\Models\Property::class, 'user_id');
-    }
-
-    /**
-     * Получить имя или почту
-     *
-     * @return string
-     */
-    public function getName(): string
-    {
-        return $this->name ?: $this->email;
     }
 
     public function edit($fields)

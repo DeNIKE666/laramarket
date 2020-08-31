@@ -11,7 +11,10 @@
     @cannot('role-admin')
         <div class="lcPageMenuNav">
             @if(request()->is('dashboard/buyer/*'))
-                @include('dashboard.partials.nav_bayer')
+                @include('dashboard.partials.nav_buyer')
+            @endif
+            @if(request()->is('dashboard/partner', 'dashboard/partner/*'))
+                @include('dashboard.partials.nav_partner')
             @endif
             @if(request()->is('dashboard/shop/*'))
                 @include('dashboard.partials.nav_seller')
@@ -44,10 +47,7 @@
             {{
                 Form::button(
                     __('users/partner.copy_link'),
-                    [
-                        'id'    => 'copy-partner-link',
-                        'class' => 'btn lcPageMenu__btn'
-                    ]
+                    ['class' => 'btn lcPageMenu__btn copy-partner-link']
                 )
             }}
         @else

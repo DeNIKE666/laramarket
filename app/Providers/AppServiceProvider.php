@@ -4,9 +4,8 @@ namespace App\Providers;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Cookie\SessionCookieJar;
-use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -24,7 +23,10 @@ class AppServiceProvider extends ServiceProvider
 
             //IDE Helper
             $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
+        }
 
+        foreach (glob(app_path() . '/Helpers/*.php') as $file) {
+            require_once($file);
         }
 
     }
@@ -36,12 +38,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-         view()->composer(
-             'front.partials.navbar_categories',
-             \App\Http\ViewComposers\NavCategoriesComposer::class
-         );
+        view()->composer(
+            'front.partials.navbar_categories',
+            \App\Http\ViewComposers\NavCategoriesComposer::class
+        );
 
-        Schema::defaultStringLength(191);
+//        Schema::defaultStringLength(191);
 
         $this->app->bind('GuzzleHttp\Client', function () {
             $cookieJar = new SessionCookieJar('SESSION_STORAGE', true);
