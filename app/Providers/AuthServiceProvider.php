@@ -28,22 +28,19 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         Gate::define('role-user', function (User $user) {
-            return $user->role == User::ROLE_USER ? true : false;
+            return $user->isBuyer();
         });
 
         Gate::define('role-shop', function (User $user) {
-            if($user->role == User::ROLE_SHOP || $user->role == User::ROLE_ADMIN){
-                return true;
-            }
-            return false;
+            return ($user->isSeller() || $user->isAdmin());
         });
 
         Gate::define('role-admin', function (User $user) {
-            return $user->role == User::ROLE_ADMIN ? true : false;
+            return $user->isAdmin();
         });
 
         Gate::define('is-partner', function (User $user) {
-            return $user->is_partner == 1 ? true : false;
+            return $user->isPartner();
         });
 
         Gate::define('update-post', function($user, $post){

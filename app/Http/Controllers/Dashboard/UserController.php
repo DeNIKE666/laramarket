@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Buyer\OrderChangeStatusRequest;
-use App\Models\Cashback;
 use App\Models\Order;
 use App\Models\PaymentOption;
 use App\Models\Property;
@@ -13,15 +12,19 @@ use App\Repositories\OrderRepository;
 use App\Services\Buyer\Order\OrderChangeStatusService;
 use App\Services\Cashback\CashbackScheduleService;
 use App\Services\Cashback\CashbackService;
+use App\Services\UserService;
 use Auth;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Str;
 
 
 class UserController extends Controller
 {
     protected $orderRepository;
+
+    /** @var UserService */
+    private $userService;
 
     /** @var OrderChangeStatusService */
     private $orderChangeStatusService;
@@ -29,6 +32,8 @@ class UserController extends Controller
     public function __construct(OrderRepository $orderRepository)
     {
         $this->orderRepository = $orderRepository;
+
+        $this->userService = (new UserService());
 
         $this->orderChangeStatusService = (new OrderChangeStatusService($orderRepository));
     }
@@ -51,17 +56,18 @@ class UserController extends Controller
         return redirect()->back()->with('status', 'Профиль обновлён');
     }
 
-    public function active_partner()
+    /**
+     * Стать партнером
+     *
+     * @return RedirectResponse
+     */
+    public function becomePartner(): RedirectResponse
     {
-        $user = Auth::user();
-        if ($user->is_partner) {
-            return redirect()->back()->with(['error' => true, 'message' => 'Вы уже партнер']);
-        } else {
-            $user->is_partner = 1;
-            $user->partner_token = Str::random(100);
-            $user->save();
-            return redirect()->back()->with('status', 'Вы стали парнером');
-        }
+        $this->userService->setAsPartner();
+
+        return redirect()
+            ->back()
+            ->with('status', __('users/partner.you_are_partner'));
     }
 
     public function application_to_sellers()
@@ -84,7 +90,7 @@ class UserController extends Controller
         );
     }
 
-    public function request_application_to_sellers(Request $request)
+    public function storeApplicationToSeller(Request $request)
     {
         $user = Auth::user();
         $user->request_shop = 1;
@@ -129,11 +135,16 @@ class UserController extends Controller
         $order = $this->orderChangeStatusService->changeStatus($request);
 
         if ($order->status === Order::STATUS_ORDER_RECEIVED) {
-            //Сохранить период выплат
-            (new CashbackService())->setPayoutsPeriod($order);
+            $CashbackService = new CashbackService();
 
-            //Заполнить задания для выплат кешбека
-            (new CashbackScheduleService())->fill($request, $order);
+            //Статус "Идут выплаты"
+            $CashbackService->setInProgressStatus($order);
+
+            //Период выплат
+            $CashbackService->setPayoutsPeriod($order);
+
+            //Заполнить расписание выплат кешбэка
+            (new CashbackScheduleService())->fill($order);
         }
 
         return response($order, Response::HTTP_OK);
@@ -177,7 +188,8 @@ class UserController extends Controller
     public function withdraw(Request $request)
     {
         $request->merge([
-            'user_id' => auth()->user()->id,
+            'user_id'            => auth()->user()->id,
+            'payment_options_id' => $request->input('method'),
         ]);
 
         Withdraw::create($request->all());
@@ -187,7 +199,10 @@ class UserController extends Controller
 
     public function histroryWithdraw()
     {
-        $withdraws = Withdraw::whereUserId(auth()->user()->id)->get();
+        $withdraws = Withdraw::query()
+            ->with('paymentOption:id,title')
+            ->whereUserId(auth()->user()->id)
+            ->get();
 
         return view('dashboard.user.history_withdraw', compact('withdraws'));
     }

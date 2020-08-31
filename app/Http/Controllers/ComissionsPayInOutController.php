@@ -24,4 +24,21 @@ class ComissionsPayInOutController extends Controller
 
         return response(compact('amount', Response::HTTP_OK));
     }
+
+    /**
+     * Рассчитать сумму комиссии при снятии
+     *
+     * @param InOutRequest $request
+     *
+     * @return Response
+     */
+    public function getPayoutFee(InOutRequest $request)
+    {
+        $amount = (new ComissionsService())
+            ->method($request->input('method'))
+            ->amount($request->input('amount'))
+            ->payoutComission($request->input('is_total_amount'));
+
+        return response(compact('amount', Response::HTTP_OK));
+    }
 }

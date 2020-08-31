@@ -10,7 +10,6 @@
         <form class="form-center" method="POST" action="{{ route('register') }}">
             @csrf
             <h1 class="form-center__title">{{ __('messages.register') }}</h1>
-        {{ Form::hidden('referral', $referral) }}
 
         <!--div class="form-group">
 

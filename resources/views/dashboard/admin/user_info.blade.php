@@ -1,24 +1,38 @@
+@php
+    /** @var \App\Models\User $user */
+@endphp
+
 @extends('layouts.admin')
 
 @section('content')
     <div class="lcPageContentData">
-        <div class="lcPageContentData__title">
+        <div class="lcPageContentData__title" style="margin-bottom: 2rem;">
             Данные пользователя
         </div>
-        <br>
-        <br>
-        @if($user->name != '')
-            <p><b>ФИО </b>{{ $user->name }}</p>
-        @endif
-        <p><b>Email </b>{{ $user->email }}</p>
-        <p><b>Роль </b>{{ $user->getNameRole() }}</p>
-        <p><b>Партнер </b>
-            @if($user->is_partner == 1)
-                Да
-            @else
-                Нет
-            @endif
-        </p>
+
+        <div>
+            <p>
+                <strong style="font-weight: bold;">ФИО</strong>
+                {{ $user->getName() }}
+            </p>
+            <p>
+                <strong style="font-weight: bold;">Email</strong>
+                {{ $user->email }}
+            </p>
+            <p>
+                <strong style="font-weight: bold;">Роль</strong>
+                @lang('users/roles.' . $user->role)
+            </p>
+            <p>
+                <strong style="font-weight: bold;">Партнер</strong>
+                @if($user->isPartner())
+                    @lang('users/partner.is_partner')
+                @else
+                    @lang('users/partner.is_not_partner')
+                @endif
+            </p>
+        </div>
+
 
         @if($user->request_shop == 1 && $user->role == \App\Models\User::ROLE_USER && $user->property)
             <div class="lcPageContentData__title">
@@ -35,7 +49,7 @@
                 @include('dashboard.admin.block.seller_type3')
                 @break
             @endswitch
-            {{ Form::open(['route' => ['admin.approved_seller'], 'method' => 'put', 'class' => 'forms-sample']) }}
+            {{ Form::open(['route' => ['admin.approve-as-seller'], 'method' => 'put', 'class' => 'forms-sample']) }}
             {{ Form::hidden('user_id', $user->id) }}
             <button type="submit" class="btn btn-primary">Разрешить</button>
             {{ Form::close() }}

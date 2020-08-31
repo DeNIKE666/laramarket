@@ -12,6 +12,7 @@
 */
 
 Route::post('/comission/payin', 'ComissionsPayInOutController@getPayinFee')->name('get-payin-fee');
+Route::post('/comission/payout', 'ComissionsPayInOutController@getPayoutFee')->name('get-payout-fee');
 
 //Route::get('/comission/payin', function () {
 //    $comission = (new \App\Services\Comission())
@@ -31,7 +32,8 @@ Route::get('product/{path}', 'FrontController@product')
 Auth::routes();
 
 Route::get('/logout', 'AuthController@logout');
-Route::get('/register/{referral}', 'Auth\RegisterController@showRegistrationForm')->name('register_referral');
+//Route::get('/register}', 'Auth\RegisterController@showRegistrationForm')->name('register');
+Route::get('/join/{partner_token}', 'Auth\RegisterController@rememberPartnerToken')->name('join');
 
 /**
  * Оформление заказа
@@ -74,9 +76,9 @@ Route::group(
         //Route::get('/', 'DashboardController@index')->name('adminIndex');
         Route::get('/index', 'UserController@edit_profile')->name('adminIndex');
         Route::put('/edit_profile', 'UserController@edit_profile_data')->name('edit_profile_data');
-        Route::get('/active_partner', 'UserController@active_partner')->name('active_partner');
-        Route::get('/application_to_sellers', 'UserController@application_to_sellers')->name('application_to_sellers');
-        Route::put('/application_to_sellers', 'UserController@request_application_to_sellers')->name('request_application_to_sellers');
+        Route::patch('/become-partner', 'UserController@becomePartner')->name('become-partner');
+        Route::get('/application-to-seller', 'UserController@application_to_sellers')->name('application-to-seller');
+        Route::put('/application-to-seller', 'UserController@storeApplicationToSeller')->name('store-application-to-seller');
         //Route::get('/data_seller', 'UserController@data_seller')->name('data_seller');
 
         Route::resource('/tasks', 'TaskController');
@@ -118,7 +120,7 @@ Route::group(
         Route::get('/users', 'AdminController@getUsers')->name('users');
         Route::get('/user/{id}', 'AdminController@infoUser')->name('info_user');
         Route::get('/request_seller', 'AdminController@index')->name('request_seller');
-        Route::put('/approved_seller', 'AdminController@approved_seller')->name('approved_seller');
+        Route::put('/approve-as-seller', 'AdminController@approveAsSeller')->name('approve-as-seller');
         Route::get('/orders', 'AdminController@orders')->name('orders');
 
         Route::resource('/settings', 'SettingController');

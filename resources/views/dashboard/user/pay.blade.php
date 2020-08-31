@@ -14,7 +14,7 @@
             <div class="lcPageContentPayChoose__check">
                 <span>
                 </span>
-                <input name="choose" type="radio">
+                <input type="radio" class="paymentType" checked="checked">
             </div>
             <span>Пополнение счёта:</span>
         </div>
@@ -22,14 +22,13 @@
             <div class="lcPageContentPayChoose__check">
                 <span>
                 </span>
-                <input name="choose" type="radio">
+                <input type="radio" class="paymentType">
             </div>
             <span>Вывод средств:</span>
         </div>
     </div>
 
     <div class="error" id="paymentErrors" style="display: none;"></div>
-
     <div class="lcPageContentPay lcPageContentPay-active">
         <div class="lcPageContentPayTop">
             <div class="lcPageContentPayTop__text">
@@ -39,19 +38,20 @@
                 История транзакций
             </button>
         </div>
-        <div id="payRefill" class="lcPageContentPayMiddle">
+        <div id="payin" class="lcPageContentPayMiddle">
             @foreach ($refills as $k=>$refill)
-                <div class="payMethods lcPageContentPayMiddle__item @if($k == 0) lcPageContentPayMiddle__item-active @endif">
+                <div class="payinMethods lcPageContentPayMiddle__item @if($k == 0) lcPageContentPayMiddle__item-active @endif">
                     <div class="lcPageContentPayMiddle__check ">
                     <span>
                     </span>
-                        <input @if($k == 0) checked @endif
-                        name="choose"
-                               data-id="{{ $refill->id }}"
-                               type="radio"
-                               value="{{ $refill->title }}"
-                               data-percent="{{ $refill->depositeMoney }}"
-                        >
+                        <input
+                                name="payinMethod"
+                                data-id="{{ $refill->id }}"
+                                type="radio"
+                                value="{{ $refill->title }}"
+                                data-percent="{{ $refill->depositeMoney }}"
+                                @if($k == 0) checked @endif
+                        />
                     </div>
                     <div class="lcPageContentPayMiddle__inf" data-modal="#modal3">
                         {{ $refill->title }}
@@ -69,11 +69,11 @@
         <div class="lcPageContentPayBottom">
             <div class="lcPageContentPayBottom__item">
                 <span>Пополнить счёт на:</span>
-                <input id="account_refill_cost" type="number" min="0" placeholder="1 000 000 руб.">
+                <input id="account_payin_cost" type="number" min="0" placeholder="1 000 000 руб.">
             </div>
             <div class="lcPageContentPayBottom__item">
                 <span>Будет списано:</span>
-                <input id="account_refill_cost_percent" type="number" min="0" placeholder="1 000 000 руб.">
+                <input id="account_payin_cost_percent" type="number" min="0" placeholder="1 000 000 руб.">
             </div>
             <button id="payModal" class="lcPageContentPayBottom__btn btn">
                 Пополнить
@@ -92,18 +92,20 @@
                 </button>
             </div>
 
-            <div class="lcPageContentPayMiddle">
+            <div id="payout" class="lcPageContentPayMiddle">
                 @foreach ($withdrawals as $k=>$withdrawal)
-                    <div class="lcPageContentPayMiddle__item @if($k == 0) lcPageContentPayMiddle__item-active @endif">
+                    <div class="payoutMethods lcPageContentPayMiddle__item @if($k == 0) lcPageContentPayMiddle__item-active @endif">
                         <div class="lcPageContentPayMiddle__check ">
                     <span>
                     </span>
-                            <input @if($k == 0) checked @endif
-                            name="choose"
-                                   type="radio"
-                                   value="{{ $withdrawal->title }}"
-                                   data-percent="{{ $withdrawal->withdrawMoney }}"
-                            >
+                            <input
+                                    name="method"
+                                    type="radio"
+                                    data-id="{{ $withdrawal->id }}"
+                           ж         value="{{ $withdrawal->id }}"
+                                    data-percent="{{ $withdrawal->withdrawMoney }}"
+                                    @if($k == 0) checked @endif
+                            />
                         </div>
                         <div class="lcPageContentPayMiddle__inf" data-modal="#modal3">
                             {{ $withdrawal->title }}
@@ -121,20 +123,14 @@
 
             <div class="lcPageContentPayBottom">
                 <div class="lcPageContentPayBottom__item">
-                                    <span>
-                                        Вывести средства:
-                                    </span>
-                    <input type="text" placeholder="1 000 000 руб." name="amount">
+                    <span>К получению:</span>
+                    <input type="number" id="account_payout_cost" autocomplete="off" placeholder="1 000 000 руб.">
                 </div>
                 <div class="lcPageContentPayBottom__item">
-                                    <span>
-                                        Коммисия:
-                                    </span>
-                    <input type="text" placeholder="1 000 000 руб.">
+                    <span>Будет списано:</span>
+                    <input type="number" id="account_payout_cost_percent" autocomplete="off" placeholder="1 000 000 руб." name="amount">
                 </div>
-                <button class="lcPageContentPayBottom__btn btn">
-                    Вывести
-                </button>
+                <button class="lcPageContentPayBottom__btn btn">Вывести</button>
             </div>
         </div>
     </form>
@@ -416,13 +412,7 @@
                         <label for="cvv">cvv</label>
                         <input type="text" class="input-card-full" placeholder="cvv" maxlength="3" name="cvv" id="cvv">
                     </div>
-                </div>
-
-                <div class="cardform__row">
-                    <div class="cardform__row__col1">
-                        <label for="amount">Сумма пополнения (руб.)</label>
-                        <input type="text" class="input-card-full input-card-full--big" placeholder="Сумма ввода" name="amount" id="amount">
-                    </div>
+                    <input type="hidden" id="payinAmount" name="amount">
                 </div>
                 <div class="cardform__foot">
                     <button class="btn lcPageMenu__btn form-submit " id="pay_button">Пополнить счёт</button>
@@ -438,10 +428,6 @@
         </div>
     </div>
 
-
-
-
-
     @push('scripts')
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
@@ -455,7 +441,6 @@
             let month = cardform.month;
             let year = cardform.year;
             let cvv = cardform.cvv;
-            let amount = cardform.amount;
 
             for (let i in ['input', 'change', 'blur', 'keyup']) {
                 cc.addEventListener('input', formatCardCode, false);
@@ -491,8 +476,8 @@
 
             $('form[id="cardform"]').validate({
                 //wrapper: 'div',
-                errorElement: "div",
-                errorElementClass: "error",
+                errorElement       : "div",
+                errorElementClass  : "error",
                 errorLabelContainer: '.error-div',
 
                 //errorClass: "error",
@@ -507,38 +492,37 @@
                 },
 
 
-                rules: {
-                    card: {
-                        required: true,
+                rules        : {
+                    card  : {
+                        required  : true,
                         creditcard: true
                     },
-                    month: {
+                    month : {
                         required: true,
-                        number: true,
-                        max: 12
+                        number  : true,
+                        max     : 12
                     },
-                    year: {
+                    year  : {
                         required: true,
-                        number: true,
-                        min: 19,
-                        max: 30
+                        number  : true,
+                        min     : 19,
+                        max     : 30
                     },
-                    cvv: {
-                        required: true,
-                        number: true,
+                    cvv   : {
+                        required : true,
+                        number   : true,
                         maxlength: 3
                     },
                     amount: {
                         required: true,
-                        number: true,
+                        number  : true,
                     }
                 },
-                messages: {
-                    card: '- Номер карты указан неправильно',
-                    month: '- Месяц указан неправильно',
-                    year: '- Год указан неправильно',
-                    cvv: '- CVV-код указан неправильно',
-                    amount: '- Сумма не указана'
+                messages     : {
+                    card  : '- Номер карты указан неправильно',
+                    month : '- Месяц указан неправильно',
+                    year  : '- Год указан неправильно',
+                    cvv   : '- CVV-код указан неправильно',
                 },
                 submitHandler: function (form) {
                     $("#pay_button").after('<img id="loader" src="img/spinner.gif">');
