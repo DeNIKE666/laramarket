@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Dashboard;
+namespace App\Http\Controllers\Dashboard\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Page;
 
 class PageController extends Controller
 {
@@ -14,7 +15,8 @@ class PageController extends Controller
      */
     public function index()
     {
-        //
+        $pages = Page::all();
+        return  view('dashboard.admin.pages.index', compact('pages'));
     }
 
     /**
@@ -24,7 +26,7 @@ class PageController extends Controller
      */
     public function create()
     {
-        //
+        return  view('dashboard.admin.pages.create');
     }
 
     /**
