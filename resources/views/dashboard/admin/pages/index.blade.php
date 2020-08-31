@@ -25,15 +25,23 @@
                         {{ $page->id }}
                     </div>
                     <div class="lcPageContentCol">
-                        <a href="{{ route('admin.page.edit', $attr) }}">
-                            {{ $attr->name }}
+                        <a href="{{ route('admin.page.edit', $page) }}">
+                            {{ $page->name }}
                         </a>
                     </div>
                     <div class="lcPageContentCol">
-                        {{ $attr->slug }}
+                        {{ $page->slug }}
                     </div>
                     <div class="lcPageContentCol">
-                        <div class="lcPageContentCol__drop">
+                        <div class="lcPageContentCol__more">
+                            <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    xmlns:xlink="http://www.w3.org/1999/xlink"
+                                    width="17px" height="5px">
+                                <path fill-rule="evenodd" fill="rgb(255, 255, 255)"
+                                      d="M14.250,4.219 C13.232,4.219 12.406,3.393 12.406,2.375 C12.406,1.357 13.232,0.531 14.250,0.531 C15.268,0.531 16.094,1.357 16.094,2.375 C16.094,3.393 15.268,4.219 14.250,4.219 ZM8.375,4.219 C7.357,4.219 6.531,3.393 6.531,2.375 C6.531,1.357 7.357,0.531 8.375,0.531 C9.393,0.531 10.219,1.357 10.219,2.375 C10.219,3.393 9.393,4.219 8.375,4.219 ZM2.469,4.219 C1.450,4.219 0.625,3.393 0.625,2.375 C0.625,1.357 1.450,0.531 2.469,0.531 C3.487,0.531 4.312,1.357 4.312,2.375 C4.312,3.393 3.487,4.219 2.469,4.219 Z"/>
+                            </svg>
+                            <div class="lcPageContentCol__drop">
                                 <span>
                                     <svg
                                             xmlns="http://www.w3.org/2000/svg"
@@ -67,6 +75,7 @@
                                         Удалить
                                     </a>
                                 </span>
+                        </div>
                         </div>
                     </div>
                 </div>

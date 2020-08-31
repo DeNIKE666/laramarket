@@ -13,4 +13,9 @@ class Page extends Model
         'name',
         'content',
     ];
+
+    public function scopeSlugPage($query, $slug)
+    {
+        return $query->where('slug', $slug);
+    }
 }

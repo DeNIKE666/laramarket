@@ -201,3 +201,5 @@ Route::group(
 );
 
 Route::post('gallery/media', 'Dashboard\DashboardController@storeMedia')->name('gallery');
+
+Route::get('/{slug}/', 'FrontController@pageStatic')->name('page_static');

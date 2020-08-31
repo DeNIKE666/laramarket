@@ -31,3 +31,10 @@ Breadcrumbs::for('login', function ($trail) {
     $trail->push('Авторизация', route('login'));
 });
 
+Breadcrumbs::for('page_static', function ($trail, $page) {
+    $trail->parent('front_index');
+    $trail->push($page->name);
+});
+
+
+

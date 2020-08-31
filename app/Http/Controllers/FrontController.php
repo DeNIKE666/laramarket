@@ -9,6 +9,7 @@ use App\Repositories\ProductRepository;
 use Illuminate\Support\Facades\Cookie;
 use App\Models\Attribute;
 use App\Models\ProductAttribute;
+use App\Models\Page;
 
 
 class FrontController extends Controller
@@ -81,6 +82,18 @@ class FrontController extends Controller
         }
 
         return view('front.page.product', compact('product', 'products_views', 'arDataProductAttr'));
+    }
+
+    public function pageStatic($slug)
+    {
+        try {
+            $page = Page::SlugPage($slug)->firstOrFail();
+        }
+        catch(ModelNotFoundException $exception)
+        {
+            return abort(404);
+        }
+        return view('front.page.static_page', compact('page'));
     }
 
 
