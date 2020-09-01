@@ -3,11 +3,15 @@
 namespace App\Http\Controllers\Dashboard\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\PageFormRequest;
 use App\Models\Page;
+use App\Traits\UniqueModelSlug;
+use Illuminate\Http\RedirectResponse;
 
 class PageController extends Controller
 {
+    use UniqueModelSlug;
+
     /**
      * Display a listing of the resource.
      *
@@ -16,7 +20,7 @@ class PageController extends Controller
     public function index()
     {
         $pages = Page::all();
-        return  view('dashboard.admin.pages.index', compact('pages'));
+        return view('dashboard.admin.pages.index', compact('pages'));
     }
 
     /**
@@ -26,25 +30,25 @@ class PageController extends Controller
      */
     public function create()
     {
-        return  view('dashboard.admin.pages.create');
+        return view('dashboard.admin.pages.create');
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \App\Http\Requests\PageFormRequest $request
+     *
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PageFormRequest $request)
     {
-        $this->validate($request, [
-            'name' => 'required|string|max:255',
-            'slug' => 'required|string|max:255',
-        ]);
 
         $data = [
-            'name' => $request['name'],
-            'slug' => $request['slug'],
+            'name'    => $request['name'],
+            'slug'    => $this->generateSlug(
+                Page::class,
+                $request['name']
+            ),
             'content' => $request['content'],
         ];
 
@@ -56,7 +60,8 @@ class PageController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -67,7 +72,8 @@ class PageController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit(Page $page)
@@ -78,21 +84,17 @@ class PageController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param PageFormRequest $request
+     * @param Page            $page
+     *
+     * @return RedirectResponse
      */
-    public function update(Request $request, Page $page)
+    public function update(PageFormRequest $request, Page $page):RedirectResponse
     {
-        $this->validate($request, [
-            'name' => 'required|string|max:255',
-            'slug' => 'required|string|max:255',
-        ]);
-
         $data = [
-            'name' => $request['name'],
-            'slug' => $request['slug'],
-            'content' => $request['content']
+            'name'    => $request['name'],
+            'slug'    => $request['slug'],
+            'content' => $request['content'],
         ];
 
         $page->update($data);
@@ -103,7 +105,8 @@ class PageController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

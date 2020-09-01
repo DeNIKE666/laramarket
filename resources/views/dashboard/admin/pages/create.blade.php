@@ -12,19 +12,10 @@
 
         <div class="form-group">
             <label>Название</label>
-            {{ Form::text('name', '', ['class' => 'form-control', 'required' => 'required']) }}
+            {{ Form::text('name', '', ['class' => 'form-control']) }}
 
             @if ($errors->has('name'))
                 <span class="invalid-feedback"><strong>{{ $errors->first('name') }}</strong></span>
-            @endif
-        </div>
-
-        <div class="form-group">
-            <label>Url</label>
-            {{ Form::text('slug', '', ['class' => 'form-control', 'required' => 'required']) }}
-
-            @if ($errors->has('slug'))
-                <span class="invalid-feedback"><strong>{{ $errors->first('slug') }}</strong></span>
             @endif
         </div>
 
@@ -33,10 +24,8 @@
             {{ Form::textarea('content', '', ['class' => 'textarea']) }}
         </div>
         <div class="form-group">
-            <button type="submit" style=" width: 200px" class="lcPageContentSort__btn btn">Сохранить</button>
+            {{ Form::submit('Сохранить', ['style' => 'width: 200px;', 'class' => 'btn lcPageContentSort__btn']) }}
         </div>
         {{ Form::close() }}
-
     </div>
-
 @endsection
