@@ -1,5 +1,5 @@
-<a href="{{ route('adminIndex') }}"
-   class="{{ (request()->is('dashboard/buyer/index')) ? 'active' : '' }}">
+<a href="{{ route('edit-profile') }}"
+   class="{{ (request()->is('dashboard/buyer')) ? 'active' : '' }}">
     Личные данные
 </a>
 <a href="{{ route('user_orders_list') }}"

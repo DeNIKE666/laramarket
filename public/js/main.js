@@ -12,7 +12,9 @@ $(function () {
             },
             url: formUrl,
             data: formData,
-            success: () => window.location.reload(),
+            success: () => {
+                window.location.href="/dashboard/buyer";
+            },
             error: (response) => {
 
                 if(response.status === 422) {
@@ -41,7 +43,9 @@ $(function () {
             },
             url: formUrl,
             data: formData,
-            success: () => window.location.reload(),
+            success: () => {
+                window.location.href="/dashboard/buyer";
+            },
             error: (response) => {
 
                 if (response.status === 422) {

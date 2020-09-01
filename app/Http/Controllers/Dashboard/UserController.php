@@ -17,6 +17,7 @@ use Auth;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\View\View;
 
 
 class UserController extends Controller
@@ -38,18 +39,25 @@ class UserController extends Controller
         $this->orderChangeStatusService = (new OrderChangeStatusService($orderRepository));
     }
 
-    public function edit_profile()
+    /**
+     * Страница редактирования профиля
+     *
+     * @return View
+     */
+    public function editProfile(): View
     {
         $user = Auth::user();
-        return view(
-            'dashboard.edit_profile',
-            compact(
-                'user'
-            )
-        );
+        return view('dashboard.edit_profile', compact('user'));
     }
 
-    public function edit_profile_data(Request $request)
+    /**
+     * Обновить информацию о профиле
+     *
+     * @param Request $request
+     *
+     * @return RedirectResponse
+     */
+    public function updateProfile(Request $request): RedirectResponse
     {
         $user = Auth::user();
         $user->edit($request->all());
@@ -98,7 +106,7 @@ class UserController extends Controller
 
         $userProp = $user->isPropery($user->id);
         $userProp->edit($request->all());
-        return redirect()->route('adminIndex')->with('status', 'Заявка отправлена');
+        return redirect()->route('edit-profile')->with('status', 'Заявка отправлена');
     }
 
     public function listOrder()

@@ -85,7 +85,7 @@
                         <p class="mb-1 mt-3">Allen Moreno</p>
                         <p class="font-weight-light text-muted mb-0">allenmoreno@gmail.com</p>
                     </div>-->
-                    <a class="dropdown-item" href="{{ route('adminIndex') }}"><i class="dropdown-item-icon icon-user text-primary"></i> {{ __('messages.my_profile') }} <!--span class="badge badge-pill badge-danger">1</span--></a>
+                    <a class="dropdown-item" href="{{ route('edit-profile') }}"><i class="dropdown-item-icon icon-user text-primary"></i> {{ __('messages.my_profile') }} <!--span class="badge badge-pill badge-danger">1</span--></a>
                     <!--a class="dropdown-item"><i class="dropdown-item-icon icon-speech text-primary"></i> Messages</a>
                     <a class="dropdown-item"><i class="dropdown-item-icon icon-energy text-primary"></i> Activity</a>
                     <a class="dropdown-item"><i class="dropdown-item-icon icon-question text-primary"></i> FAQ</a-->

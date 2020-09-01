@@ -64,7 +64,7 @@ Route::group(
 );
 
 /**
- * Раздел покупателя в админке
+ * Раздел покупателя
  */
 Route::group(
     [
@@ -73,9 +73,8 @@ Route::group(
         'middleware' => 'auth',
     ],
     function () {
-        //Route::get('/', 'DashboardController@index')->name('adminIndex');
-        Route::get('/index', 'UserController@edit_profile')->name('adminIndex');
-        Route::put('/edit_profile', 'UserController@edit_profile_data')->name('edit_profile_data');
+        Route::get('/', 'UserController@editProfile')->name('edit-profile');
+        Route::put('/edit_profile', 'UserController@updateProfile')->name('update-profile');
         Route::patch('/become-partner', 'UserController@becomePartner')->name('become-partner');
         Route::get('/application-to-seller', 'UserController@application_to_sellers')->name('application-to-seller');
         Route::put('/application-to-seller', 'UserController@storeApplicationToSeller')->name('store-application-to-seller');
@@ -106,7 +105,7 @@ Route::group(
 );
 
 /**
- * функционал админа сайта
+ * Функционал админа сайта
  */
 Route::group(
     [
@@ -116,7 +115,7 @@ Route::group(
         'as'         => 'admin.',
     ],
     function () {
-        Route::get('/index', 'AdminController@index')->name('home');
+        Route::get('/', 'AdminController@index')->name('home');
         Route::get('/users', 'AdminController@getUsers')->name('users');
         Route::get('/user/{id}', 'AdminController@infoUser')->name('info_user');
         Route::get('/request_seller', 'AdminController@index')->name('request_seller');
@@ -137,7 +136,7 @@ Route::group(
 );
 
 /**
- * функционал продавца
+ * Функционал продавца
  */
 Route::group(
     [
@@ -177,7 +176,7 @@ Route::group(
             }
         );
 
-        Route::get('/index', 'SellerController@seller_status')->name('seller_status');
+        Route::get('/', 'SellerController@seller_status')->name('seller_status');
         Route::get('/data_sellers', 'SellerController@data_sellers')->name('data_sellers');
     }
 );

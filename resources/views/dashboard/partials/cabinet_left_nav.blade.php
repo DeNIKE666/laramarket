@@ -10,13 +10,13 @@
 
     @cannot('role-admin')
         <div class="lcPageMenuNav">
-            @if(request()->is('dashboard/buyer/*'))
+            @if(request()->is('dashboard/buyer', 'dashboard/buyer/*'))
                 @include('dashboard.partials.nav_buyer')
             @endif
             @if(request()->is('dashboard/partner', 'dashboard/partner/*'))
                 @include('dashboard.partials.nav_partner')
             @endif
-            @if(request()->is('dashboard/shop/*'))
+            @if(request()->is('dashboard/shop', 'dashboard/shop/*'))
                 @include('dashboard.partials.nav_seller')
             @endif
         </div>

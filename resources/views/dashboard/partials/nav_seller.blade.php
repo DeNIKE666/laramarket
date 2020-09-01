@@ -1,5 +1,5 @@
 <a href="{{ route('seller_status') }}"
-   class="{{ (request()->is('dashboard/shop/index')) ? 'active' : '' }}">
+   class="{{ (request()->is('dashboard/shop')) ? 'active' : '' }}">
     Панель состояния
 </a>
 <a href="{{ route('products.index') }}"

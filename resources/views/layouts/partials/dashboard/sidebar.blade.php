@@ -5,8 +5,8 @@
         <li class="nav-item nav-category">
             <span class="nav-link">{{ __('messages.cabinet') }}</span>
         </li>
-        <li class="nav-item {{ (request()->is(route('adminIndex'))) ? 'active' : '' }}">
-            <a class="nav-link" href="{{ route('adminIndex') }}">
+        <li class="nav-item {{ (request()->is(route('edit-profile'))) ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('edit-profile') }}">
                 <span class="menu-title">{{ __('messages.my_profile') }}</span>
                 <i class="icon-user menu-icon"></i>
             </a>

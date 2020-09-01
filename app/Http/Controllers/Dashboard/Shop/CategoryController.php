@@ -27,7 +27,7 @@ class CategoryController extends Controller
 
             return view('dashboard.shop.categories.index', compact('categories'));
         } else {
-            return redirect()->route('adminIndex')->with('status', 'Доступ для админа');
+            return redirect()->route('edit-profile')->with('status', 'Доступ для админа');
         }
     }
 
