@@ -20,15 +20,6 @@
         </div>
 
         <div class="form-group">
-            <label>Url</label>
-            {{ Form::text('slug', $page->slug, ['class' => 'form-control', 'required' => 'required']) }}
-
-            @if ($errors->has('slug'))
-                <span class="invalid-feedback"><strong>{{ $errors->first('slug') }}</strong></span>
-            @endif
-        </div>
-
-        <div class="form-group">
             <label>Контент</label>
             {{ Form::textarea('content', $page->content, ['class' => 'textarea']) }}
         </div>

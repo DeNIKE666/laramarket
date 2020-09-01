@@ -24,7 +24,9 @@
     @endcannot
 
     @can('role-admin')
-        <a class="lcPageContentTop__btn {{ request()->is('dashboard/admin/*') ? 'lcPageContentTop__btn-active btn-blue' : null }}">
+        <a
+            href="{{ route('admin.home') }}"
+            class="lcPageContentTop__btn {{ request()->is('dashboard/admin/*') ? 'lcPageContentTop__btn-active btn-blue' : null }}">
             Кабинет администратора
         </a>
     @endcan

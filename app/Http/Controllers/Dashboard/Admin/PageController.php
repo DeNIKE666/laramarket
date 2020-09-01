@@ -5,9 +5,13 @@ namespace App\Http\Controllers\Dashboard\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Page;
+use App\Http\Requests\PageFormRequest;
+use App\Traits\UniqueModelSlug;
 
 class PageController extends Controller
 {
+    use UniqueModelSlug;
+
     /**
      * Display a listing of the resource.
      *
@@ -32,19 +36,18 @@ class PageController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\PageFormRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PageFormRequest $request)
     {
-        $this->validate($request, [
-            'name' => 'required|string|max:255',
-            'slug' => 'required|string|max:255',
-        ]);
 
         $data = [
             'name' => $request['name'],
-            'slug' => $request['slug'],
+            'slug' => $this->generateSlug(
+                Page::class,
+                $request['name']
+            ),
             'content' => $request['content'],
         ];
 
@@ -78,16 +81,12 @@ class PageController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\PageFormRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Page $page)
+    public function update(PageFormRequest $request, Page $page)
     {
-        $this->validate($request, [
-            'name' => 'required|string|max:255',
-            'slug' => 'required|string|max:255',
-        ]);
 
         $data = [
             'name' => $request['name'],
