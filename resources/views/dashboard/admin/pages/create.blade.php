@@ -12,19 +12,10 @@
 
         <div class="form-group">
             <label>Название</label>
-            {{ Form::text('name', '', ['class' => 'form-control', 'required' => 'required']) }}
+            {{ Form::text('name', '', ['class' => 'form-control']) }}
 
             @if ($errors->has('name'))
                 <span class="invalid-feedback"><strong>{{ $errors->first('name') }}</strong></span>
-            @endif
-        </div>
-
-        <div class="form-group">
-            <label>Url</label>
-            {{ Form::text('slug', '', ['class' => 'form-control', 'required' => 'required']) }}
-
-            @if ($errors->has('slug'))
-                <span class="invalid-feedback"><strong>{{ $errors->first('slug') }}</strong></span>
             @endif
         </div>
 
