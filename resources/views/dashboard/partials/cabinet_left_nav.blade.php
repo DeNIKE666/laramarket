@@ -31,10 +31,6 @@
             @endif
         @endcan
         @can('is-partner')
-            <p>Реферная ссылка для регисрации</p>
-            <textarea style="height: 80px; line-height: 1.3; padding: 5px" class="form-control"
-                      onfocus="this.select();"
-                      readonly="readonly">{{ route('register_referral', auth()->user()->partner_token) }}</textarea>
         @else
             {{ Form::open(['route' => [ 'active_partner'], 'method' => 'get']) }}
             <button type="submit" class="btn lcPageMenu__btn">Стать партнером</button>

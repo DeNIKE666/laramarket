@@ -31,20 +31,6 @@ Route::get('product/{path}', 'FrontController@product')
 
 Auth::routes();
 
-/*
-Route::get('login', ['as' => 'auth.login', 'uses' => 'Auth\AuthController@showLoginForm']);
-Route::post('login', ['as' => 'auth.login', 'uses' => 'Auth\AuthController@login']);
-Route::get('logout', ['as' => 'auth.logout', 'uses' => 'Auth\AuthController@logout']);
-
-// Registration Routes...
-//Route::get('register', ['as' => 'auth.register', 'uses' => 'AuthController@showRegistrationForm']);
-Route::post('register', ['as' => 'auth.register', 'uses' => 'AuthController@register']);
-
-// Password Reset Routes...
-Route::get('password/reset/{token?}', ['as' => 'auth.password.reset', 'uses' => 'Auth\PasswordController@showResetForm']);
-Route::post('password/email', ['as' => 'auth.password.email', 'uses' => 'Auth\PasswordController@sendResetLinkEmail']);
-Route::post('password/reset', ['as' => 'auth.password.reset', 'uses' => 'Auth\PasswordController@reset']);*/
-
 Route::get('/logout', 'AuthController@logout');
 Route::get('/register/{referral}', 'Auth\RegisterController@showRegistrationForm')->name('register_referral');
 
@@ -191,6 +177,23 @@ Route::group(
 
         Route::get('/index', 'SellerController@seller_status')->name('seller_status');
         Route::get('/data_sellers', 'SellerController@data_sellers')->name('data_sellers');
+    }
+);
+
+/**
+ * функционал партнерки
+ */
+Route::group(
+    [
+        'prefix' => 'dashboard/partnership',
+        'namespace' => 'Dashboard\Partnership',
+        'middleware' => ['auth'],
+        'as' => 'partnership.'
+    ],
+    function () {
+
+        Route::get('/index', 'PartnershipController@index')->name('index');
+
     }
 );
 
