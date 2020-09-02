@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Dashboard\Shop;
+namespace App\Http\Controllers\Dashboard\Seller;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Shop\OrderChangeStatusRequest;

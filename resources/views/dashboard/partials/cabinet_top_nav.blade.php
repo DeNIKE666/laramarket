@@ -13,15 +13,15 @@
 
 <div class="lcPageContentTop" {!! $margin !!}>
 
-    @cannot('role-admin')
+    @cannot('is-admin')
         <a href="{{ route('edit-profile') }}"
            class="lcPageContentTop__btn {{ request()->is('dashboard/buyer', 'dashboard/buyer/*') ? 'lcPageContentTop__btn-active btn-blue' : null }} ">
             Кабинет покупателя
         </a>
 
-        @can('role-shop')
+        @can('is-seller')
             <a href="{{ route('seller_status') }}"
-               class="lcPageContentTop__btn {{ request()->is('dashboard/shop', 'dashboard/shop/*') ? 'lcPageContentTop__btn-active btn-blue' : null }} ">
+               class="lcPageContentTop__btn {{ request()->is('dashboard/seller', 'dashboard/seller/*') ? 'lcPageContentTop__btn-active btn-blue' : null }} ">
                 Кабинет продавца
             </a>
 
@@ -36,7 +36,7 @@
 
     @endcannot
 
-    {{--    @can('role-admin')--}}
+    {{--    @can('is-admin')--}}
     {{--        <a class="lcPageContentTop__btn {{ request()->is('dashboard/admin/*') ? 'lcPageContentTop__btn-active btn-blue' : null }}">--}}
     {{--            Кабинет администратора--}}
     {{--        </a>--}}

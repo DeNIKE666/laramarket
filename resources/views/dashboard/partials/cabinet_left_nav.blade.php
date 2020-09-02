@@ -8,7 +8,7 @@
         </div>
     </div>
 
-    @cannot('role-admin')
+    @cannot('is-admin')
         <div class="lcPageMenuNav">
             @if(request()->is('dashboard/buyer', 'dashboard/buyer/*'))
                 @include('dashboard.partials.nav_buyer')
@@ -16,7 +16,7 @@
             @if(request()->is('dashboard/partner', 'dashboard/partner/*'))
                 @include('dashboard.partials.nav_partner')
             @endif
-            @if(request()->is('dashboard/shop', 'dashboard/shop/*'))
+            @if(request()->is('dashboard/seller', 'dashboard/seller/*'))
                 @include('dashboard.partials.nav_seller')
             @endif
         </div>
@@ -25,7 +25,7 @@
             <span>{{ auth()->user()->personal_account }} руб.</span>
         </div>
 
-        @can('role-user')
+        @can('is-buyer')
             @if(auth()->user()->request_shop == 0)
                 <a href="{{ route('application-to-seller') }}" class="btn lcPageMenu__btn">Стать продавцом</a>
             @else
@@ -58,7 +58,7 @@
 
     @endcannot
 
-    @can('role-admin')
+    @can('is-admin')
         @include('dashboard.admin.block.nav_admin')
     @endcan
 

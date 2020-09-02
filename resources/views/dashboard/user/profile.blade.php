@@ -17,7 +17,7 @@
         </div>
         <div class="lcPageContentDataChange__inpWrap">
             <div class="lcPageContentDataChange__inp">
-                {!! Form::open(['route' => ['update-profile'], 'method' => 'put']) !!}
+                {!! Form::open(['route' => ['update-profile'], 'method' => 'patch']) !!}
                     {!! Form::text('name', '', ['placeholder' => 'Новое имя', 'required' => 'required']) !!}
                     <button type="submit" class="btn-svg">
                         <svg class="lcPageContentDataChange__icon"

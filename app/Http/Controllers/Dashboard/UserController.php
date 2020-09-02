@@ -78,7 +78,13 @@ class UserController extends Controller
             ->with('status', __('users/partner.you_are_partner'));
     }
 
-    public function application_to_sellers()
+    /**
+     * Форма создания заявки на Продавца
+     *
+     * @return View
+     * @author Anton Reviakin
+     */
+    public function applicationToSeller(): View
     {
         $user = Auth::user();
         if ($user->request_shop == 1) {
@@ -89,13 +95,7 @@ class UserController extends Controller
             $property = new Property();
         }
         //$property = new Property();
-        return view(
-            'dashboard.user.application_to_sellers',
-            compact(
-                'user',
-                'property'
-            )
-        );
+        return view('dashboard.user.application_to_sellers', compact('user', 'property'));
     }
 
     public function storeApplicationToSeller(Request $request)

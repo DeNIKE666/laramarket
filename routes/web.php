@@ -70,14 +70,14 @@ Route::group(
     [
         'prefix'     => 'dashboard/buyer',
         'namespace'  => 'Dashboard',
-        'middleware' => 'auth',
+        'middleware' => ['auth'],
     ],
     function () {
         Route::get('/', 'UserController@editProfile')->name('edit-profile');
         Route::put('/edit_profile', 'UserController@updateProfile')->name('update-profile');
         Route::patch('/become-partner', 'UserController@becomePartner')->name('become-partner');
-        Route::get('/application-to-seller', 'UserController@application_to_sellers')->name('application-to-seller');
-        Route::put('/application-to-seller', 'UserController@storeApplicationToSeller')->name('store-application-to-seller');
+        Route::get('/application-to-seller', 'UserController@applicationToSeller')->name('application-to-seller');
+        Route::post('/application-to-seller', 'UserController@storeApplicationToSeller')->name('store-application-to-seller');
         //Route::get('/data_seller', 'UserController@data_seller')->name('data_seller');
 
         Route::resource('/tasks', 'TaskController');
@@ -111,7 +111,7 @@ Route::group(
     [
         'prefix'     => 'dashboard/admin',
         'namespace'  => 'Dashboard\Admin',
-        'middleware' => ['auth', 'super'],
+        'middleware' => ['auth', 'admin'],
         'as'         => 'admin.',
     ],
     function () {
@@ -140,9 +140,9 @@ Route::group(
  */
 Route::group(
     [
-        'prefix'     => 'dashboard/shop',
-        'namespace'  => 'Dashboard\Shop',
-        'middleware' => ['auth', 'shop'],
+        'prefix'     => 'dashboard/seller',
+        'namespace'  => 'Dashboard\Seller',
+        'middleware' => ['auth', 'seller'],
     ],
     function () {
         Route::resource('/categories', 'CategoryController');
@@ -188,7 +188,7 @@ Route::group(
     [
         'prefix'     => 'dashboard/partner',
         'namespace'  => 'Dashboard\Partner',
-        'middleware' => ['auth'],
+        'middleware' => ['auth', 'partner'],
         'as'         => 'partner.',
     ],
     function () {

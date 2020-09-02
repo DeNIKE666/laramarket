@@ -2,10 +2,9 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\User;
 use Closure;
 
-class ShopMiddleware
+class PartnerMiddleware
 {
     /**
      * Handle an incoming request.
@@ -17,13 +16,10 @@ class ShopMiddleware
      */
     public function handle($request, Closure $next)
     {
-        /** @var User $user */
-        $user = auth()->user();
-
-        if ($user->isSeller() or $user->isAdmin()) {
+        if (\Gate::allows('is-partner')) {
             return $next($request);
         }
 
-        return redirect('/');
+        return redirect()->route('edit-profile');
     }
 }
