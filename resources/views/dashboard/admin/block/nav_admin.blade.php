@@ -1,6 +1,6 @@
 <div class="lcPageMenuNav">
     <a href="{{ route('admin.home') }}"
-       class="{{ (request()->is('dashboard/admin/index')) ? 'active' : '' }}">
+       class="{{ (request()->is('dashboard/admin')) ? 'active' : '' }}">
         Личные данные
     </a>
     <a href="{{ route('admin.users') }}"
@@ -22,5 +22,9 @@
     <a href="{{ route('admin.payment_option.index') }}"
        class="{{ (request()->is('dashboard/admin/payment_option*')) ? 'active' : '' }}">
         Платёжная система
+    </a>
+    <a href="{{ route('admin.page.index') }}"
+       class="{{ (request()->is('dashboard/admin/page*')) ? 'active' : '' }}">
+        Текстовые страницы
     </a>
 </div>

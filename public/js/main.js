@@ -3,6 +3,7 @@ $(function () {
         e.preventDefault();
         let formData = $(this).serializeArray();
         let formUrl = $(this).attr('action');
+        let successUrl = $(this).data('success');
         $(".invalid-feedback").text("");
         $("#registerForm input").removeClass("is-invalid");
         $.ajax({
@@ -12,7 +13,7 @@ $(function () {
             },
             url: formUrl,
             data: formData,
-            success: () => window.location.reload(),
+            success: () => window.location.replace(successUrl),
             error: (response) => {
 
                 if(response.status === 422) {

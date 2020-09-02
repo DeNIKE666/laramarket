@@ -23,7 +23,7 @@ Route::post('/comission/payout', 'ComissionsPayInOutController@getPayoutFee')->n
 //    dd($comission);
 //});
 
-Route::get('/','FrontController@index')->name('front_index');
+Route::get('/', 'FrontController@index')->name('front_index');
 Route::get('catalog/{path}', 'FrontController@catalog')
     ->where('path', '[a-zA-Z0-9/_-]+')->name('front_catalog');
 Route::get('product/{path}', 'FrontController@product')
@@ -32,7 +32,8 @@ Route::get('product/{path}', 'FrontController@product')
 Auth::routes();
 
 Route::get('/logout', 'AuthController@logout');
-Route::get('/register/{referral}', 'Auth\RegisterController@showRegistrationForm')->name('register_referral');
+//Route::get('/register}', 'Auth\RegisterController@showRegistrationForm')->name('register');
+Route::get('/join/{partner_token}', 'Auth\RegisterController@rememberPartnerToken')->name('join');
 
 /**
  * Оформление заказа
@@ -51,7 +52,7 @@ Route::group(['middleware' => ['auth']], function () {
 Route::group(
     [
         'prefix' => 'shop',
-        'as' => 'cart.',
+        'as'     => 'cart.',
     ],
     function () {
         Route::get('/cart', 'CartController@cart')->name('index');
@@ -63,21 +64,20 @@ Route::group(
 );
 
 /**
- * Раздел покупателя в админке
+ * Раздел покупателя
  */
 Route::group(
     [
-        'prefix' => 'dashboard/buyer',
-        'namespace' => 'Dashboard',
-        'middleware' => 'auth'
+        'prefix'     => 'dashboard/buyer',
+        'namespace'  => 'Dashboard',
+        'middleware' => ['auth'],
     ],
     function () {
-        //Route::get('/', 'DashboardController@index')->name('adminIndex');
-        Route::get('/index', 'UserController@edit_profile')->name('adminIndex');
-        Route::put('/edit_profile', 'UserController@edit_profile_data')->name('edit_profile_data');
-        Route::get('/active_partner', 'UserController@active_partner')->name('active_partner');
-        Route::get('/application_to_sellers', 'UserController@application_to_sellers')->name('application_to_sellers');
-        Route::put('/application_to_sellers', 'UserController@request_application_to_sellers')->name('request_application_to_sellers');
+        Route::get('/', 'UserController@editProfile')->name('edit-profile');
+        Route::put('/edit_profile', 'UserController@updateProfile')->name('update-profile');
+        Route::patch('/become-partner', 'UserController@becomePartner')->name('become-partner');
+        Route::get('/application-to-seller', 'UserController@applicationToSeller')->name('application-to-seller');
+        Route::post('/application-to-seller', 'UserController@storeApplicationToSeller')->name('store-application-to-seller');
         //Route::get('/data_seller', 'UserController@data_seller')->name('data_seller');
 
         Route::resource('/tasks', 'TaskController');
@@ -89,14 +89,14 @@ Route::group(
         Route::get('/list_cashback', 'UserController@userCashback')->name('user_list_cashback');
         Route::get('/user_pay', 'UserController@userPay')->name('user_pay');
 
-        Route::post('/withdraw' , 'UserController@withdraw')->name('withdraw');
-        Route::get('/history/withdraw' , 'UserController@histroryWithdraw')->name('history.withdraw');
+        Route::post('/withdraw', 'UserController@withdraw')->name('withdraw');
+        Route::get('/history/withdraw', 'UserController@histroryWithdraw')->name('history.withdraw');
 
         Route::prefix('payment')->group(function () {
-            Route::post('/visa' , 'QiwiController@pay')->name('qiwi.pay');
-            Route::post('/visa/order/{order}' , 'QiwiController@orderPay')->name('qiwi.order.pay');
-            Route::post('/callback/visa/deposit/{orderPay}' , 'QiwiController@callback')->name('qiwi.callback');
-            Route::post('/callback/visa/order/{order}/{orderPay}' , 'QiwiController@callbackOrder')->name('qiwi.callback.order');
+            Route::post('/visa', 'QiwiController@pay')->name('qiwi.pay');
+            Route::post('/visa/order/{order}', 'QiwiController@orderPay')->name('qiwi.order.pay');
+            Route::post('/callback/visa/deposit/{orderPay}', 'QiwiController@callback')->name('qiwi.callback');
+            Route::post('/callback/visa/order/{order}/{orderPay}', 'QiwiController@callbackOrder')->name('qiwi.callback.order');
         });
 
         //Route::get('summernote',array('as'=>'summernote.get','uses'=>'FileController@getSummernote'));
@@ -105,29 +105,30 @@ Route::group(
 );
 
 /**
- * функционал админа сайта
+ * Функционал админа сайта
  */
 Route::group(
     [
-        'prefix' => 'dashboard/admin',
-        'namespace' => 'Dashboard\Admin',
-        'middleware' => ['auth', 'super'],
-        'as' => 'admin.'
+        'prefix'     => 'dashboard/admin',
+        'namespace'  => 'Dashboard\Admin',
+        'middleware' => ['auth', 'admin'],
+        'as'         => 'admin.',
     ],
     function () {
-        Route::get('/index', 'AdminController@index')->name('home');
+        Route::get('/', 'AdminController@index')->name('home');
         Route::get('/users', 'AdminController@getUsers')->name('users');
         Route::get('/user/{id}', 'AdminController@infoUser')->name('info_user');
         Route::get('/request_seller', 'AdminController@index')->name('request_seller');
-        Route::put('/approved_seller', 'AdminController@approved_seller')->name('approved_seller');
+        Route::put('/approve-as-seller', 'AdminController@approveAsSeller')->name('approve-as-seller');
         Route::get('/orders', 'AdminController@orders')->name('orders');
 
         Route::resource('/settings', 'SettingController');
         Route::resource('/setting_schedules', 'PaymentScheduleController');
         Route::resource('/attributes', 'AttributeController');
         Route::resource('/payment_option', 'PaymentOptionController');
+        Route::resource('/page', 'PageController');
 
-        Route::get('/clear-cache', function() {
+        Route::get('/clear-cache', function () {
             Artisan::call('cache:clear');
             return redirect()->back();
         })->name('clear-cache');
@@ -135,13 +136,13 @@ Route::group(
 );
 
 /**
- * функционал продавца
+ * Функционал продавца
  */
 Route::group(
     [
-        'prefix' => 'dashboard/shop',
-        'namespace' => 'Dashboard\Shop',
-        'middleware' => ['auth', 'shop'],
+        'prefix'     => 'dashboard/seller',
+        'namespace'  => 'Dashboard\Seller',
+        'middleware' => ['auth', 'seller'],
     ],
     function () {
         Route::resource('/categories', 'CategoryController');
@@ -152,7 +153,7 @@ Route::group(
         Route::group(
             [
                 'prefix' => 'categories/{category}',
-                'as' => 'categories.',
+                'as'     => 'categories.',
             ],
             function () {
                 Route::post('/first', 'CategoryController@first')->name('first');
@@ -165,7 +166,7 @@ Route::group(
         Route::group(
             [
                 'prefix' => 'order',
-                'as' => 'order.',
+                'as'     => 'order.',
             ],
             function () {
                 Route::get('/list', 'OrderShopController@index')->name('list');
@@ -175,26 +176,29 @@ Route::group(
             }
         );
 
-        Route::get('/index', 'SellerController@seller_status')->name('seller_status');
+        Route::get('/', 'SellerController@seller_status')->name('seller_status');
         Route::get('/data_sellers', 'SellerController@data_sellers')->name('data_sellers');
     }
 );
 
 /**
- * функционал партнерки
+ * Функционал партнера
  */
 Route::group(
     [
-        'prefix' => 'dashboard/partnership',
-        'namespace' => 'Dashboard\Partnership',
-        'middleware' => ['auth'],
-        'as' => 'partnership.'
+        'prefix'     => 'dashboard/partner',
+        'namespace'  => 'Dashboard\Partner',
+        'middleware' => ['auth', 'partner'],
+        'as'         => 'partner.',
     ],
     function () {
-
-        Route::get('/index', 'PartnershipController@index')->name('index');
-
+        Route::get('/', 'PartnerController@index')->name('index');
+        Route::get('/referrals', 'PartnerController@referrals')->name('referrals');
+        Route::get('/history-account', 'PartnerController@historyAccount')->name('history-account');
+        Route::patch('/account/transfer-to-personal-account', 'PartnerController@transferToPersonalAccount')->name('transfer-to-personal-account');
     }
 );
 
 Route::post('gallery/media', 'Dashboard\DashboardController@storeMedia')->name('gallery');
+
+Route::get('/{slug}/', 'FrontController@pageStatic')->name('page_static');

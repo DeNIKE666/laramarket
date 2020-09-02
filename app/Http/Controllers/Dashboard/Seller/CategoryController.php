@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Dashboard\Shop;
+namespace App\Http\Controllers\Dashboard\Seller;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -22,12 +22,12 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        if (Gate::allows('role-admin')) {
+        if (Gate::allows('is-admin')) {
             $categories = Category::getAllCategory();
 
             return view('dashboard.shop.categories.index', compact('categories'));
         } else {
-            return redirect()->route('adminIndex')->with('status', 'Доступ для админа');
+            return redirect()->route('edit-profile')->with('status', 'Доступ для админа');
         }
     }
 
@@ -151,7 +151,7 @@ class CategoryController extends Controller
 
     public function destroy(Category $category)
     {
-        if (Gate::allows('role-admin')) {
+        if (Gate::allows('is-admin')) {
             $category->delete();
         }
         Cache::forget('getAllCategory');

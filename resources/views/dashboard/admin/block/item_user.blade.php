@@ -1,22 +1,26 @@
+@php
+    /** @var \App\Models\User $user */
+@endphp
+
 <div class="lcPageContentRow">
     <div class="lcPageContentCol">
-        <a href="{{ route('admin.info_user', $user->id) }}">{{ $user->getName() }}</a>
+        <a href="{{ route('admin.info_user', $user->id) }}">{{ getName($user) }}</a>
     </div>
     <div class="lcPageContentCol">
-        {{ $user->getNameRole() }}
+        @lang('users/roles.' . $user->role)
     </div>
     <div class="lcPageContentCol">
-        @if($user->is_partner == 1)
-            Да
+        @if($user->isPartner())
+            @lang('users/partner.is_partner')
         @else
-            Нет
+            @lang('users/partner.is_not_partner')
         @endif
     </div>
     <div class="lcPageContentCol">
-        @if($user->request_shop == 1 && $user->role == \App\Models\User::ROLE_USER)
-            {{ Form::open(['route' => ['admin.approved_seller'], 'method' => 'put', 'class' => 'forms-sample']) }}
-            {{ Form::hidden('user_id', $user->id) }}
-            <button type="submit" class="lcPageContentSort__btn btn">Подтвердить</button>
+        @if($user->request_shop == 1)
+            {{ Form::open(['route' => ['admin.approve-as-seller'], 'method' => 'put', 'class' => 'forms-sample']) }}
+            {{ Form::hidden('id', $user->id) }}
+            {{ Form::submit(__('admin/users.confirm'), ['class' => 'lcPageContentSort__btn btn']) }}
             {{ Form::close() }}
         @endif
     </div>

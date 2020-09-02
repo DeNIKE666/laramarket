@@ -3,10 +3,10 @@
         <div class="card-body">
             <h4 class="card-title">Кабинет покупателя</h4>
             <br>
-            {{ Form::open(['route' => [ 'edit_profile_data'], 'method' => 'put', 'class' => 'forms-sample']) }}
+            {{ Form::open(['route' => ['update-profile'], 'method' => 'patch', 'class' => 'forms-sample']) }}
             <div class="form-group">
                 <label>ФИО</label>
-                {{ Form::text('name', $user->name, ['class' => 'form-control']) }}
+                {{ Form::text('name', getName($user), ['class' => 'form-control']) }}
             </div>
             <div class="form-group">
                 <label>Телефон</label>

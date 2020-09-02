@@ -12,15 +12,20 @@ use App\Repositories\OrderRepository;
 use App\Services\Buyer\Order\OrderChangeStatusService;
 use App\Services\Cashback\CashbackScheduleService;
 use App\Services\Cashback\CashbackService;
+use App\Services\UserService;
 use Auth;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Str;
+use Illuminate\View\View;
 
 
 class UserController extends Controller
 {
     protected $orderRepository;
+
+    /** @var UserService */
+    private $userService;
 
     /** @var OrderChangeStatusService */
     private $orderChangeStatusService;
@@ -29,41 +34,57 @@ class UserController extends Controller
     {
         $this->orderRepository = $orderRepository;
 
+        $this->userService = (new UserService());
+
         $this->orderChangeStatusService = (new OrderChangeStatusService($orderRepository));
     }
 
-    public function edit_profile()
+    /**
+     * Страница редактирования профиля
+     *
+     * @return View
+     */
+    public function editProfile(): View
     {
         $user = Auth::user();
-        return view(
-            'dashboard.edit_profile',
-            compact(
-                'user'
-            )
-        );
+        return view('dashboard.edit_profile', compact('user'));
     }
 
-    public function edit_profile_data(Request $request)
+    /**
+     * Обновить информацию о профиле
+     *
+     * @param Request $request
+     *
+     * @return RedirectResponse
+     */
+    public function updateProfile(Request $request): RedirectResponse
     {
         $user = Auth::user();
         $user->edit($request->all());
         return redirect()->back()->with('status', 'Профиль обновлён');
     }
 
-    public function active_partner()
+    /**
+     * Стать партнером
+     *
+     * @return RedirectResponse
+     */
+    public function becomePartner(): RedirectResponse
     {
-        $user = Auth::user();
-        if ($user->is_partner) {
-            return redirect()->back()->with(['error' => true, 'message' => 'Вы уже партнер']);
-        } else {
-            $user->is_partner = 1;
-            $user->partner_token = Str::random(100);
-            $user->save();
-            return redirect()->back()->with('status', 'Вы стали парнером');
-        }
+        $this->userService->setAsPartner();
+
+        return redirect()
+            ->back()
+            ->with('status', __('users/partner.you_are_partner'));
     }
 
-    public function application_to_sellers()
+    /**
+     * Форма создания заявки на Продавца
+     *
+     * @return View
+     * @author Anton Reviakin
+     */
+    public function applicationToSeller(): View
     {
         $user = Auth::user();
         if ($user->request_shop == 1) {
@@ -74,16 +95,10 @@ class UserController extends Controller
             $property = new Property();
         }
         //$property = new Property();
-        return view(
-            'dashboard.user.application_to_sellers',
-            compact(
-                'user',
-                'property'
-            )
-        );
+        return view('dashboard.user.application_to_sellers', compact('user', 'property'));
     }
 
-    public function request_application_to_sellers(Request $request)
+    public function storeApplicationToSeller(Request $request)
     {
         $user = Auth::user();
         $user->request_shop = 1;
@@ -91,7 +106,7 @@ class UserController extends Controller
 
         $userProp = $user->isPropery($user->id);
         $userProp->edit($request->all());
-        return redirect()->route('adminIndex')->with('status', 'Заявка отправлена');
+        return redirect()->route('edit-profile')->with('status', 'Заявка отправлена');
     }
 
     public function listOrder()

@@ -5,7 +5,7 @@
                 <span>
                     Имя:
                 </span>
-                {{ $user->getName() }}
+                {{ getName($user) }}
             </div>
             <svg class="lcPageContentDataChange__img"
                  xmlns="http://www.w3.org/2000/svg"
@@ -17,7 +17,7 @@
         </div>
         <div class="lcPageContentDataChange__inpWrap">
             <div class="lcPageContentDataChange__inp">
-                {!! Form::open(['route' => [ 'edit_profile_data'], 'method' => 'put']) !!}
+                {!! Form::open(['route' => ['update-profile'], 'method' => 'patch']) !!}
                     {!! Form::text('name', '', ['placeholder' => 'Новое имя', 'required' => 'required']) !!}
                     <button type="submit" class="btn-svg">
                         <svg class="lcPageContentDataChange__icon"

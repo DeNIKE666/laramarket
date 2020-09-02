@@ -50,7 +50,7 @@
 
         $("#popup-changeOrderStatus .popUp__body").html(form);
 
-        $('#popup-changeOrderStatus').fadeIn("normal", function () {
+        $("#popup-changeOrderStatus").fadeIn("normal", function () {
             $("#popup-changeOrderStatus form").on("submit", function (e) {
                 e.preventDefault();
                 changeStatus(orderId);
@@ -120,7 +120,7 @@
             notes: $("#order_notes").val()
         };
 
-        axios.patch(`/dashboard/shop/order/${orderId}/status`, data)
+        axios.patch(`/dashboard/seller/order/${orderId}/status`, data)
             .then(response => {
                 hideChangeStatusPopup();
             })

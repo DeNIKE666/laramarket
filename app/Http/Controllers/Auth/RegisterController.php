@@ -3,28 +3,25 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
 use App\Models\User;
+use App\Providers\RouteServiceProvider;
+use App\Repositories\UserRepository;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\RegistersUsers;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\View\View;
 
 class RegisterController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Register Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles the registration of new users as well as their
-    | validation and creation. By default this controller uses a trait to
-    | provide this functionality without requiring any additional code.
-    |
-    */
-
     use RegistersUsers;
+
+    private $userRepository;
 
     /**
      * Where to redirect users after registration.
@@ -41,50 +38,112 @@ class RegisterController extends Controller
     public function __construct()
     {
         $this->middleware('guest');
+        $this->userRepository = app(UserRepository::class);
+    }
+
+    /**
+     * Запомнить партнера
+     *
+     * @param Request $request
+     * @param string  $partnerToken
+     *
+     * @return RedirectResponse
+     * @author Anton Reviakin
+     */
+    public function rememberPartnerToken(string $partnerToken = ''): RedirectResponse
+    {
+        if (!empty($partnerToken)) {
+            Session::put('partner', $partnerToken);
+            Cookie::queue('partner', $partnerToken, (60 * 24 * 365), '/', null, null, false);
+        }
+
+        return redirect()->route('front_index');
     }
 
     /**
      * Get a validator for an incoming registration request.
      *
-     * @param  array  $data
+     * @param array $data
+     *
      * @return \Illuminate\Contracts\Validation\Validator
      */
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'phone' => ['required', 'regex:/^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}/'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'phone'    => ['required', 'regex:/^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}/'],
+            'email'    => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:6', 'confirmed'],
         ]);
     }
 
     /**
+     * Handle a registration request for the application.
+     *
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function register(Request $request)
+    {
+        $this->validator($request->all())->validate();
+
+        event(new Registered($user = $this->create($request->all())));
+
+        $this->guard()->login($user);
+
+        if ($response = $this->registered($request, $user)) {
+            return $response;
+        }
+
+        return $request->wantsJson()
+            ? new Response('', 201)
+            : redirect()->intended($this->redirectPath());
+    }
+
+    /**
      * Create a new user instance after a valid registration.
      *
-     * @param  array  $data
-     * @return \App\Models\User
+     * @param array $data
+     *
+     * @return User
      */
-    protected function create(array $data)
+    protected function reate(array $data)
     {
+        $partner = $this->detectPartner();
 
         return User::create([
-            //'referral' => $data['referral'],
-            'partner_token' => Str::random(100),
-            'phone' => $data['phone'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
+            'partner_id' => $partner->id,
+            'phone'      => $data['phone'],
+            'email'      => $data['email'],
+            'password'   => Hash::make($data['password']),
         ]);
+    }
+
+    /**
+     * Найти партнера
+     *
+     * @return User|null
+     */
+    private function detectPartner(): ?User
+    {
+        //Получить токен партнера из сессии или куки
+        $partnerToken = Session::get('partner') ?: Cookie::get('partner');
+
+        if (!$partnerToken) {
+            return null;
+        }
+
+        //Найти партнера по токену
+        return $this->userRepository->getPartnerByToken($partnerToken);
     }
 
     /**
      * Show the application registration form.
      *
-     * @return \Illuminate\Http\Response
+     * @return View
      */
-    public function showRegistrationForm(Request $request)
+    public function showRegistrationForm(Request $request): View
     {
-        $referral = $request->input('referral');
-        //dump($referral);
-        return view('auth.register', compact('referral'));
+        return view('auth.register');
     }
 }

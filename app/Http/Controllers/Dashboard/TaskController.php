@@ -18,7 +18,7 @@ class TaskController extends Controller
      */
     public function index()
     {
-        if (Gate::allows('role-admin')) {
+        if (Gate::allows('is-admin')) {
             $tasks = Task::orderBy("id", "desc")->paginate(20);
             return view('dashboard.task.index', compact('tasks'));
         } else {
@@ -83,7 +83,7 @@ class TaskController extends Controller
         $task = Task::findOrFail($id);
         abort_if(Gate::denies('update-post', $task), 403, 'Sorry, you are not an admin');
 
-        if (Gate::allows('role-admin')) {
+        if (Gate::allows('is-admin')) {
             $tasks = Task::orderBy("id", "desc")->paginate(20);
         } else {
             $userId = Auth::user()->id;
@@ -123,7 +123,7 @@ class TaskController extends Controller
             'user_id' => Auth::user()->id,
             'task_id' => $id
         ];
-        if (Gate::allows('role-admin')) {
+        if (Gate::allows('is-admin')) {
             //если ответ админа
             $task->status = Task::STATUS_TASK_CLOSE;
             $task->save();
