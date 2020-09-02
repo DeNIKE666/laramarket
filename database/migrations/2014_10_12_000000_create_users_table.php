@@ -28,14 +28,14 @@ class CreateUsersTable extends Migration
 
             $table
                 ->enum('role', [
-                    'user',
-                    'user_partner',
-                    'shop',
-                    'shop_partner',
+                    'buyer',
+                    'buyer_partner',
+                    'seller',
+                    'seller_partner',
                     'moderator',
                     'admin',
                 ])
-                ->default('user')
+                ->default('buyer')
                 ->comment('Роль');
 
             $table->string('name')->nullable();
@@ -45,9 +45,9 @@ class CreateUsersTable extends Migration
             $table->rememberToken();
 
             $table
-                ->boolean('request_shop')
+                ->boolean('request_seller')
                 ->default(false)
-                ->comment('Запрос на роль Магазин');
+                ->comment('Запрос на роль Продавец');
 
             $table
                 ->unsignedDecimal('personal_account')
@@ -58,9 +58,9 @@ class CreateUsersTable extends Migration
                 ->default(0)
                 ->comment('Счет для кешбэка');
             $table
-                ->unsignedDecimal('shop_account')
+                ->unsignedDecimal('seller_account')
                 ->default(0)
-                ->comment('Счет магазина');
+                ->comment('Счет продавца');
             $table
                 ->unsignedDecimal('partner_account')
                 ->default(0)

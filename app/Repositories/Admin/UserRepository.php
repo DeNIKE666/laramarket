@@ -48,11 +48,11 @@ class UserRepository
             ->firstOrFail();
 
         //Если уже является партнером - сохранить статус партнера
-        $role = $user->isPartner() ? $user::ROLE_SHOP_PARTNER : $user::ROLE_SHOP;
+        $role = $user->isPartner() ? $user::ROLE_SELLER_PARTNER : $user::ROLE_SELLER;
 
         $update = [
-            'role'         => $role,
-            'request_shop' => false,
+            'role'           => $role,
+            'request_seller' => false,
         ];
 
         return $user->update($update);

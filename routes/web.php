@@ -74,7 +74,7 @@ Route::group(
     ],
     function () {
         Route::get('/', 'UserController@editProfile')->name('edit-profile');
-        Route::put('/edit_profile', 'UserController@updateProfile')->name('update-profile');
+        Route::patch('/update-profile', 'UserController@updateProfile')->name('update-profile');
         Route::patch('/become-partner', 'UserController@becomePartner')->name('become-partner');
         Route::get('/application-to-seller', 'UserController@applicationToSeller')->name('application-to-seller');
         Route::post('/application-to-seller', 'UserController@storeApplicationToSeller')->name('store-application-to-seller');
@@ -85,7 +85,7 @@ Route::group(
 
         Route::get('/orders', 'UserController@listOrder')->name('user_orders_list');
         Route::patch('/order/{order}/status', 'UserController@changeStatus')->name('user_change_status');
-        Route::get('/history_orders', 'UserController@historyOrder')->name('user_history_order');
+        Route::get('/history-orders', 'UserController@historyOrder')->name('user_history_order');
         Route::get('/list_cashback', 'UserController@userCashback')->name('user_list_cashback');
         Route::get('/user_pay', 'UserController@userPay')->name('user_pay');
 

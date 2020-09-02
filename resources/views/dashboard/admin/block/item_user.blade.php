@@ -17,7 +17,7 @@
         @endif
     </div>
     <div class="lcPageContentCol">
-        @if($user->request_shop == 1)
+        @if($user->hasSellerRequest())
             {{ Form::open(['route' => ['admin.approve-as-seller'], 'method' => 'put', 'class' => 'forms-sample']) }}
             {{ Form::hidden('id', $user->id) }}
             {{ Form::submit(__('admin/users.confirm'), ['class' => 'lcPageContentSort__btn btn']) }}

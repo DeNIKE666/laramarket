@@ -7,6 +7,7 @@ use App\Http\Requests\Buyer\OrderChangeStatusRequest;
 use App\Models\Order;
 use App\Models\PaymentOption;
 use App\Models\Property;
+use App\Models\User;
 use App\Models\Withdraw;
 use App\Repositories\OrderRepository;
 use App\Services\Buyer\Order\OrderChangeStatusService;
@@ -86,8 +87,9 @@ class UserController extends Controller
      */
     public function applicationToSeller(): View
     {
+        /** @var User $user */
         $user = Auth::user();
-        if ($user->request_shop == 1) {
+        if ($user->hasSellerRequest()) {
             return redirect()->back()->with('status', 'Заявка на продовца отправлена');
         }
         //dd($user->hasPropery($user->id));
@@ -100,8 +102,9 @@ class UserController extends Controller
 
     public function storeApplicationToSeller(Request $request)
     {
+        /** @var User $user */
         $user = Auth::user();
-        $user->request_shop = 1;
+        $user->request_seller = 1;
         $user->save();
 
         $userProp = $user->isPropery($user->id);
