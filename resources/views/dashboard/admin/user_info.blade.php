@@ -13,7 +13,7 @@
         <div>
             <p>
                 <strong style="font-weight: bold;">ФИО</strong>
-                {{ $user->getName() }}
+                {{ getName($user) }}
             </p>
             <p>
                 <strong style="font-weight: bold;">Email</strong>

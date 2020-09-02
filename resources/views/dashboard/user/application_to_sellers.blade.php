@@ -41,7 +41,7 @@
                 <div class="userRegRow">
                     <div class="userRegInp">
                         <span>Ф.И.О.</span>
-                        {{ Form::text('name', $user->getName(), ['placeholder' => 'Введите Ф.И.О.', 'required' => 'required']) }}
+                        {{ Form::text('name', getName($user), ['placeholder' => 'Введите Ф.И.О.', 'required' => 'required']) }}
                     </div>
                     <div class="userRegInp">
                         <span>Гражданство</span>
@@ -104,7 +104,7 @@
                 <div class="userRegRow">
                     <div class="userRegInp">
                         <span>Ф.И.О.</span>
-                        {{ Form::text('name', $user->getName(), ['placeholder' => 'Введите Ф.И.О.', 'required' => 'required']) }}
+                        {{ Form::text('name', getName($user), ['placeholder' => 'Введите Ф.И.О.', 'required' => 'required']) }}
                     </div>
                     <div class="userRegInp">
                         <span>Гражданство</span>
@@ -210,7 +210,7 @@
                 <div class="userRegRow">
                     <div class="userRegInp">
                         <span>Ф.И.О.</span>
-                        {{ Form::text('name', $user->getName(), ['placeholder' => 'Введите Ф.И.О.', 'required' => 'required']) }}
+                        {{ Form::text('name', getName($user), ['placeholder' => 'Введите Ф.И.О.', 'required' => 'required']) }}
                     </div>
                     <div class="userRegInp">
                         <span>Гражданство</span>

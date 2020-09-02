@@ -4,7 +4,7 @@
 
 <div class="lcPageContentRow">
     <div class="lcPageContentCol">
-        <a href="{{ route('admin.info_user', $user->id) }}">{{ $user->getName() }}</a>
+        <a href="{{ route('admin.info_user', $user->id) }}">{{ getName($user) }}</a>
     </div>
     <div class="lcPageContentCol">
         @lang('users/roles.' . $user->role)

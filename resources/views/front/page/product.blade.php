@@ -33,7 +33,7 @@
                 <div class="product__right">
                     <div class="product__user">
                         <img src="{{ asset('img/photos/18.png') }}" alt="">
-                        <span>{{ $product->author->getName()  }}</span>
+                        <span>{{ getName($product->author)  }}</span>
                     </div>
                     <h1 class="product__title">
                         {{ $product->title }}

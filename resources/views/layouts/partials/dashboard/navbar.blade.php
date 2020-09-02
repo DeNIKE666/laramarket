@@ -8,7 +8,7 @@
     </div>
 
     <div class="navbar-menu-wrapper d-flex align-items-center flex-grow-1">
-        <h5 class="mb-0 font-weight-medium d-none d-lg-flex">{{ __('messages.welcome') }} {{ Auth::user()->getName() }}</h5>
+        <h5 class="mb-0 font-weight-medium d-none d-lg-flex">{{ __('messages.welcome') }} {{ getName(Auth::user()) }}</h5>
         <ul class="navbar-nav navbar-nav-right ml-auto">
 
             <!--
@@ -78,7 +78,7 @@
             <li class="nav-item dropdown d-none d-xl-inline-flex user-dropdown">
                 <a class="nav-link dropdown-toggle" id="UserDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
                    <!-- <img class="img-xs rounded-circle ml-2" src="images/faces/face8.jpg" alt="Profile image">-->
-                    <span class="font-weight-normal"> {{ Auth::user()->getName() }} </span></a>
+                    <span class="font-weight-normal"> {{ getName(Auth::user()) }} </span></a>
                 <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="UserDropdown">
                    <!-- <div class="dropdown-header text-center">
                         <img class="img-md rounded-circle" src="images/faces/face8.jpg" alt="Profile image">

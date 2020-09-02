@@ -74,16 +74,6 @@ class User extends Authenticatable
     ];
 
     /**
-     * Получить имя или почту
-     *
-     * @return string
-     */
-    public function getName(): string
-    {
-        return $this->name ?: $this->email;
-    }
-
-    /**
      * Является ли пользователь администратором
      *
      * @return bool

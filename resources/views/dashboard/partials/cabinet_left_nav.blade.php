@@ -4,7 +4,7 @@
             <img src="{{ asset('img/photos/18.png') }}" alt="">
         </div>
         <div class="lcPageMenuTop__name">
-            {{ auth()->user()->getName() }}
+            {{ getName(auth()->user()) }}
         </div>
     </div>
 

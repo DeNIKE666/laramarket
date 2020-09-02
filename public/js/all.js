@@ -6055,10 +6055,14 @@ $(function () {
     }); // Модалки
 
     $('.popUp-auth-btn').on('click', function () {
-        $('.popUp-auth').fadeIn();
+        $('.popUp-auth').fadeIn("normal", function () {
+            $("#emailInput2").focus();
+        });
     });
     $('.popUp-reg-btn').on('click', function () {
-        $('.popUp-reg').fadeIn();
+        $('.popUp-reg').fadeIn("normal", function () {
+            $("#phoneInput").focus();
+        });
     });
     $('.popUp__layer').on('click', function () {
         $('.popUp').fadeOut();

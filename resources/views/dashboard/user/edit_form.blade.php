@@ -6,7 +6,7 @@
             {{ Form::open(['route' => ['update-profile'], 'method' => 'put', 'class' => 'forms-sample']) }}
             <div class="form-group">
                 <label>ФИО</label>
-                {{ Form::text('name', $user->getName(), ['class' => 'form-control']) }}
+                {{ Form::text('name', getName($user), ['class' => 'form-control']) }}
             </div>
             <div class="form-group">
                 <label>Телефон</label>

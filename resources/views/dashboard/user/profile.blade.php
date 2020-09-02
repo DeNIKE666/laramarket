@@ -5,7 +5,7 @@
                 <span>
                     Имя:
                 </span>
-                {{ $user->getName() }}
+                {{ getName($user) }}
             </div>
             <svg class="lcPageContentDataChange__img"
                  xmlns="http://www.w3.org/2000/svg"
