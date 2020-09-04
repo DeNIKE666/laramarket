@@ -116,9 +116,19 @@ class ProductRepository extends BaseRepository
      *
      * @return mixed
      */
-    public function getProductsByCategory(array $arParentCat)
+    public function getProductsByCategory(array $arParentCat, array $filter = [])
     {
-        $products = Product::whereIn('category_id', $arParentCat)->active();
+
+        $products = Product::
+            query()
+            ->whereIn('category_id', $arParentCat)
+            ->active();
+
+
+        if (!empty($filter)) {
+            $products->filter($filter);
+        }
+
         return $products;
     }
 
@@ -183,15 +193,13 @@ class ProductRepository extends BaseRepository
         $filterProps = [];
         if ($catFilter->count() > 0) {
             foreach ($catFilter as $attribute) {
+
                 //dump($attribute->name);
 
                 $listAttr = ProductAttribute::whereIn('product_id', $arIdProduct)
-                    ->where('attribute_id', $attribute->id)
-                    //->pluck('value')
-                    ->get('value')
-                    ->unique('value')
-                    ->toArray();
-                //dump($listAttr);
+                    ->where('attribute_id', $attribute->id)->where('');
+
+
                 if (count($listAttr) > 0) {
                     $listAttrFull = [];
                     foreach ($listAttr as $attr) {
@@ -211,7 +219,7 @@ class ProductRepository extends BaseRepository
                 }
             }
         }
-        return $filterProps;
+     //   return $filterProps;
     }
 
 

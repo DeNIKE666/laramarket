@@ -35,6 +35,8 @@ class ProductController extends Controller
     public function create()
     {
         $categories = Category::getAllCategory();
+
+
         return view('dashboard.shop.product.create', compact('categories'));
     }
 

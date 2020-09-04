@@ -3071,7 +3071,7 @@ footer {
 .catalogFilter__checks {
   max-height: 380px;
   overflow-y: scroll;
-  margin-bottom: 45px;
+  margin-bottom: 5px;
 }
 
 .catalogFilter__checks::-webkit-scrollbar {

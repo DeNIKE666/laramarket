@@ -3,6 +3,8 @@
     {{ Breadcrumbs::render('front_catalog', $category) }}
 @endsection
 @section('content')
+
+
     <div class="block-catalog">
         <div class="wrapper">
             <div class="catalogTop">
@@ -12,26 +14,20 @@
                 @include('front.partials.catalog_sort')
 
                 <div class="catalogTop__sum">
-                    {{ $products->total() }} товаров
+                   {{ $products->total() }} товаров
                 </div>
             </div>
             <div class="catalog">
-                @include('front.partials.catalog_filter',
-                        [
-                            'filterProps' => $filterProps,
-                            'maxPrice' => $maxPrice,
-                            'minPrice' => $minPrice
-                        ]
-                )
+                @include('front.partials.catalog_filter')
                 <div class="catalogContentWrap">
                     <div class="catalogContent">
-                        @if (count($products))
+ @if (count($products))
 
-                                @foreach($products as $product)
-                                    @include('front.partials.item_product', ['product' => $product])
-                                @endforeach
+                          @foreach($products as $product)
+                                   @include('front.partials.item_product', ['product' => $product])
+                             @endforeach
 
-                        @endif
+                       @endif
                     </div>
                 </div>
             </div>

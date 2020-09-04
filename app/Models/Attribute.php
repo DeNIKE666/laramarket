@@ -18,4 +18,9 @@ class Attribute extends Model
     {
         return $this->belongsToMany('App\Models\Category');
     }
+
+    public function children()
+    {
+        return $this->hasMany(ProductAttribute::class);
+    }
 }

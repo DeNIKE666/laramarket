@@ -1,15 +1,14 @@
 <?php
+
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Cviebrock\EloquentSluggable\Sluggable;
-use Illuminate\Support\Facades\Storage;
 use Auth;
-use Illuminate\Support\Str;
+use Cviebrock\EloquentSluggable\Sluggable;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Spatie\MediaLibrary\Models\Media;
-use App\Models\ProductAttribute;
 
 class Product extends Model implements HasMedia
 {
@@ -49,7 +48,7 @@ class Product extends Model implements HasMedia
         'part_cashback',
         'slug',
         'brand',
-        'status'
+        'status',
     ];
 
     public function author()
@@ -62,7 +61,7 @@ class Product extends Model implements HasMedia
         return $this->belongsTo(Category::class);
     }
 
-    public function product_attributes()
+    public function productAttributes()
     {
         return $this->hasMany(ProductAttribute::class);
     }
@@ -72,14 +71,14 @@ class Product extends Model implements HasMedia
      *
      * @return array
      */
-/*
-    public function setTitleAttribute($value)
-    {
-        return $this->attributes['title'] = Str::of($value)->slug('-');
-    }
-*/
+    /*
+        public function setTitleAttribute($value)
+        {
+            return $this->attributes['title'] = Str::of($value)->slug('-');
+        }
+    */
 
-    public  static function add($fields)
+    public static function add($fields)
     {
         $post = new static;
         $post->fill($fields);
@@ -104,7 +103,9 @@ class Product extends Model implements HasMedia
 
     public function setCategory($id)
     {
-        if($id == null) {return;}
+        if ($id == null) {
+            return;
+        }
         $this->category_id = $id;
         $this->save();
     }
@@ -123,7 +124,7 @@ class Product extends Model implements HasMedia
 
     public function toogleStatus($value)
     {
-        if($value == null) {
+        if ($value == null) {
             return $this->setDraft();
         }
         return $this->setPublic();
@@ -142,19 +143,22 @@ class Product extends Model implements HasMedia
             ->height(360);
     }
 
-    public function getUrl() {
+    public function getUrl()
+    {
         return '/product/' . $this->slug;
     }
 
-    public function getImage($size='') {
+    public function getImage($size = '')
+    {
         $img = $this->getMedia('image')->first();
-        if($img) {
+        if ($img) {
             return '<img class="img-fluid" alt="" src="' . $img->getUrl($size) . '" >';
         }
     }
 
-    public function getImageAdmin($size='') {
-        if($this->getMedia('image')->first()) {
+    public function getImageAdmin($size = '')
+    {
+        if ($this->getMedia('image')->first()) {
             return '<div class="lcPageAddImg">
                             <div class="lcPageAddImg__btns">
                                  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="25px" height="24px">
@@ -168,13 +172,16 @@ class Product extends Model implements HasMedia
             //return '<img class="img-fluid" alt="" src="' . $this->getMedia('image')->first()->getUrl($size) . '" >';
         }
     }
-    public function getImageSrc($size='') {
-        if($this->getMedia('image')->first()) {
+
+    public function getImageSrc($size = '')
+    {
+        if ($this->getMedia('image')->first()) {
             return $this->getMedia('image')->first()->getUrl($size);
         }
     }
 
-    public function getGallery() {
+    public function getGallery()
+    {
         return $this->getMedia('gallery')->all();
     }
 
@@ -183,7 +190,7 @@ class Product extends Model implements HasMedia
         return number_format($this->price, 0, '', ' ') . ' руб';
     }
 
-    public  static function getProductsById(array $ids=[])
+    public static function getProductsById(array $ids = [])
     {
         if (count($ids) > 0) {
             foreach ($ids as $id) {
@@ -195,7 +202,7 @@ class Product extends Model implements HasMedia
         }
     }
 
-    public  static function ViewsId()
+    public static function ViewsId()
     {
         if (isset($_COOKIE[Product::COOKVIEWS])) {
             $value = $_COOKIE[Product::COOKVIEWS];
@@ -207,12 +214,13 @@ class Product extends Model implements HasMedia
 
     /**
      * @param int $id
+     *
      * @return mixed
      */
     public static function staticFindProductById(int $id)
     {
         try {
-            return \Cache::remember('product_id_' . $id, 3600, function() use ($id) {
+            return \Cache::remember('product_id_' . $id, 3600, function () use ($id) {
                 return Product::findOrFail($id);
             });
         } catch (ModelNotFoundException $e) {
@@ -221,9 +229,9 @@ class Product extends Model implements HasMedia
 
     }
 
-    public  static function getPopularProductById()
+    public static function getPopularProductById()
     {
-        return \Cache::remember('popular_products_id', 3600, function() {
+        return \Cache::remember('popular_products_id', 3600, function () {
             return Product::where('status', Product::STATUS_PRODUCT_ACTIVE)
                 ->orderByDesc('views')
                 ->limit(4)
@@ -237,5 +245,12 @@ class Product extends Model implements HasMedia
         return $query->where('status', 'active');
     }
 
-
+    public function scopeFilter(Builder $builder, array $ids)
+    {
+        return $builder
+            ->whereHas('productAttributes', function (Builder $builder) use ($ids) {
+                return $builder->whereIn('attribute_id', array_values($ids));
+            });
+//            ->whereIn('id', array_values($ids));
+    }
 }
