@@ -1,10 +1,15 @@
+@php
+    /** @var \App\Models\User $user */
+    $user = auth()->user();
+@endphp
+
 <div class="lcPageMenu">
     <div class="lcPageMenuTop">
         <div class="lcPageMenuTop__img">
             <img src="{{ asset('img/photos/18.png') }}" alt="">
         </div>
         <div class="lcPageMenuTop__name">
-            {{ getName(auth()->user()) }}
+            {{ getName($user) }}
         </div>
     </div>
 
@@ -22,11 +27,11 @@
         </div>
         <div class="lcPageMenuCash">
             Баланс:
-            <span>{{ auth()->user()->personal_account }} руб.</span>
+            <span>{!! formatByCurrency($user->personal_account, 2) !!}</span>
         </div>
 
         @can('is-buyer')
-            @if(auth()->user()->request_shop == 0)
+            @if(!$user->hasSellerRequest())
                 <a href="{{ route('application-to-seller') }}" class="btn lcPageMenu__btn">Стать продавцом</a>
             @else
                 <p>Заявка на продовца отправлена скоро будет расмотренна</p>
@@ -36,7 +41,7 @@
             {{
                 Form::text(
                     '',
-                    route('join', auth()->user()->partner_token),
+                    route('join', $user->partner_token),
                     [
                         'id'    => 'partner-link',
                         'style' => 'position: absolute; left: -100em;'

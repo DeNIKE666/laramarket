@@ -54,7 +54,7 @@ class UserRepository
             ->firstOrFail();
 
         //Статус (покупатель/продавец)-партнер
-        $role = $user->role === $user::ROLE_USER ? $user::ROLE_USER_PARTNER : $user::ROLE_SHOP_PARTNER;
+        $role = $user->isBuyer() ? $user::ROLE_BUYER_PARTNER : $user::ROLE_SELLER_PARTNER;
 
         //Уникальный токен для партнерской ссылки
         $partner_token = $user->getUniquePartnerToken();
@@ -138,7 +138,7 @@ class UserRepository
     }
 
     /**
-     * Добавить на счет магазина
+     * Добавить на счет продавца
      *
      * @param int $id
      * @param     $amount
@@ -149,7 +149,7 @@ class UserRepository
     {
         return $this->model->query()
             ->where(compact('id'))
-            ->increment('shop_account', $amount);
+            ->increment('seller_account', $amount);
     }
 
     /**
@@ -164,7 +164,7 @@ class UserRepository
     {
         return $this->model->query()
             ->where(compact('id'))
-            ->decrement('shop_account', $amount);
+            ->decrement('seller_account', $amount);
     }
 
     /**

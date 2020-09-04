@@ -1,4 +1,7 @@
 $(function () {
+    /**
+     * Регистрация
+     */
     $('#registerForm').submit(function (e) {
         e.preventDefault();
         let formData = $(this).serializeArray();
@@ -29,6 +32,10 @@ $(function () {
             }
         })
     });
+
+    /**
+     * Авторизация
+     */
     $('#loginForm').submit(function (e) {
         e.preventDefault();
         let formData = $(this).serializeArray();
@@ -42,19 +49,19 @@ $(function () {
             },
             url: formUrl,
             data: formData,
-            success: () => window.location.reload(),
-            error: (response) => {
-
-                if (response.status === 422) {
-                    let errors = response.responseJSON.errors;
+            success: (response) => {
+                window.location.href = response.redirect;
+            },
+            error: (error) => {
+                if (error.status === 422) {
+                    let errors = error.responseJSON.errors;
                     Object.keys(errors).forEach(function (key) {
                         $("#" + key + "Input2").addClass("is-invalid");
                         $("#" + key + "Error2").text(errors[key][0]);
                     });
                 } else {
-                    window.location.reload();
+                    // window.location.reload();
                 }
-
             }
         })
     });

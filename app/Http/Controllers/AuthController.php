@@ -2,14 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Auth;
-use Illuminate\Http\Request;
-use App\User;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Foundation\Auth\RegistersUsers;
 use App\Region;
-use Mail;
+use App\User;
+use Auth;
 
 class AuthController extends Controller
 {
