@@ -5,7 +5,7 @@
 @extends('layouts.admin')
 
 @section('content')
-    @can('role-user', $user)
+    @can('is-buyer', $user)
         <div class="userReg">
             <div class="userRegTop">
                 <div class="lcPageContentSort__item">
@@ -36,12 +36,12 @@
             </div>
             <div name="1" class="userRegContent userRegContent-active">
 
-                {{ Form::open(['route' => [ 'store-application-to-seller'], 'method' => 'put', 'class' => 'forms-sample']) }}
+                {{ Form::open(['route' => [ 'store-application-to-seller'], 'method' => 'post', 'class' => 'forms-sample']) }}
                 {{ Form::hidden('type_shop', $user::TYPE1) }}
                 <div class="userRegRow">
                     <div class="userRegInp">
                         <span>Ф.И.О.</span>
-                        {{ Form::text('name', $user->getName(), ['placeholder' => 'Введите Ф.И.О.', 'required' => 'required']) }}
+                        {{ Form::text('name', getName($user), ['placeholder' => 'Введите Ф.И.О.', 'required' => 'required']) }}
                     </div>
                     <div class="userRegInp">
                         <span>Гражданство</span>
@@ -99,12 +99,12 @@
             </div>
 
             <div name="2" class="userRegContent">
-                {{ Form::open(['route' => [ 'store-application-to-seller'], 'method' => 'put', 'class' => 'forms-sample']) }}
+                {{ Form::open(['route' => [ 'store-application-to-seller'], 'method' => 'post', 'class' => 'forms-sample']) }}
                 {{ Form::hidden('type_shop', $user::TYPE2) }}
                 <div class="userRegRow">
                     <div class="userRegInp">
                         <span>Ф.И.О.</span>
-                        {{ Form::text('name', $user->getName(), ['placeholder' => 'Введите Ф.И.О.', 'required' => 'required']) }}
+                        {{ Form::text('name', getName($user), ['placeholder' => 'Введите Ф.И.О.', 'required' => 'required']) }}
                     </div>
                     <div class="userRegInp">
                         <span>Гражданство</span>
@@ -204,13 +204,13 @@
             </div>
 
             <div name="3" class="userRegContent">
-                {{ Form::open(['route' => [ 'store-application-to-seller'], 'method' => 'put', 'class' => 'forms-sample']) }}
+                {{ Form::open(['route' => [ 'store-application-to-seller'], 'method' => 'post', 'class' => 'forms-sample']) }}
                 {{ Form::hidden('type_shop', $user::TYPE3) }}
 
                 <div class="userRegRow">
                     <div class="userRegInp">
                         <span>Ф.И.О.</span>
-                        {{ Form::text('name', $user->getName(), ['placeholder' => 'Введите Ф.И.О.', 'required' => 'required']) }}
+                        {{ Form::text('name', getName($user), ['placeholder' => 'Введите Ф.И.О.', 'required' => 'required']) }}
                     </div>
                     <div class="userRegInp">
                         <span>Гражданство</span>

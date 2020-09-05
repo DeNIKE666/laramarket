@@ -8,7 +8,7 @@
         <br>
         <br>
 
-        {{ Form::open(['route' => [ 'admin.page.update', $page], 'method' => 'put', 'class' => 'forms-sample']) }}
+        {{ Form::open(['route' => ['admin.page.update', $page], 'method' => 'put', 'class' => 'forms-sample']) }}
 
         <div class="form-group">
             <label>Название</label>
@@ -24,10 +24,8 @@
             {{ Form::textarea('content', $page->content, ['class' => 'textarea']) }}
         </div>
         <div class="form-group">
-            <button type="submit" style=" width: 200px" class="lcPageContentSort__btn btn">Сохранить</button>
+            {{ Form::submit('Сохранить', ['style' => 'width: 200px;', 'class' => 'btn lcPageContentSort__btn']) }}
         </div>
         {{ Form::close() }}
-
     </div>
-
 @endsection

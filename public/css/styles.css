@@ -3070,8 +3070,8 @@ footer {
 
 .catalogFilter__checks {
   max-height: 380px;
-  overflow-y: scroll;
-  margin-bottom: 45px;
+  overflow-y: auto;
+  margin-bottom: 5px;
 }
 
 .catalogFilter__checks::-webkit-scrollbar {
@@ -5571,7 +5571,7 @@ footer {
   background: #fff;
   border: 1px solid #e7e6e6;
   width: 100%;
-  max-width: 280px;
+  max-width: 240px;
 }
 
 .lcPageContentProductsTop__search input {

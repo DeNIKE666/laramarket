@@ -13,7 +13,7 @@
         <div>
             <p>
                 <strong style="font-weight: bold;">ФИО</strong>
-                {{ $user->getName() }}
+                {{ getName($user) }}
             </p>
             <p>
                 <strong style="font-weight: bold;">Email</strong>
@@ -34,7 +34,7 @@
         </div>
 
 
-        @if($user->request_shop == 1 && $user->role == \App\Models\User::ROLE_USER && $user->property)
+        @if($user->hasSellerRequest() && $user->isBuyer() && $user->property)
             <div class="lcPageContentData__title">
                 Заявка для продавца
             </div>
@@ -56,6 +56,4 @@
 
         @endif
     </div>
-
-
 @endsection

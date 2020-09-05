@@ -6055,10 +6055,14 @@ $(function () {
     }); // Модалки
 
     $('.popUp-auth-btn').on('click', function () {
-        $('.popUp-auth').fadeIn();
+        $('.popUp-auth').fadeIn("normal", function () {
+            $("#emailInput2").focus();
+        });
     });
     $('.popUp-reg-btn').on('click', function () {
-        $('.popUp-reg').fadeIn();
+        $('.popUp-reg').fadeIn("normal", function () {
+            $("#phoneInput").focus();
+        });
     });
     $('.popUp__layer').on('click', function () {
         $('.popUp').fadeOut();
@@ -6166,6 +6170,7 @@ $(function () {
         $('.lcPageAddContentToggle').addClass('lcPageAddContentToggle-hide');
         $('.lcPageAddContentToggle').eq(ind).removeClass('lcPageAddContentToggle-hide');
     });
+    /*
     $('.lcPageContentCol__check').on('click', function () {
         $(this).toggleClass('lcPageContentCol__check-active');
 
@@ -6174,7 +6179,7 @@ $(function () {
         } else {
             $(this).find('input').attr('checked', 'true');
         }
-    });
+    });*/
     $('.lcPageContentCol__more').on('click', function () {
         $(this).find('.lcPageContentCol__drop').fadeToggle();
     });

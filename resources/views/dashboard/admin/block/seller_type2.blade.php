@@ -1,5 +1,5 @@
 <h4>Физическое лицо</h4>
-<p><b>ФИО</b> {{ $user->getName() }}</p>
+<p><b>ФИО</b> {{ getName($user) }}</p>
 <p><b>Гражданство</b> {{ $user->property->citizenship }}</p>
 <p><b>Телефон</b> {{ $user->property->phone }}</p>
 <p><b>Серия и номер паспорта</b> {{ $user->property->passport_number }}</p>

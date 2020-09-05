@@ -24,10 +24,8 @@
             {{ Form::textarea('content', '', ['class' => 'textarea']) }}
         </div>
         <div class="form-group">
-            <button type="submit" style=" width: 200px" class="lcPageContentSort__btn btn">Сохранить</button>
+            {{ Form::submit('Сохранить', ['style' => 'width: 200px;', 'class' => 'btn lcPageContentSort__btn']) }}
         </div>
         {{ Form::close() }}
-
     </div>
-
 @endsection

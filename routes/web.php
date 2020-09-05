@@ -64,21 +64,20 @@ Route::group(
 );
 
 /**
- * Раздел покупателя в админке
+ * Раздел покупателя
  */
 Route::group(
     [
         'prefix'     => 'dashboard/buyer',
         'namespace'  => 'Dashboard',
-        'middleware' => 'auth',
+        'middleware' => ['auth'],
     ],
     function () {
-        //Route::get('/', 'DashboardController@index')->name('adminIndex');
-        Route::get('/index', 'UserController@edit_profile')->name('adminIndex');
-        Route::put('/edit_profile', 'UserController@edit_profile_data')->name('edit_profile_data');
+        Route::get('/', 'UserController@editProfile')->name('edit-profile');
+        Route::patch('/update-profile', 'UserController@updateProfile')->name('update-profile');
         Route::patch('/become-partner', 'UserController@becomePartner')->name('become-partner');
-        Route::get('/application-to-seller', 'UserController@application_to_sellers')->name('application-to-seller');
-        Route::put('/application-to-seller', 'UserController@storeApplicationToSeller')->name('store-application-to-seller');
+        Route::get('/application-to-seller', 'UserController@applicationToSeller')->name('application-to-seller');
+        Route::post('/application-to-seller', 'UserController@storeApplicationToSeller')->name('store-application-to-seller');
         //Route::get('/data_seller', 'UserController@data_seller')->name('data_seller');
 
         Route::resource('/tasks', 'TaskController');
@@ -86,7 +85,7 @@ Route::group(
 
         Route::get('/orders', 'UserController@listOrder')->name('user_orders_list');
         Route::patch('/order/{order}/status', 'UserController@changeStatus')->name('user_change_status');
-        Route::get('/history_orders', 'UserController@historyOrder')->name('user_history_order');
+        Route::get('/history-orders', 'UserController@historyOrder')->name('user_history_order');
         Route::get('/list_cashback', 'UserController@userCashback')->name('user_list_cashback');
         Route::get('/user_pay', 'UserController@userPay')->name('user_pay');
 
@@ -106,17 +105,17 @@ Route::group(
 );
 
 /**
- * функционал админа сайта
+ * Функционал админа сайта
  */
 Route::group(
     [
         'prefix'     => 'dashboard/admin',
         'namespace'  => 'Dashboard\Admin',
-        'middleware' => ['auth', 'super'],
+        'middleware' => ['auth', 'admin'],
         'as'         => 'admin.',
     ],
     function () {
-        Route::get('/index', 'AdminController@index')->name('home');
+        Route::get('/', 'AdminController@index')->name('home');
         Route::get('/users', 'AdminController@getUsers')->name('users');
         Route::get('/user/{id}', 'AdminController@infoUser')->name('info_user');
         Route::get('/request_seller', 'AdminController@index')->name('request_seller');
@@ -137,18 +136,27 @@ Route::group(
 );
 
 /**
- * функционал продавца
+ * Функционал продавца
  */
 Route::group(
     [
-        'prefix'     => 'dashboard/shop',
-        'namespace'  => 'Dashboard\Shop',
-        'middleware' => ['auth', 'shop'],
+        'prefix'     => 'dashboard/seller',
+        'namespace'  => 'Dashboard\Seller',
+        'middleware' => ['auth', 'seller'],
     ],
     function () {
         Route::resource('/categories', 'CategoryController');
         Route::resource('/products', 'ProductController');
-
+        Route::group(
+            [
+                'as'     => 'products.',
+            ],
+            function () {
+                Route::patch('/change-status/{status}', 'ProductController@changeStatus')->name('change-status');
+                Route::get('/change-status-all/{status}', 'ProductController@changeStatusAll')->name('change-status-all');
+                Route::delete('/change-delete/', 'ProductController@changeDelete')->name('change-delete');
+            }
+        );
         Route::post('/products/attributes', 'ProductController@getAttributeProduct')->name('product_attributes');
 
         Route::group(
@@ -177,7 +185,7 @@ Route::group(
             }
         );
 
-        Route::get('/index', 'SellerController@seller_status')->name('seller_status');
+        Route::get('/', 'SellerController@seller_status')->name('seller_status');
         Route::get('/data_sellers', 'SellerController@data_sellers')->name('data_sellers');
     }
 );
@@ -189,7 +197,7 @@ Route::group(
     [
         'prefix'     => 'dashboard/partner',
         'namespace'  => 'Dashboard\Partner',
-        'middleware' => ['auth'],
+        'middleware' => ['auth', 'partner'],
         'as'         => 'partner.',
     ],
     function () {

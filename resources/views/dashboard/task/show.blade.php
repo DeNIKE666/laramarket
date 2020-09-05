@@ -47,7 +47,7 @@
                         @foreach ($task->messages as $message)
                             <div class="lcPageHelpArchChatMsg">
                                 <div class="lcPageHelpArchChatMsg__name {{ $message->getTypeMessage() }}">
-                                    {{ $message->user->getName() }}
+                                    {{ getName($message->user() }}
                                 </div>
                                 <div class="lcPageHelpArchChatMsg__text">
                                     {{ $message->content }}

@@ -31,6 +31,7 @@ class Category extends Model
         return $this->belongsToMany('App\Models\Attribute');
     }
 
+
     public function parent()
     {
         return $this->belongsTo(static::class, 'parent_id', 'id');
@@ -78,8 +79,8 @@ class Category extends Model
     public static function getStatusUser() {
         $user = Auth::user();
        return [
-         'user_id' => $user->id,
-         'status' => ($user->role == User::ROLE_SHOP) ? Category::STATUS_CAT_CORRECTION : Category::STATUS_CAT_ACTIVE,
+           'user_id' => $user->id,
+           'status' => ($user->role == User::ROLE_SELLER) ? Category::STATUS_CAT_CORRECTION : Category::STATUS_CAT_ACTIVE,
        ];
     }
 

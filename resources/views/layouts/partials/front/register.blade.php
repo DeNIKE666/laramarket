@@ -7,7 +7,7 @@
                 method="POST"
                 action="{{ route('register') }}"
                 id="registerForm"
-                data-success="{{ route('adminIndex') }}"
+                data-success="{{ route('edit-profile') }}"
         >
             @csrf
 

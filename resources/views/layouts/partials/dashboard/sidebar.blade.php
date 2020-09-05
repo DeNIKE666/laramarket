@@ -5,13 +5,13 @@
         <li class="nav-item nav-category">
             <span class="nav-link">{{ __('messages.cabinet') }}</span>
         </li>
-        <li class="nav-item {{ (request()->is(route('adminIndex'))) ? 'active' : '' }}">
-            <a class="nav-link" href="{{ route('adminIndex') }}">
+        <li class="nav-item {{ (request()->is(route('edit-profile'))) ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('edit-profile') }}">
                 <span class="menu-title">{{ __('messages.my_profile') }}</span>
                 <i class="icon-user menu-icon"></i>
             </a>
         </li>
-        @can('role-user')
+        @can('is-buyer')
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('user_orders_list') }}">
                     <span class="menu-title">{{ __('messages.purchase') }}</span>
@@ -45,7 +45,7 @@
             </li>
         @endcan
 
-        @can('role-shop')
+        @can('is-seller')
             <li class="nav-item nav-category">
                 <span class="nav-link">{{ __('messages.shop') }}</span>
             </li>
@@ -63,7 +63,7 @@
             </li>
         @endcan
 
-        @can('role-admin')
+        @can('is-admin')
             <li class="nav-item ">
                 <a class="nav-link {{ (request()->is(route('admin.users'))) ? 'active' : '' }}" href="{{ route('admin.users') }}">
                     <span class="menu-title">{{ __('messages.users') }}</span>
@@ -108,7 +108,7 @@
             <span class="nav-link">{{ __('messages.help') }}</span>
         </li>
 
-        @can('role-shop')
+        @can('is-seller')
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('tasks.index') }}">
                     <span class="menu-title">{{ __('messages.help') }}</span>
@@ -117,7 +117,7 @@
             </li>
         @endcan
 
-        @can('role-user')
+        @can('is-buyer')
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('tasks.index') }}">
                     <span class="menu-title">{{ __('messages.help') }}</span>
@@ -127,7 +127,7 @@
         @endcan
 
 
-        @can('role-admin')
+        @can('is-admin')
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('tasks.index') }}">
                     <span class="menu-title">Обращения</span>

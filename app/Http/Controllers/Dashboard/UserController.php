@@ -7,6 +7,7 @@ use App\Http\Requests\Buyer\OrderChangeStatusRequest;
 use App\Models\Order;
 use App\Models\PaymentOption;
 use App\Models\Property;
+use App\Models\User;
 use App\Models\Withdraw;
 use App\Repositories\OrderRepository;
 use App\Services\Buyer\Order\OrderChangeStatusService;
@@ -17,6 +18,7 @@ use Auth;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\View\View;
 
 
 class UserController extends Controller
@@ -38,18 +40,25 @@ class UserController extends Controller
         $this->orderChangeStatusService = (new OrderChangeStatusService($orderRepository));
     }
 
-    public function edit_profile()
+    /**
+     * Страница редактирования профиля
+     *
+     * @return View
+     */
+    public function editProfile(): View
     {
         $user = Auth::user();
-        return view(
-            'dashboard.edit_profile',
-            compact(
-                'user'
-            )
-        );
+        return view('dashboard.edit_profile', compact('user'));
     }
 
-    public function edit_profile_data(Request $request)
+    /**
+     * Обновить информацию о профиле
+     *
+     * @param Request $request
+     *
+     * @return RedirectResponse
+     */
+    public function updateProfile(Request $request): RedirectResponse
     {
         $user = Auth::user();
         $user->edit($request->all());
@@ -70,10 +79,17 @@ class UserController extends Controller
             ->with('status', __('users/partner.you_are_partner'));
     }
 
-    public function application_to_sellers()
+    /**
+     * Форма создания заявки на Продавца
+     *
+     * @return View
+     * @author Anton Reviakin
+     */
+    public function applicationToSeller(): View
     {
+        /** @var User $user */
         $user = Auth::user();
-        if ($user->request_shop == 1) {
+        if ($user->hasSellerRequest()) {
             return redirect()->back()->with('status', 'Заявка на продовца отправлена');
         }
         //dd($user->hasPropery($user->id));
@@ -81,24 +97,19 @@ class UserController extends Controller
             $property = new Property();
         }
         //$property = new Property();
-        return view(
-            'dashboard.user.application_to_sellers',
-            compact(
-                'user',
-                'property'
-            )
-        );
+        return view('dashboard.user.application_to_sellers', compact('user', 'property'));
     }
 
     public function storeApplicationToSeller(Request $request)
     {
+        /** @var User $user */
         $user = Auth::user();
-        $user->request_shop = 1;
+        $user->request_seller = 1;
         $user->save();
 
         $userProp = $user->isPropery($user->id);
         $userProp->edit($request->all());
-        return redirect()->route('adminIndex')->with('status', 'Заявка отправлена');
+        return redirect()->route('edit-profile')->with('status', 'Заявка отправлена');
     }
 
     public function listOrder()

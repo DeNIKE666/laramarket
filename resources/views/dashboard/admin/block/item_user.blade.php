@@ -4,7 +4,7 @@
 
 <div class="lcPageContentRow">
     <div class="lcPageContentCol">
-        <a href="{{ route('admin.info_user', $user->id) }}">{{ $user->getName() }}</a>
+        <a href="{{ route('admin.info_user', $user->id) }}">{{ getName($user) }}</a>
     </div>
     <div class="lcPageContentCol">
         @lang('users/roles.' . $user->role)
@@ -17,7 +17,7 @@
         @endif
     </div>
     <div class="lcPageContentCol">
-        @if($user->request_shop == 1)
+        @if($user->hasSellerRequest())
             {{ Form::open(['route' => ['admin.approve-as-seller'], 'method' => 'put', 'class' => 'forms-sample']) }}
             {{ Form::hidden('id', $user->id) }}
             {{ Form::submit(__('admin/users.confirm'), ['class' => 'lcPageContentSort__btn btn']) }}

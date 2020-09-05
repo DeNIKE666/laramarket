@@ -120,7 +120,7 @@
             notes: $("#order_notes").val()
         };
 
-        axios.patch(`/dashboard/shop/order/${orderId}/status`, data)
+        axios.patch(`/dashboard/seller/order/${orderId}/status`, data)
             .then(response => {
                 hideChangeStatusPopup();
             })

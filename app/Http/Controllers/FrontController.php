@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Attribute;
 use App\Models\Category;
+use App\Models\Page;
 use App\Models\Product;
 use App\Repositories\ProductRepository;
-use Illuminate\Support\Facades\Cookie;
-use App\Models\Attribute;
-use App\Models\ProductAttribute;
-use App\Models\Page;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 
 class FrontController extends Controller
@@ -30,36 +29,41 @@ class FrontController extends Controller
         return view('front.page.home', compact('products_views', 'products_popular'));
     }
 
-    public function catalog(string $slug, Request $request)
+    public function catalog(Request $request, string $slug)
     {
         $category = Category::where('slug', $slug)->firstOrFail();
         $arParentCat = $category->descendants()->defaultOrder()->pluck('id')->toArray();
         $arParentCat[] = $category->id;
 
-        $products = $this->productRepository->getProductsByCategory($arParentCat);
-        $arIdProduct = $products->pluck('id')->toArray();
+        $filterAttributes = $request->has('attr') ? $request->get('attr') : [];
 
-        $maxPrice = intval($products->max('price'));
-        $minPrice = intval($products->min('price'));
+        $attrChecks = array_values($filterAttributes ?: []);
+
+
+        $products = $this
+            ->productRepository
+            ->getProductsByCategory(
+                $arParentCat,
+                $filterAttributes
+            );
+
+
+        $minPrice = $request->get('min_price') ?: (int)$products->min('price');
+        $maxPrice = $request->get('max_price') ?: (int)$products->max('price');
 
         $catFilter = $category->attributes()->where('is_filter', 1)->get();
-        //dump($catFilter);
 
-        $arFilterChek = [];
-        if(!empty($request->input('attr'))) {
-            $arFilterChek = $request->input('attr');
-        }
+        $products = $products->wherein('price' , [$minPrice, $maxPrice])->paginate(Product::PAGINATE);
 
-        $filterProps = $this->productRepository->getFilterChekbox($catFilter, $arFilterChek, $arIdProduct);
 
-        $products = $products->paginate(Product::PAGINATE);
         return view('front.page.catalog',
             compact(
-            'category',
-                    'products',
-                    'filterProps',
-                    'maxPrice',
-                    'minPrice'
+                'category',
+                'products',
+                'catFilter',
+                'maxPrice',
+                'minPrice',
+                'attrChecks'
             )
         );
     }
@@ -73,11 +77,11 @@ class FrontController extends Controller
         $products_views = Product::getProductsById(Product::ViewsId());
         $this->productRepository->addCookieViews($product->id);
         $arDataProductAttr = [];
-        foreach($product->product_attributes()->get() as $productAttr) {
+        foreach ($product->product_attributes()->get() as $productAttr) {
             //dump($productAttr->attribute->name);
             $arDataProductAttr[] = [
-                'name' => $productAttr->attribute->name,
-                'value' => $productAttr->value
+                'name'  => $productAttr->attribute->name,
+                'value' => $productAttr->value,
             ];
         }
 
@@ -88,13 +92,10 @@ class FrontController extends Controller
     {
         try {
             $page = Page::SlugPage($slug)->firstOrFail();
-        }
-        catch(ModelNotFoundException $exception)
-        {
+        } catch (ModelNotFoundException $exception) {
             return abort(404);
         }
         return view('front.page.static_page', compact('page'));
     }
-
 
 }

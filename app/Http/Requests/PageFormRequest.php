@@ -13,7 +13,7 @@ class PageFormRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return auth()->check();
     }
 
     /**
@@ -31,7 +31,8 @@ class PageFormRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.required' => 'Не указан заголовок строницы',
+            'name.required' => 'Не указан заголовок страницы',
+            'name.max'      => 'Максимальное значение :max символов',
         ];
     }
 }

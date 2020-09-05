@@ -23,7 +23,7 @@ class ProductAttribute extends Model
 
     public function product()
     {
-        return $this->belongsTo(Product::class);
+        return $this->hasMany(Product::class, 'id', 'product_id');
     }
 
     public  static function add($fields)
@@ -34,4 +34,5 @@ class ProductAttribute extends Model
 
         return $productAttribute;
     }
+
 }

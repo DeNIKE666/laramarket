@@ -1,6 +1,6 @@
 <div class="lcPageMenuNav">
     <a href="{{ route('admin.home') }}"
-       class="{{ (request()->is('dashboard/admin/index')) ? 'active' : '' }}">
+       class="{{ (request()->is('dashboard/admin')) ? 'active' : '' }}">
         Личные данные
     </a>
     <a href="{{ route('admin.users') }}"

@@ -18,10 +18,10 @@ class User extends Authenticatable
     /**
      * Список ролей
      */
-    const ROLE_USER = 'user';
-    const ROLE_USER_PARTNER = 'user_partner';
-    const ROLE_SHOP = 'shop';
-    const ROLE_SHOP_PARTNER = 'shop_partner';
+    const ROLE_BUYER = 'buyer';
+    const ROLE_BUYER_PARTNER = 'buyer_partner';
+    const ROLE_SELLER = 'seller';
+    const ROLE_SELLER_PARTNER = 'seller_partner';
     const ROLE_MODERATOR = 'moderator';
     const ROLE_ADMIN = 'admin';
 
@@ -44,10 +44,10 @@ class User extends Authenticatable
         'partner_token',
         'partner_id',
         'role',
-        'request_shop',
+        'request_seller',
         'personal_account',
         'cashback_account',
-        'shop_account',
+        'seller_account',
         'partner_account',
         'phone',
         'address',
@@ -72,16 +72,6 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-
-    /**
-     * Получить имя или почту
-     *
-     * @return string
-     */
-    public function getName(): string
-    {
-        return $this->name ?: $this->email;
-    }
 
     /**
      * Является ли пользователь администратором
@@ -114,8 +104,8 @@ class User extends Authenticatable
     public function isPartner(): bool
     {
         $roles = [
-            self::ROLE_USER_PARTNER,
-            self::ROLE_SHOP_PARTNER,
+            self::ROLE_BUYER_PARTNER,
+            self::ROLE_SELLER_PARTNER,
         ];
 
         return in_array($this->role, $roles);
@@ -130,8 +120,8 @@ class User extends Authenticatable
     public function isBuyer(): bool
     {
         $roles = [
-            self::ROLE_USER,
-            self::ROLE_USER_PARTNER,
+            self::ROLE_BUYER,
+            self::ROLE_BUYER_PARTNER,
         ];
 
         return in_array($this->role, $roles);
@@ -146,11 +136,21 @@ class User extends Authenticatable
     public function isSeller(): bool
     {
         $roles = [
-            self::ROLE_SHOP,
-            self::ROLE_SHOP_PARTNER,
+            self::ROLE_SELLER,
+            self::ROLE_SELLER_PARTNER,
         ];
 
         return in_array($this->role, $roles);
+    }
+
+    /**
+     * Есть ли запрос на продавца
+     *
+     * @return bool
+     */
+    public function hasSellerRequest(): bool
+    {
+        return $this->request_seller;
     }
 
     /**
