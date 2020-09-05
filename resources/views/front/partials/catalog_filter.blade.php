@@ -65,7 +65,7 @@
 
 
                         <div class="catalogFilter__check">
-                            <label>
+                            <label class="check-inp">
                                 {{ Form::checkbox("attr[$child->id]", $child->id, $child['status'] , ['checked' => in_array($child->id , $attrChecks)]) }}
                                 <span>{{ $child['value'] }}</span>
                             </label>

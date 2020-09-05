@@ -1,16 +1,11 @@
 <div class="lcPageContentRow">
     <div class="lcPageContentCol">
         <div class="lcPageContentCol__check">
-            <input type="checkbox" name="product_id" value="{{ $product->id }}">
-            <span>
-                <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        xmlns:xlink="http://www.w3.org/1999/xlink"
-                        width="7px" height="6px">
-                    <path fill-rule="evenodd" fill="rgb(90, 84, 255)"
-                          d="M3.167,5.724 C2.849,6.088 2.334,6.088 2.017,5.724 L0.235,3.675 C-0.083,3.311 -0.083,2.719 0.235,2.354 C0.552,1.989 1.067,1.989 1.385,2.354 L2.447,3.574 C2.527,3.666 2.657,3.666 2.737,3.574 L5.612,0.270 C5.930,-0.095 6.445,-0.095 6.762,0.270 C6.915,0.445 7.000,0.683 7.000,0.931 C7.000,1.179 6.915,1.417 6.762,1.592 L3.167,5.724 Z"/>
-                </svg>
-            </span>
+            <label class="check-inp">
+                {{ Form::checkbox('product_id[]', $product->id, '', ['class' => 'product-chek']) }}
+                <span></span>
+            </label>
+
         </div>
     </div>
     <div class="lcPageContentCol">
@@ -30,7 +25,7 @@
         {{ $product->part_cashback }}%
     </div>
     <div class="lcPageContentCol">
-        Принят в обработку
+        @lang('products/status.' . $product->status)
     </div>
     <div class="lcPageContentCol">
         <div class="lcPageContentCol__more">
@@ -71,11 +66,12 @@
                         </g>
 
                         </svg>
-                    <a href="">
-                        Удалить
-                    </a>
+                        {!! Form::open(['route' => ['products.destroy', $product->id], 'method' => 'delete']) !!}
+                            <button onclick="return confirm('Точно удалить?')" type="submit"  class="btn-delete" title="">Удалить</button>
+                        {!! Form::close() !!}
+
                 </span>
-                <span>
+                <!--span>
                     <svg width="14px" xmlns="http://www.w3.org/2000/svg"
                          xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
                          id="Capa_1" x="0px" y="0px" viewBox="0 0 512 512"
@@ -100,7 +96,7 @@
                     <a href="">
                         Копировать
                     </a>
-                </span>
+                </span-->
             </div>
         </div>
     </div>

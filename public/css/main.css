@@ -51,6 +51,15 @@ textarea.form-control {
     display: block;
     position: relative;
     padding-left: 20px;
+    font-size: 14px;
+    line-height: 17px;
+}
+.lcPageContentProductsTop__add {
+    padding-right: 15px;
+}
+.lcPageAddInp select {
+    width: 100%;
+    opacity: 0;
 }
 .check-inp span::after {
     content: "";
@@ -75,4 +84,16 @@ textarea.form-control {
     height: 12px;
     background: url('../img/chek.svg') 50% 50% no-repeat;
     background-size: 7px auto;
+}
+.lcPageContentCol__check .check-inp span {
+    padding-left: 0 !important;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    user-select: none;
+}
+.lcPageContentCol__check .check-inp span::after {
+    display: none !important;
+}
+.lcPageContentCol__check .check-inp input:checked + span::before {
+    top: -1px !important;
 }

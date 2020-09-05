@@ -112,13 +112,13 @@ class Product extends Model implements HasMedia
 
     public function setDraft()
     {
-        $this->status = 0;
+        $this->status = Product::STATUS_PRODUCT_DRAW;
         $this->save();
     }
 
     public function setPublic()
     {
-        $this->status = 1;
+        $this->status = Product::STATUS_PRODUCT_ACTIVE;
         $this->save();
     }
 

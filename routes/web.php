@@ -147,7 +147,16 @@ Route::group(
     function () {
         Route::resource('/categories', 'CategoryController');
         Route::resource('/products', 'ProductController');
-
+        Route::group(
+            [
+                'as'     => 'products.',
+            ],
+            function () {
+                Route::patch('/change-status/{status}', 'ProductController@changeStatus')->name('change-status');
+                Route::get('/change-status-all/{status}', 'ProductController@changeStatusAll')->name('change-status-all');
+                Route::delete('/change-delete/', 'ProductController@changeDelete')->name('change-delete');
+            }
+        );
         Route::post('/products/attributes', 'ProductController@getAttributeProduct')->name('product_attributes');
 
         Route::group(
