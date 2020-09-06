@@ -159,7 +159,7 @@
                         </span>
                 </button>
                 <nav class="nav">
-                    <a href="">
+                    <a href="{{ route('front.about') }}">
                         О компании
                     </a>
                     <a href="">

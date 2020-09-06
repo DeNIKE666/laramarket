@@ -23,7 +23,11 @@ Route::post('/comission/payout', 'ComissionsPayInOutController@getPayoutFee')->n
 //    dd($comission);
 //});
 
-Route::get('/', 'FrontController@index')->name('front_index');
+Route::get('/', 'FrontController@index')->name('front.index');
+Route::get('/about', 'FrontController@about')->name('front.about');
+
+
+
 Route::get('catalog/{path}', 'FrontController@catalog')
     ->where('path', '[a-zA-Z0-9/_-]+')->name('front_catalog');
 Route::get('product/{path}', 'FrontController@product')

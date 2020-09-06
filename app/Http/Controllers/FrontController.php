@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Repositories\ProductRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\View\View;
 
 
 class FrontController extends Controller
@@ -20,13 +21,23 @@ class FrontController extends Controller
         $this->productRepository = $productRepository;
     }
 
-    public function index()
+    public function index():View
     {
         $products_popular = Product::getProductsById(Product::getPopularProductById());
         //dd(Product::ViewsId());
         $products_views = Product::getProductsById(Product::ViewsId());
         //$products_views = [];
         return view('front.page.home', compact('products_views', 'products_popular'));
+    }
+
+    /**
+     * О компании
+     *
+     * @return View
+     */
+    public function about():View
+    {
+        return view('front.page.about');
     }
 
     public function catalog(Request $request, string $slug)
