@@ -7,7 +7,7 @@
                 method="POST"
                 action="{{ route('register') }}"
                 id="registerForm"
-                data-success="{{ route('edit-profile') }}"
+                data-success="{{ route('buyer.profile.edit') }}"
         >
             @csrf
 

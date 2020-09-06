@@ -5,6 +5,7 @@ namespace App\Repositories;
 
 
 use App\Models\CashbackSchedule;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
@@ -29,7 +30,7 @@ class CashbackScheduleRepository extends BaseRepository
     }
 
     /**
-     * Получить список для начисления кешбэка
+     * Получить список для начисления кэшбэка
      *
      * @return Collection
      */
@@ -57,5 +58,24 @@ class CashbackScheduleRepository extends BaseRepository
         return $this->model::query()
             ->where(compact('id'))
             ->update(compact('payout_complete'));
+    }
+
+    /**
+     * История начислений
+     *
+     * @param int            $userId
+     * @param array|string[] $sort
+     *
+     * @return LengthAwarePaginator
+     */
+    public function historyCompletedByUser(int $userId, array $sort = ['id', 'asc']): LengthAwarePaginator
+    {
+        return $this->model
+            ->query()
+            ->with('paySystem')
+//            ->where('user_id', $userId)
+            ->where('payout_complete', true)
+            ->orderBy($sort)
+            ->paginate(10);
     }
 }

@@ -20,6 +20,6 @@ class AdminMiddleware
             return $next($request);
         }
 
-        return redirect()->route('edit-profile');
+        return redirect()->route('buyer.profile.edit');
     }
 }

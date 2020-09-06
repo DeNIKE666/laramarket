@@ -16,17 +16,40 @@ class CreateOrdersTable extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
-            $table->string('name');
-            $table->string('address');
-            $table->string('phones');
-            $table->string('payment_method');
-            $table->string('delivery');
-            $table->unsignedInteger('cost')->default(0);
-//            $table->unsignedInteger('avg_percent_fees')->comment('Средний % комиссий по товарам');
-            $table->timestamps();
-            $table->softDeletes();
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
+            $table->unsignedBigInteger('delivery_profile_id');
+
+            $table->unsignedDecimal('cost');
+
+            $table
+                ->enum('payment_method', [
+                    'internal_personal',
+                    'visa',
+                    'mastercard',
+                    'webmoney'
+                ])
+            ->comment('Способ оплаты');
+
+            $table
+                ->enum('delivery_service', [
+                    'cdek',
+                    'energy',
+                    'courier',
+                ])
+            ->comment('Служба доставки');
+
+            $table
+                ->unsignedTinyInteger('status')
+                ->default(0);
+
+            $table
+                ->string('notes')
+                ->nullable();
+
+            $table->softDeletes();
+            $table->timestamps();
+
+            $table->foreign('delivery_profile_id')->references('id')->on('orders_delivery_profiles');
         });
     }
 

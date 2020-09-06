@@ -5,7 +5,7 @@
         <span class="lcPageHelpTop__text">
             Помощь
         </span>
-        <a href="{{ route('tasks.index') }}#chat" class="btn lcPageHelpTop__btn">
+        <a href="{{ route('user.tasks.index') }}#chat" class="btn lcPageHelpTop__btn">
             Задать вопрос
         </a>
     </div>

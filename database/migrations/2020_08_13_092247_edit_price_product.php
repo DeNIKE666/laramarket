@@ -19,17 +19,9 @@ class EditPriceProduct extends Migration
             $table->string('brand')->nullable();
         });
 
-        Schema::table('orders', function(Blueprint $table){
-            $table->dropColumn('cost');
-        });
-
         Schema::table('products', function(Blueprint $table){
            $table->decimal('old_price', 6, 2)->nullable();
             $table->decimal('price', 6, 2)->default(0);
-        });
-
-        Schema::table('orders', function(Blueprint $table){
-            $table->decimal('cost', 6, 2)->default(0);
         });
     }
 
@@ -49,14 +41,6 @@ class EditPriceProduct extends Migration
         Schema::table('products', function(Blueprint $table) {
             $table->integer('price')->default(0);
             $table->integer('old_price')->nullable();
-        });
-
-        Schema::table('orders', function(Blueprint $table){
-            $table->dropColumn('cost');
-        });
-
-        Schema::table('orders', function(Blueprint $table){
-            $table->integer('cost')->default(0);
         });
     }
 }

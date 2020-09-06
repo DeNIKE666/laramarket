@@ -111,22 +111,22 @@
                     {{-- ПЕРЕДЕЛАТЬ --}}
                     @switch($order->status)
                         {{-- Новый --}}
-                        @case($Order::STATUS_ORDER_NEW)
-                        <button type="button" data-id="{{ $order->id }}" data-status="{{ $Order::STATUS_ORDER_CANCELED_BY_BUYER }}" class="order-changeStatus btn lcPageMenu__btn" style="margin-bottom: 0;">
+                        @case($Order::ORDER_STATUS_NEW)
+                        <button type="button" data-id="{{ $order->id }}" data-status="{{ $Order::ORDER_STATUS_CANCELED_BY_BUYER }}" class="order-changeStatus btn lcPageMenu__btn" style="margin-bottom: 0;">
                             @lang('orders/actions.cancel')
                         </button>
                         @break
 
                         {{-- Оплачен --}}
-                        @case($Order::STATUS_ORDER_PAYED)
-                        <button type="button" data-id="{{ $order->id }}" data-status="{{ $Order::STATUS_ORDER_CANCELED_BY_BUYER }}" class="order-changeStatus btn lcPageMenu__btn" style="margin-bottom: 0;">
+                        @case($Order::ORDER_STATUS_PAYED)
+                        <button type="button" data-id="{{ $order->id }}" data-status="{{ $Order::ORDER_STATUS_CANCELED_BY_BUYER }}" class="order-changeStatus btn lcPageMenu__btn" style="margin-bottom: 0;">
                             @lang('orders/actions.cancel')
                         </button>
                         @break
 
                         {{-- Отправлен --}}
-                        @case($Order::STATUS_ORDER_SENT)
-                        <button type="button" data-id="{{ $order->id }}" data-status="{{ $Order::STATUS_ORDER_RECEIVED }}" class="order-changeStatus btn lcPageMenu__btn" style="margin-bottom: 0;">
+                        @case($Order::ORDER_STATUS_SENT)
+                        <button type="button" data-id="{{ $order->id }}" data-status="{{ $Order::ORDER_STATUS_RECEIVED }}" class="order-changeStatus btn lcPageMenu__btn" style="margin-bottom: 0;">
                             @lang('orders/actions.received')
                         </button>
                         @break

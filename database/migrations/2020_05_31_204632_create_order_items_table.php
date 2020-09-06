@@ -32,14 +32,6 @@ class CreateOrderItemsTable extends Migration
 
             $table->timestamps();
         });
-
-        Schema::table('orders', function (Blueprint $table) {
-            $table->tinyInteger('status')->default(0);
-            $table->text('notes')->nullable();
-            $table->boolean('payment_status')->default(0);
-            $table->string('select_cashback')->nullable();
-            $table->smallInteger('price_cashback')->nullable();
-        });
     }
 
     /**
@@ -50,13 +42,5 @@ class CreateOrderItemsTable extends Migration
     public function down()
     {
         Schema::dropIfExists('order_items');
-
-        Schema::table('orders', function (Blueprint $table) {
-            $table->dropColumn('status');
-            $table->dropColumn('notes');
-            $table->dropColumn('payment_status');
-            $table->dropColumn('select_cashback');
-            $table->dropColumn('price_cashback');
-        });
     }
 }

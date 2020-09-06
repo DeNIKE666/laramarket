@@ -14,7 +14,7 @@
 <div class="lcPageContentTop" {!! $margin !!}>
 
     @cannot('is-admin')
-        <a href="{{ route('edit-profile') }}"
+        <a href="{{ route('buyer.profile.edit') }}"
            class="lcPageContentTop__btn {{ request()->is('dashboard/buyer', 'dashboard/buyer/*') ? 'lcPageContentTop__btn-active btn-blue' : null }} ">
             Кабинет покупателя
         </a>

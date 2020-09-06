@@ -56,7 +56,7 @@ class CreateUsersTable extends Migration
             $table
                 ->unsignedDecimal('cashback_account')
                 ->default(0)
-                ->comment('Счет для кешбэка');
+                ->comment('Счет для кэшбэка');
             $table
                 ->unsignedDecimal('seller_account')
                 ->default(0)

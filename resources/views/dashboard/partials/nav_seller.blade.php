@@ -13,7 +13,7 @@
 <a href="{{ route('data_sellers') }}">
     Данные продавца
 </a>
-<a href="{{ route('tasks.index') }}"
+<a href="{{ route('user.tasks.index') }}"
    class="{{ (request()->is('dashboard/buyer/tasks*')) ? 'active' : '' }}">
     Помощь
 </a>

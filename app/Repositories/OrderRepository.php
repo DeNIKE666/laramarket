@@ -4,15 +4,29 @@ namespace App\Repositories;
 
 use App\Models\Order;
 use App\Models\OrderItem;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Pagination\LengthAwarePaginator;
 
-class OrderRepository extends BaseRepository
+class OrderRepository
 {
+    /** @var Order */
+    private $model;
+
     public function __construct(Order $model)
     {
-        parent::__construct($model);
         $this->model = $model;
+    }
+
+    /**
+     * Добавить заказ
+     *
+     * @param array $order
+     *
+     * @return Order
+     */
+    public function store(array $order): Order
+    {
+        return Order::create($order);
     }
 
     /**
@@ -40,30 +54,25 @@ class OrderRepository extends BaseRepository
     }
 
     /**
-     * @param int $id
+     * Заказы пользователя
      *
-     * @return Order
+     * @param int            $userId
+     * @param array|string[] $sort
+     *
+     * @return LengthAwarePaginator
      */
-    public function findOrderById(int $id): Order
+    public function ordersByUser(int $userId, array $sort = ['id', 'asc']): LengthAwarePaginator
     {
-        return $this->findOneOrFail($id);
-    }
-
-    public function findOrderByNumber($orderNumber)
-    {
-        return Order::where('order_number', $orderNumber)->first();
-    }
-
-    public function listOrdersUser()
-    {
-        return Order::where('user_id', auth()->user()->id)
-            ->orderBy('id', 'desc')
+        return $this->model
+            ->query()
+            ->where('user_id', $userId)
+            ->orderBy($sort)
             ->paginate(10);
     }
 
     public function listOrdersShop()
     {
-        return Order::where('status', Order::STATUS_ORDER_NEW)
+        return Order::where('status', Order::ORDER_STATUS_NEW)
             ->whereHas('items', function ($query) {
                 $query->whereHas('product', function ($query) {
                     $query->where('user_id', auth()->user()->id);

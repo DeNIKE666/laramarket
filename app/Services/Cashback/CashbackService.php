@@ -20,7 +20,7 @@ class CashbackService
     }
 
     /**
-     * Добавить Кешбэк
+     * Добавить Кэшбэк
      *
      * @param Order $order
      *
@@ -37,7 +37,7 @@ class CashbackService
     }
 
     /**
-     * Установить период выплат в кешбэке
+     * Установить период выплат в кэшбэке
      *
      * @param Request $request
      * @param Order   $order

@@ -3,7 +3,7 @@
         <div class="card-body">
             <h4 class="card-title">Кабинет покупателя</h4>
             <br>
-            {{ Form::open(['route' => ['update-profile'], 'method' => 'patch', 'class' => 'forms-sample']) }}
+            {{ Form::open(['route' => ['buyer.profile.update'], 'method' => 'patch', 'class' => 'forms-sample']) }}
             <div class="form-group">
                 <label>ФИО</label>
                 {{ Form::text('name', getName($user), ['class' => 'form-control']) }}

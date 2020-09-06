@@ -18,17 +18,9 @@ class EditPriceProduct2 extends Migration
             $table->dropColumn('price');
         });
 
-        Schema::table('orders', function(Blueprint $table){
-            $table->dropColumn('cost');
-        });
-
         Schema::table('products', function(Blueprint $table){
             $table->decimal('old_price', 8, 2)->nullable();
             $table->decimal('price', 8, 2)->default(0);
-        });
-
-        Schema::table('orders', function(Blueprint $table){
-            $table->decimal('cost', 8, 2)->default(0);
         });
     }
 

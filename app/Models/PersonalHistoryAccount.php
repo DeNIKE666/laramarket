@@ -6,13 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class PersonalHistoryAccount extends Model
 {
-    public function receiver()
+    public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function sender()
+    public function paySystem()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(PaymentOption::class);
     }
 }

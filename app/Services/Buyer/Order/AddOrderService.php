@@ -5,10 +5,10 @@ namespace App\Services\Buyer\Order;
 
 
 use App\Models\Order;
-use App\Models\OrderItem;
 use App\Models\Product;
+use App\Repositories\OrderItemRepository;
+use App\Repositories\OrderRepository;
 use Cart;
-use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 
 /**
@@ -20,26 +20,42 @@ use Illuminate\Support\Carbon;
  */
 class AddOrderService
 {
+    /** @var OrderRepository $orderRepository */
+    private $orderRepository;
+
+    /** @var OrderItemRepository $orderItemRepository */
+    private $orderItemRepository;
+
+    public function __construct()
+    {
+        $this->orderRepository = app(OrderRepository::class);
+        $this->orderItemRepository = app(OrderItemRepository::class);
+    }
+
     /**
      * Добавить заказ
      *
-     * @param Request $request
+     * @param array $request
+     * @param int   $deliveryProfileId
      *
      * @return Order
      */
-    public function storeOrder(Request $request): Order
+    public function storeOrder(array $request, int $deliveryProfileId): Order
     {
-        return Order::create([
-            'user_id'        => auth()->user()->id,
-            'status'         => Order::STATUS_ORDER_NEW,
-            'cost'           => Order::formatCost(Cart::getSubTotal()),
-            'payment_status' => 0,
-            'payment_method' => $request->input('payment_method'),
-            'name'           => $request->input('name'),
-            'address'        => $request->input('address'),
-            'delivery'       => $request->input('delivery'),
-            'phones'         => $request->input('phones'),
-        ]);
+        $order = [
+            'user_id'             => auth()->user()->id,
+            'delivery_profile_id' => $deliveryProfileId,
+            'cost'                => Cart::getSubTotal(false),
+            'payment_method'      => $request['payment_method'],
+            'delivery_service'    => $request['delivery_service'],
+            'status'              => Order::ORDER_STATUS_NEW,
+        ];
+
+        $order = $this->orderRepository->store($order);
+
+        $this->storeOrderItems($order);
+
+        return $order;
     }
 
     /**
@@ -50,7 +66,7 @@ class AddOrderService
      * @return bool
      * @author Anton Reviakin
      */
-    public function storeOrderItems(Order $order): bool
+    private function storeOrderItems(Order $order): bool
     {
         $products = Cart::getContent();
 
@@ -71,6 +87,6 @@ class AddOrderService
             ];
         }
 
-        return OrderItem::insert($orderItems);
+        return $this->orderItemRepository->batchStore($orderItems);
     }
 }

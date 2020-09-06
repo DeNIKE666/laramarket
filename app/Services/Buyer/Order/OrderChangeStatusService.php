@@ -67,18 +67,18 @@ class OrderChangeStatusService
         $allow = [];
 
         switch ($order->status) {
-            case Order::STATUS_ORDER_NEW :
-            case Order::STATUS_ORDER_PAYED :
+            case Order::ORDER_STATUS_NEW :
+            case Order::ORDER_STATUS_PAYED :
             {
                 $allow = [
-                    Order::STATUS_ORDER_CANCELED_BY_BUYER,
+                    Order::ORDER_STATUS_CANCELED_BY_BUYER,
                 ];
                 break;
             }
-            case Order::STATUS_ORDER_SENT :
+            case Order::ORDER_STATUS_SENT :
             {
                 $allow = [
-                    Order::STATUS_ORDER_RECEIVED,
+                    Order::ORDER_STATUS_RECEIVED,
                 ];
                 break;
             }

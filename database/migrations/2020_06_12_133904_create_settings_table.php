@@ -45,9 +45,9 @@ class CreateSettingsTable extends Migration
     {
         Schema::dropIfExists('settings');
 
-        Schema::table('orders', function(Blueprint $table) {
-            $table->dropColumn('part_cashback');
-        });
+//        Schema::table('orders', function(Blueprint $table) {
+//            $table->dropColumn('part_cashback');
+//        });
 
 //        Schema::table('cashbacks', function(Blueprint $table) {
 //            $table->dropColumn('user_id');
