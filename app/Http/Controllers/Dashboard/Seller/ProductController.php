@@ -107,7 +107,7 @@ class ProductController extends Controller
                 $fileAdder->toMediaCollection('gallery');
             });
         }
-        return redirect()->route('products.edit', $product->id);
+        return redirect()->route('products.edit', $product->id)->with('status', 'товар добавлен');;
     }
 
     /**
@@ -204,7 +204,7 @@ class ProductController extends Controller
         }
         $product = $product->edit($data);
 
-        return redirect()->back();
+        return redirect()->back()->with('status', 'изменения сохранены');
     }
 
     /**
@@ -217,6 +217,20 @@ class ProductController extends Controller
     {
         $product = Product::findOrFail($id);
         abort_if(Gate::denies('update-post', $product), 403, 'Sorry, you are not an admin');
+        $product->delete();
+        return redirect()->back()->with('status', 'продукт удален');
+    }
+
+    public function changeDelete(Request $request)
+    {
+        if (!empty($request->ids)) {
+            $products = Product::whereIn('id', $request->ids)->where('user_id', auth()->user()->id)->get();
+            if (count($products) > 0) {
+                foreach ($products as $product) {
+                    $product->delete();
+                }
+            }
+        }
     }
 
     public function getAttributeProduct(Request $request) {
@@ -237,5 +251,44 @@ class ProductController extends Controller
             'productAttr' => $productAttr
         ];
         return response()->json($resArray, 200);
+    }
+
+    public function changeStatus(string $status, Request $request)
+    {
+        if (!empty($request->ids)) {
+            $products = Product::whereIn('id', $request->ids)->where('user_id', auth()->user()->id)->get();
+            if (count($products) > 0) {
+               foreach ($products as $product) {
+                   switch ($status) {
+                       case 'activate':
+                           $product->setPublic();
+                           break;
+                       case 'disable':
+                           $product->setDraft();
+                           break;
+                   }
+               }
+            }
+        }
+        //dump($status);
+    }
+
+    public function changeStatusAll(string $status, Request $request)
+    {
+        $products = Product::where('user_id', auth()->user()->id)->get();
+        if (count($products) > 0) {
+            foreach ($products as $product) {
+                switch ($status) {
+                    case 'activate':
+                        $product->setPublic();
+                        break;
+                    case 'disable':
+                        $product->setDraft();
+                        break;
+                }
+            }
+            return redirect()->back()->with('status', 'изменения сохранены');
+        }
+        return redirect()->back();
     }
 }
