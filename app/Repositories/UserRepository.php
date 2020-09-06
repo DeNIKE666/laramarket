@@ -108,7 +108,7 @@ class UserRepository
     }
 
     /**
-     * Добавить на счет кешбэка
+     * Добавить на счет кэшбэка
      *
      * @param int $id
      * @param     $amount
@@ -123,7 +123,7 @@ class UserRepository
     }
 
     /**
-     * Отнять со счета кешбэка
+     * Отнять со счета кэшбэка
      *
      * @param int $id
      * @param     $amount

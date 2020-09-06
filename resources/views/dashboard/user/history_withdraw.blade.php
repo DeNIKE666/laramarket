@@ -21,7 +21,7 @@
             </div>
         </div>
 
-        @foreach($withdraws as $withdraw)
+{{--        @foreach($withdraws as $withdraw)
             <div class="lcPageContentRow">
                 <div class="lcPageContentCol">
                     {{ $withdraw->id }}
@@ -47,6 +47,6 @@
                     @endif
                 </div>
             </div>
-        @endforeach
+        @endforeach--}}
     </div>
 @endsection

@@ -7,28 +7,24 @@
             <div class="offer">
                 <div class="offer__left">
                     <div class="offer__title">
-                            <span>
-                                Совершайте любые покупки
-                                и получайте 100% кешбека
-                            </span>
                         <span>
-                                Любые покупки
-                                со 100% кешбеком
-                            </span>
+                            Совершайте любые покупки
+                            и получайте 100% кэшбэка!
+                        </span>
+                        <span></span>
                     </div>
                     <div class="offer__text">
-                            <p>
-                                Вопреки распространенному мнению, Lorem Ipsum - это не просто случайный текст. Он имеет корни в произведении классической латинской литературы 45 года до нашей эры, что делает его более 2000 лет. Ричард МакКлинток, профессор латыни в Хэмпден-Сиднейском колледже в Вирджинии, отыскал одно из самых непонятных латинских слов, concectetur, из отрывка из Lorem Ipsum и, пройдя по ссылкам на слова в классической литературе
-                            </p>
                         <p>
-                                Вопреки распространенному мнению, Lorem Ipsum - это не просто случайный текст.
-                            </p>
+                            Первый и единственный сервис в мире
+                        </p>
+                        <p>
+                            Кэшбэк реальными деньгами на вашу карту
+                        </p>
                     </div>
                     <button class="offer__btn btn">
                         <span>Подробнее</span>
                         <svg
                                 xmlns="http://www.w3.org/2000/svg"
-                                xmlns:xlink="http://www.w3.org/1999/xlink"
                                 width="26px" height="9px">
                             <path fill-rule="evenodd" fill="rgb(51, 51, 51)"
                                   d="M21.871,3.499 L-0.000,3.499 L-0.000,5.499 L21.871,5.499 L19.742,7.500 L21.290,8.999 L26.000,4.499 L21.290,-0.001 L19.742,1.500 L21.871,3.499 Z"/>
@@ -56,13 +52,12 @@
                             Цифровые товары
                         </div>
                         <div class="cat__text">
-                            Вопреки распространенному мнению, Lorem Ipsum - это не просто случайный текст.
+
                         </div>
                         <button class="cat__btn btn">
                             <span>Подробнее</span>
                             <svg
                                     xmlns="http://www.w3.org/2000/svg"
-                                    xmlns:xlink="http://www.w3.org/1999/xlink"
                                     width="26px" height="9px">
                                 <path fill-rule="evenodd" fill="rgb(51, 51, 51)"
                                       d="M21.871,3.499 L-0.000,3.499 L-0.000,5.499 L21.871,5.499 L19.742,7.500 L21.290,8.999 L26.000,4.499 L21.290,-0.001 L19.742,1.500 L21.871,3.499 Z"/>
@@ -79,13 +74,12 @@
                             Инфо услуги
                         </div>
                         <div class="cat__text">
-                            Вопреки распространенному мнению, Lorem Ipsum - это не просто случайный текст.
+
                         </div>
                         <button class="cat__btn btn">
                             <span>Подробнее</span>
                             <svg
                                     xmlns="http://www.w3.org/2000/svg"
-                                    xmlns:xlink="http://www.w3.org/1999/xlink"
                                     width="26px" height="9px">
                                 <path fill-rule="evenodd" fill="rgb(51, 51, 51)"
                                       d="M21.871,3.499 L-0.000,3.499 L-0.000,5.499 L21.871,5.499 L19.742,7.500 L21.290,8.999 L26.000,4.499 L21.290,-0.001 L19.742,1.500 L21.871,3.499 Z"/>
@@ -102,13 +96,12 @@
                             Потребительские товары
                         </div>
                         <div class="cat__text">
-                            Вопреки распространенному мнению, Lorem Ipsum - это не просто случайный текст.
+
                         </div>
                         <button class="cat__btn btn">
                             <span>Подробнее</span>
                             <svg
                                     xmlns="http://www.w3.org/2000/svg"
-                                    xmlns:xlink="http://www.w3.org/1999/xlink"
                                     width="26px" height="9px">
                                 <path fill-rule="evenodd" fill="rgb(51, 51, 51)"
                                       d="M21.871,3.499 L-0.000,3.499 L-0.000,5.499 L21.871,5.499 L19.742,7.500 L21.290,8.999 L26.000,4.499 L21.290,-0.001 L19.742,1.500 L21.871,3.499 Z"/>
@@ -125,13 +118,12 @@
                             Торговые роботы
                         </div>
                         <div class="cat__text">
-                            Вопреки распространенному мнению, Lorem Ipsum - это не просто случайный текст.
+
                         </div>
                         <button class="cat__btn btn">
                             <span>Подробнее</span>
                             <svg
                                     xmlns="http://www.w3.org/2000/svg"
-                                    xmlns:xlink="http://www.w3.org/1999/xlink"
                                     width="26px" height="9px">
                                 <path fill-rule="evenodd" fill="rgb(51, 51, 51)"
                                       d="M21.871,3.499 L-0.000,3.499 L-0.000,5.499 L21.871,5.499 L19.742,7.500 L21.290,8.999 L26.000,4.499 L21.290,-0.001 L19.742,1.500 L21.871,3.499 Z"/>
@@ -160,20 +152,19 @@
                     </div>
                     <ul class="takingCard__list">
                         <li>
-                            100% кэшбэк в течении года
+                            Уникальный оффер для продаж
                         </li>
                         <li>
-                            100% кэшбэк в течении года
+                            Собственную партнерскую программу
                         </li>
                         <li>
-                            100% кэшбэк в течении года
+                            Рекламу и траффик за счет компании
                         </li>
                     </ul>
                     <button class="takingCard__btn btn">
                         <span>Регистрация</span>
                         <svg
                                 xmlns="http://www.w3.org/2000/svg"
-                                xmlns:xlink="http://www.w3.org/1999/xlink"
                                 width="26px" height="9px">
                             <path fill-rule="evenodd" fill="rgb(51, 51, 51)"
                                   d="M21.871,3.499 L-0.000,3.499 L-0.000,5.499 L21.871,5.499 L19.742,7.500 L21.290,8.999 L26.000,4.499 L21.290,-0.001 L19.742,1.500 L21.871,3.499 Z"/>
@@ -189,20 +180,19 @@
                     </div>
                     <ul class="takingCard__list">
                         <li>
-                            100% кэшбэк в течении года
+                            100% кэшбэк на любую покупку
                         </li>
                         <li>
-                            100% кэшбэк в течении года
+                            Большой ассортимент товаров в одном месте
                         </li>
                         <li>
-                            100% кэшбэк в течении года
+                            Защиту прав покупателя в каждом заказе
                         </li>
                     </ul>
                     <button class="takingCard__btn btn">
                         <span>Регистрация</span>
                         <svg
                                 xmlns="http://www.w3.org/2000/svg"
-                                xmlns:xlink="http://www.w3.org/1999/xlink"
                                 width="26px" height="9px">
                             <path fill-rule="evenodd" fill="rgb(51, 51, 51)"
                                   d="M21.871,3.499 L-0.000,3.499 L-0.000,5.499 L21.871,5.499 L19.742,7.500 L21.290,8.999 L26.000,4.499 L21.290,-0.001 L19.742,1.500 L21.871,3.499 Z"/>
@@ -218,20 +208,19 @@
                     </div>
                     <ul class="takingCard__list">
                         <li>
-                            100% кэшбэк в течении года
+                            Вознаграждение от компании за привлечение продавцов
                         </li>
                         <li>
-                            100% кэшбэк в течении года
+                            Вознаграждение от продавцов за рекомендации
                         </li>
                         <li>
-                            100% кэшбэк в течении года
+                            Индивидуальные условия сотрудничества
                         </li>
                     </ul>
                     <button class="takingCard__btn btn">
                         <span>Регистрация</span>
                         <svg
                                 xmlns="http://www.w3.org/2000/svg"
-                                xmlns:xlink="http://www.w3.org/1999/xlink"
                                 width="26px" height="9px">
                             <path fill-rule="evenodd" fill="rgb(51, 51, 51)"
                                   d="M21.871,3.499 L-0.000,3.499 L-0.000,5.499 L21.871,5.499 L19.742,7.500 L21.290,8.999 L26.000,4.499 L21.290,-0.001 L19.742,1.500 L21.871,3.499 Z"/>
@@ -249,26 +238,29 @@
             <div class="offer offer-margin">
                 <div class="offer__left offer__left-width">
                     <div class="offer__title">
-                        Glodal e-commerce discount
-                        площадка со 100% кешбеком
+                        G-Market — это первая в мире площадка со 100% кэшбэком.
                     </div>
-                    <div class="offer__text">
-                        Вопреки распространенному мнению, Lorem Ipsum - это не просто случайный текст. Он имеет корни в
-                        произведении классической латинской литературы 45 года до нашей эры, что делает его более 2000
-                        лет. Ричард МакКлинток, профессор латыни в Хэмпден-Сиднейском колледже в Вирджинии, отыскал одно
-                        из самых непонятных латинских слов, concectetur, из отрывка из Lorem Ipsum и, пройдя по ссылкам
-                        на слова в классической литературе
+                    <div class="offer__text txt">
+                        <p>
+                            Совершая любые покупки в G-Market Вы получаете полную стоимость заказа на свой персональный счет и можете потратить эти деньги
+                            на новую покупку или без проблем вывести на карту. Как такое возможно?
+                        </p>
+                        <p>
+                            На самом деле, все очень просто! Заказывая товар через G-Market Вы тем самым помогаете компании зарабатывать и увеличивать оборот.
+                            Чем чаще Вы это делаете — тем быстрее оборачиваемость капитала. В качестве благодарности за это компания &laquo;делится&raquo;
+                            частью заработанной прибыли. Чтобы иметь возможность выплатить 100% стоимости покупки, деньги, уплаченные за товар должны обернуться
+                            много раз — поэтому выплата кэшбэка растянута во времени.
+                        </p>
                     </div>
-                    <button class="offer__btn offer__btn-center btn">
+                    <a href="" class="offer__btn offer__btn-center btn">
                         <span>Подробнее</span>
                         <svg
                                 xmlns="http://www.w3.org/2000/svg"
-                                xmlns:xlink="http://www.w3.org/1999/xlink"
                                 width="26px" height="9px">
                             <path fill-rule="evenodd" fill="rgb(51, 51, 51)"
                                   d="M21.871,3.499 L-0.000,3.499 L-0.000,5.499 L21.871,5.499 L19.742,7.500 L21.290,8.999 L26.000,4.499 L21.290,-0.001 L19.742,1.500 L21.871,3.499 Z"/>
                         </svg>
-                    </button>
+                    </a>
                 </div>
                 <div class="offer__right offer__right-none">
                     <img src="img/photos/9.png" alt="">
@@ -287,8 +279,7 @@
                         <span class="count__num">100</span>%
                     </div>
                     <div class="number__text">
-                        Успешной cдачи
-                        у наших учеников
+                        кэшбэк
                     </div>
                 </div>
                 <div class="number">
@@ -296,8 +287,7 @@
                         <span class="count__num">100</span>%
                     </div>
                     <div class="number__text">
-                        Успешной cдачи
-                        у наших учеников
+                        кэшбэк
                     </div>
                 </div>
                 <div class="number">
@@ -305,8 +295,7 @@
                         <span class="count__num">100</span>%
                     </div>
                     <div class="number__text">
-                        Успешной cдачи
-                        у наших учеников
+                        кэшбэк
                     </div>
                 </div>
                 <div class="number">
@@ -314,8 +303,7 @@
                         <span class="count__num">100</span>%
                     </div>
                     <div class="number__text">
-                        Успешной cдачи
-                        у наших учеников
+                        кэшбэк
                     </div>
                 </div>
             </div>
@@ -356,5 +344,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('js/numbers.js') }}"></script>
+    <script src="{{ asset('js/numbers.js') }}"></script>
 @endpush

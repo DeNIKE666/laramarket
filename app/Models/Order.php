@@ -3,8 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\User;
-use App\Models\OrderItem;
 
 class Order extends Model
 {
@@ -15,26 +13,41 @@ class Order extends Model
      *
      * @author Anton Reviakin
      */
-    public const STATUS_ORDER_NEW = 0;
-    public const STATUS_ORDER_PAYED = 1;
-    public const STATUS_ORDER_CONFIRMED = 2;
-    public const STATUS_ORDER_SENT = 3;
-    public const STATUS_ORDER_RECEIVED = 4;
-    public const STATUS_ORDER_CANCELED_BY_BUYER = 5;
-    public const STATUS_ORDER_CANCELED_BY_SHOP = 6;
-    public const STATUS_ORDER_REJECT = 7;
+    const ORDER_STATUS_NEW = 0;
+    const ORDER_STATUS_PAYED = 1;
+    const ORDER_STATUS_CONFIRMED = 2;
+    const ORDER_STATUS_SENT = 3;
+    const ORDER_STATUS_RECEIVED = 4;
+    const ORDER_STATUS_CANCELED_BY_BUYER = 5;
+    const ORDER_STATUS_CANCELED_BY_SHOP = 6;
+    const ORDER_STATUS_REJECT = 7;
 
+    /**
+     * Службы доставки
+     *
+     * @author Anton Reviakin
+     */
+    const DELIVERY_WITH_CDEK = 'cdek';
+    const DELIVERY_WITH_ENERGY = 'energy';
+    const DELIVERY_WITH_COURIER = 'courier';
+
+    /**
+     * Способы оплаты
+     *
+     * @author Anton Reviakin
+     */
+    const PAY_METHOD_INTERNAL_PERSONAL = 'internal_personal';
+    const PAY_METHOD_VISA = 'visa';
+    const PAY_METHOD_MASTERCARD = 'mastercard';
+    const PAY_METHOD_WEBMONEY = 'webmoney';
 
     protected $fillable = [
         'user_id',
-        'name',
-        'address',
-        'phones',
-        'payment_method',
-        'delivery',
+        'delivery_profile_id',
         'cost',
+        'payment_method',
+        'delivery_service',
         'status',
-        'payment_status',
         'notes',
     ];
 
@@ -48,6 +61,11 @@ class Order extends Model
         return $this->hasMany(OrderItem::class);
     }
 
+    public function deliveryContact()
+    {
+        return $this->hasOne(OrdersDeliveryProfile::class);
+    }
+
     public function cashback()
     {
         return $this->hasOne(Cashback::class);
@@ -55,7 +73,37 @@ class Order extends Model
 
     public static function formatCost($cost = '')
     {
-        return (int) str_replace(" ", "", $cost);
+        return (int)str_replace(" ", "", $cost);
     }
 
+    /**
+     * Список служб доставки
+     *
+     * @return string[]
+     * @author Anton Reviakin
+     */
+    public function getDeliveryServices(): array
+    {
+        return [
+            self::DELIVERY_WITH_CDEK,
+            self::DELIVERY_WITH_ENERGY,
+            self::DELIVERY_WITH_COURIER,
+        ];
+    }
+
+    /**
+     * Список способов оплаты
+     *
+     * @return string[]
+     * @author Anton Reviakin
+     */
+    public function getPaymentMethods(): array
+    {
+        return [
+            self::PAY_METHOD_INTERNAL_PERSONAL,
+            self::PAY_METHOD_VISA,
+            self::PAY_METHOD_MASTERCARD,
+            self::PAY_METHOD_WEBMONEY,
+        ];
+    }
 }

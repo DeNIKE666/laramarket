@@ -107,7 +107,7 @@ class RegisterController extends Controller
      *
      * @return User
      */
-    protected function reate(array $data)
+    protected function create(array $data)
     {
         $partner = $this->detectPartner();
 

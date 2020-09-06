@@ -15,14 +15,7 @@ class CreatePersonalHistoryAccountsTable extends Migration
     {
         Schema::create('personal_history_accounts', function (Blueprint $table) {
             $table->id();
-            $table
-                ->unsignedBigInteger('receiver_id')
-                ->comment('Получатель');
-
-            $table
-                ->unsignedBigInteger('sender_id')
-                ->nullable()
-                ->comment('Отправитель');
+            $table->unsignedBigInteger('user_id');
 
             $table
                 ->unsignedTinyInteger('trans_direction')
@@ -32,20 +25,24 @@ class CreatePersonalHistoryAccountsTable extends Migration
                 ->enum('trans_type', [
                     'deposit',               //Пополнение
                     'withdraw',              //Вывод
-                    'transfer',              //Перевод между аккаунтами
                     'purchase',              //Покупка товара
-                    'deposit_from_cashback', //Перевод со счета Кешбэк
+                    'deposit_from_cashback', //Перевод со счета Кэшбэк
                     'deposit_from_seller',   //Перевод со счета Продавец
                     'deposit_from_partner',  //Перевод со счета Партнер
                 ])
                 ->comment('Тип операции');
 
+            $table
+                ->unsignedBigInteger('pay_system_id')
+                ->nullable()
+                ->comment('Платежная система');
+
             $table->unsignedDecimal('amount');
 
             $table->timestamps();
 
-            $table->foreign('receiver_id')->references('id')->on('users');
-            $table->foreign('sender_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('pay_system_id')->references('id')->on('payment_options');
 
             $table->index('trans_direction');
             $table->index('trans_type');

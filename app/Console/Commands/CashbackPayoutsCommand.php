@@ -19,7 +19,7 @@ class CashbackPayoutsCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Начислить кешбэк пользователям';
+    protected $description = 'Начислить кэшбэк пользователям';
 
     /**
      * Create a new command instance.

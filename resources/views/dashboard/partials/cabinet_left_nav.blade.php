@@ -15,7 +15,7 @@
 
     @cannot('is-admin')
         <div class="lcPageMenuNav">
-            @if(request()->is('dashboard/buyer', 'dashboard/buyer/*'))
+            @if(request()->is('dashboard/user', 'dashboard/buyer', 'dashboard/buyer/*'))
                 @include('dashboard.partials.nav_buyer')
             @endif
             @if(request()->is('dashboard/partner', 'dashboard/partner/*'))
@@ -32,7 +32,7 @@
 
         @can('is-buyer')
             @if(!$user->hasSellerRequest())
-                <a href="{{ route('application-to-seller') }}" class="btn lcPageMenu__btn">Стать продавцом</a>
+                <a href="{{ route('user.application-to-seller') }}" class="btn lcPageMenu__btn">Стать продавцом</a>
             @else
                 <p>Заявка на продовца отправлена скоро будет расмотренна</p>
             @endif
@@ -56,7 +56,7 @@
                 )
             }}
         @else
-            {{ Form::open(['route' => ['become-partner'], 'method' => 'patch']) }}
+            {{ Form::open(['route' => ['user.become-partner'], 'method' => 'patch']) }}
             {{ Form::submit(__('users/partner.become_partner'), ['class' => 'btn lcPageMenu__btn']) }}
             {{ Form::close() }}
         @endif

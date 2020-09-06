@@ -7,7 +7,7 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">Новое обращение</h4>
-                    {{ Form::open(['route' =>  'tasks.store', 'files' =>	true, 'method' => 'post', 'class' => 'forms-sample']) }}
+                    {{ Form::open(['route' => 'user.tasks.store', 'files' => true, 'method' => 'post', 'class' => 'forms-sample']) }}
                     <div class="row">
                         <div class="col-lg-8">
                             <div class="form-group">

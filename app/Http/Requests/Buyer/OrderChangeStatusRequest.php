@@ -29,7 +29,7 @@ class OrderChangeStatusRequest extends FormRequest
             'status'   => 'bail|required|integer',
         ];
 
-        if ($this->input('status') == Order::STATUS_ORDER_RECEIVED) {
+        if ($this->input('status') == Order::ORDER_STATUS_RECEIVED) {
             $rules['period'] = 'bail|required|integer';
         }
 

@@ -18,20 +18,26 @@ class CreateCashbackSchedulesTable extends Migration
 
             $table->unsignedBigInteger('cashback_id');
 
-            $table->unsignedBigInteger('order_item_id')
+            $table
+                ->unsignedBigInteger('order_item_id')
                 ->comment('Отдельный товар в заказе');
 
-            $table->unsignedDecimal('payout_amount')
+            $table
+                ->unsignedDecimal('payout_amount')
                 ->comment('Сумма выплаты');
 
-            $table->timestamp('payout_at')
-                ->comment('Дата выплаты');
-
-            $table->boolean('payout_complete')
+            $table
+                ->boolean('payout_complete')
                 ->default(false)
                 ->comment('Выплачено');
 
+            $table
+                ->timestamp('payout_at')
+                ->comment('Дата выплаты');
+
             $table->timestamps();
+
+            $table->index('payout_complete');
 
             $table->foreign('cashback_id')->references('id')->on('cashbacks');
             $table->foreign('order_item_id')->references('id')->on('order_items');

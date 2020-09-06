@@ -67,19 +67,19 @@ class OrderService
         $allow = [];
 
         switch ($order->status) {
-            case Order::STATUS_ORDER_PAYED :
+            case Order::ORDER_STATUS_PAYED :
             {
                 $allow = [
-                    Order::STATUS_ORDER_CONFIRMED,
-                    Order::STATUS_ORDER_CANCELED_BY_SHOP,
+                    Order::ORDER_STATUS_CONFIRMED,
+                    Order::ORDER_STATUS_CANCELED_BY_SHOP,
                 ];
                 break;
             }
-            case Order::STATUS_ORDER_CONFIRMED :
+            case Order::ORDER_STATUS_CONFIRMED :
             {
                 $allow = [
-                    Order::STATUS_ORDER_SENT,
-                    Order::STATUS_ORDER_CANCELED_BY_SHOP,
+                    Order::ORDER_STATUS_SENT,
+                    Order::ORDER_STATUS_CANCELED_BY_SHOP,
                 ];
                 break;
             }

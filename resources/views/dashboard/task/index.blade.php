@@ -41,7 +41,7 @@
             <div class="lcPageHelpArchRight">
 
                 <h4 class="card-title">Новое обращение</h4>
-                {{ Form::open(['route' =>  'tasks.store', 'files' =>	true, 'method' => 'post', 'class' => 'forms-sample']) }}
+                {{ Form::open(['route' => 'user.tasks.store', 'files' => true, 'method' => 'post', 'class' => 'forms-sample']) }}
 
                     {{ Form::text('title', '', ['placeholder' => 'Заголовок обращения', 'class' => 'form-control', 'required' => 'required']) }}
 
