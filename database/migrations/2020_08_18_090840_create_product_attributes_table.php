@@ -19,8 +19,8 @@ class CreateProductAttributesTable extends Migration
             $table->unsignedBigInteger('attribute_id');
             $table->string('value');
 
-            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
-            $table->foreign('attribute_id')->references('id')->on('attributes')->onDelete('cascade');
+            $table->foreign('product_id')->references('id')->on('products');
+            $table->foreign('attribute_id')->references('id')->on('attributes');
         });
     }
 

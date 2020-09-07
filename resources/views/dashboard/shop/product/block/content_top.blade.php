@@ -18,12 +18,12 @@
             </span>
         <button id="js_product_activate"
                 class="lcPageContentProductsTop__action tooltip"
-                title="Включить"
+                title="Включить отмеченные"
                 data-route="{{ route('products.change-status', 'activate') }}"
         >
             <svg width="26px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-            version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 512 512"
-            style="enable-background:new 0 0 512 512;" xml:space="preserve">
+                 version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 512 512"
+                 style="enable-background:new 0 0 512 512;" xml:space="preserve">
             <g>
                 <g>
                     <path d="M257,0C116.39,0,0,114.39,0,255s116.39,257,257,257s255-116.39,255-257S397.61,0,257,0z M392,285H287v107    c0,16.54-13.47,30-30,30c-16.54,0-30-13.46-30-30V285H120c-16.54,0-30-13.46-30-30c0-16.54,13.46-30,30-30h107V120    c0-16.54,13.46-30,30-30c16.53,0,30,13.46,30,30v105h105c16.53,0,30,13.46,30,30S408.53,285,392,285z"/>
@@ -32,9 +32,10 @@
 
             </svg>
         </button>
+
         <button id="js_product_disable"
                 class="lcPageContentProductsTop__action tooltip"
-                title="Отключить"
+                title="Отключить отмеченные"
                 data-route="{{ route('products.change-status', 'disable') }}"
         >
             <svg width="26px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -48,8 +49,11 @@
 
             </svg>
         </button>
+
         <a href="{{ route('products.change-status-all', 'activate') }}"
-                class="lcPageContentProductsTop__action tooltip" title="Включить все">
+           class="lcPageContentProductsTop__action tooltip"
+           title="Включить все"
+        >
             <svg width="26px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                  version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 512 512"
                  style="enable-background:new 0 0 512 512;" xml:space="preserve">
@@ -61,20 +65,23 @@
 
             </svg>
         </a>
-        <a href="{{ route('products.change-status-all', 'disable') }}"
-                class="lcPageContentProductsTop__action tooltip" title="Отключить все">
-            <svg width="26px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                 version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 512 512"
-                 style="enable-background:new 0 0 512 512;" xml:space="preserve">
+
+        <button id="js_product_disableAll"
+                class="lcPageContentProductsTop__action tooltip"
+                title="Отключить все"
+                data-route="{{ route('products.change-status', 'disable') }}"
+        >
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="26" height="26" viewBox="0 0 26 26">
                 <g>
                     <g>
-                        <path d="M257,0C116.39,0,0,114.39,0,255s116.39,257,257,257s255-116.39,255-257S397.61,0,257,0z M383.22,338.79    c11.7,11.7,11.7,30.73,0,42.44c-11.61,11.6-30.64,11.79-42.44,0L257,297.42l-85.79,83.82c-11.7,11.7-30.73,11.7-42.44,0    c-11.7-11.7-11.7-30.73,0-42.44l83.8-83.8l-83.8-83.8c-11.7-11.71-11.7-30.74,0-42.44c11.71-11.7,30.74-11.7,42.44,0L257,212.58    l83.78-83.82c11.68-11.68,30.71-11.72,42.44,0c11.7,11.7,11.7,30.73,0,42.44l-83.8,83.8L383.22,338.79z"/>
+                        <image width="26" height="26"
+                               xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAYAAACpSkzOAAADa0lEQVRIS62WX2gcVRTGv3NnNomJbVWU5EH6IPogBcViIYXQCiFGN7Mme4cuPkhBI/Stmka0hVArUcxDKuZF0FaK7YsE52zWmU2FVkKrUGkeFASh0EILWkpTzR8N3SU7c2Q2f4jJzGxac59253zn+82dO+ecIWxgMX/bBhhtgDwHyHYRIiLcBPALoH6sVP65kMvl/CQriguOj4/Xl8v+WyL0JoCnatzP70Q4VV+vhtPp9FyUNhI0NuZmgoA+A/D4Bja8WnIHkH6tM6fX5q0DMbuHADp+j4A1chnSOnNk9cX/gJiLfYB88v8gK9kfaW0NLP9bAeXzbrsInd8kSNVGhPbbdteZ8HcVNDo6aphm4zSALbVAIvIhQDNEGK6lDeOVSv1DuVzHbBXkOF7/RhObmlIPdnZ2zjN7shEQQCNad71dBTF7twE8lpB4EZA6gFqVomfq6uhGqRTMAnIFULcA2ZuQW0mlZBs5zngrUXApXig/aZ3ZzVzsBmQsCPxng6DxhmmWZ0Rw1LatQWaPAWTjPERkH+XzxQERGYwTGYa/tVwui2k2XgXQ3NCgtoVFufTo5gzDf7q7u/sms3cXQEOMz+fE7BUAvBItkLNaZ9KrNSLoUwp3RLD4NpH8nM1mdjK7J4BqF4la54i5eBmQXVFREbxj29ZxZm8BgBm3a62t0McCxI3RXKZ83psUwfMxoD7btj5l9ioAjBqglwA5G62hyRBUFEE6xoS1tmxmbwLACzGaa1pbTzK7IwAdjNF8H57RBwCOxgj8qamWB1pa/njE941bURql1I6envRvzF7YtSMLXgRfkuMU9xDJhYQ6OKe19WKhUGj2fWMUwJ5FLU0qhd6enq5fmYtfAbI/oUReo4mJCXN6ev5PAFsTYN9obe2LijuOd5IIvUldImxDSy3IPUZE7yeJAZRE8DUg3ymlKkEg7UR4FcDDyXl0SuuuN6qgcJqWSsHfAFI1YPcRTjVr3Xl7ZUwwe+GjCc9g01ZY3GF5VE90tSuz+zFAhzeDJIIvbNs6sOy1bpQ7jjtIRCuT8X6gayHrdrRsms97vUGAESI03SMoAPCe1ta6oRj7ubVYN+a7gLxe+81C2LlPExlD2ezL16NuLha0LC4UClt83+hYGm5PAHh08QNS/hKh60rRDwsLdD6XS08l7f5f9NBf0s8FaBwAAAAASUVORK5CYII="/>
                     </g>
                 </g>
-
             </svg>
-        </a>
-        <!--a href="{{ route('products.create') }}"
+        </button>
+
+    <!--a href="{{ route('products.create') }}"
            class="lcPageContentProductsTop__action tooltip" title="Добавить">
             <svg width="26px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                  version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 512 512"

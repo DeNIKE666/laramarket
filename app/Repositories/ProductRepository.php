@@ -4,12 +4,16 @@ namespace App\Repositories;
 
 use App\Models\Product;
 use App\Models\ProductAttribute;
+use Illuminate\Database\Eloquent\Builder;
 
-class ProductRepository extends BaseRepository
+class ProductRepository
 {
+    /** @var Product $model */
+    private $model;
+
     public function __construct(Product $model)
     {
-        parent::__construct($model);
+//        parent::__construct($model);
         $this->model = $model;
     }
 
@@ -112,24 +116,19 @@ class ProductRepository extends BaseRepository
     }
 
     /**
-     * @param $slug
+     * Получить Builder для продуктов по категориям
      *
-     * @return mixed
+     * @param array $descendants
+     *
+     * @return Builder
+     * @author Anton Reviakin
      */
-    public function getProductsByCategory(array $arParentCat, array $filter = [])
+    public function getProductsByCategoryBuilder(array $descendants): Builder
     {
-
-        $products = Product::
-            query()
-            ->whereIn('category_id', $arParentCat)
-            ->active();
-
-
-        if (!empty($filter)) {
-            $products->filter($filter);
-        }
-
-        return $products;
+        return $this
+            ->model
+            ->query()
+            ->whereIn('category_id', $descendants);
     }
 
     /**
@@ -186,41 +185,4 @@ class ProductRepository extends BaseRepository
         }
         return false;
     }
-
-    public function getFilterChekbox($catFilter, $arFilterChek, $arIdProduct)
-    {
-
-        $filterProps = [];
-        if ($catFilter->count() > 0) {
-            foreach ($catFilter as $attribute) {
-
-                //dump($attribute->name);
-
-                $listAttr = ProductAttribute::whereIn('product_id', $arIdProduct)
-                    ->where('attribute_id', $attribute->id)->where('');
-
-
-                if (count($listAttr) > 0) {
-                    $listAttrFull = [];
-                    foreach ($listAttr as $attr) {
-                        $status = 0;
-                        if (isset($arFilterChek[$attribute->id]) && in_array($attr['value'], $arFilterChek[$attribute->id])) {
-                            $status = 1;
-                        }
-                        $listAttrFull[] = [
-                            'value'  => $attr['value'],
-                            'status' => $status,
-                        ];
-                    }
-                    $filterProps[$attribute->id] = [
-                        'name' => $attribute->name,
-                        'list' => $listAttrFull,
-                    ];
-                }
-            }
-        }
-     //   return $filterProps;
-    }
-
-
 }

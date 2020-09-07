@@ -245,12 +245,46 @@ class Product extends Model implements HasMedia
         return $query->where('status', 'active');
     }
 
-    public function scopeFilter(Builder $builder, array $ids)
+    /**
+     * Фильтр по атрибутам
+     *
+     * @param Builder $builder
+     * @param array   $ids
+     *
+     * @return Builder
+     * @author Anton Reviakin
+     */
+    public function scopeFilterByAttributes(Builder $builder, array $ids = []): Builder
     {
+        if (empty($ids)) {
+            return $builder;
+        }
+
         return $builder
             ->whereHas('productAttributes', function (Builder $builder) use ($ids) {
-                return $builder->whereIn('attribute_id', array_values($ids));
+                return $builder->whereIn('id', array_values($ids));
             });
-//            ->whereIn('id', array_values($ids));
+    }
+
+    /**
+     * Фильтр по ценам
+     *
+     * @param Builder   $builder
+     * @param float|int $min
+     * @param float|int $max
+     *
+     * @return Builder
+     * @author Anton Reviakin
+     */
+    public function scopeBetweenPrices(Builder $builder, float $min = 0, float $max = 0): Builder
+    {
+        if ($min < 0 or $max < 0
+            or $max < 0.01
+            or $max < $min
+        ) {
+            return $builder;
+        }
+
+        return $builder->whereBetween('price', [$min, $max]);
     }
 }

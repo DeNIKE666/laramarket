@@ -15,8 +15,11 @@ class CreateTableAttributeCategory extends Migration
     {
         Schema::create('attribute_category', function (Blueprint $table) {
             $table->id();
-            $table->integer('attribute_id');
-            $table->integer('category_id');
+            $table->unsignedBigInteger('attribute_id');
+            $table->unsignedBigInteger('category_id');
+
+            $table->foreign('attribute_id')->references('id')->on('attributes');
+            $table->foreign('category_id')->references('id')->on('categories');
         });
     }
 

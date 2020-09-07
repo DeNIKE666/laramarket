@@ -28,8 +28,11 @@ Route::get('/about', 'FrontController@about')->name('front.about');
 
 
 
-Route::get('catalog/{path}', 'FrontController@catalog')
-    ->where('path', '[a-zA-Z0-9/_-]+')->name('front_catalog');
+Route::get('catalog/{slug}', 'CatalogController@index')
+    ->where('slug', '[a-zA-Z0-9/_-]+')
+    ->name('front_catalog');
+
+
 Route::get('product/{path}', 'FrontController@product')
     ->where('path', '[a-zA-Z0-9/_-]+')->name('front_product');
 
