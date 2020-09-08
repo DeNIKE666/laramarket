@@ -1,7 +1,7 @@
 @if (count($tasks))
         @foreach ($tasks as $task)
             <div class="lcPageHelpArchLeft__item">
-                <a href="{{ route('tasks.show', $task->id) }}#chat">
+                <a href="{{ route('user.tasks.show', $task->id) }}#chat">
                     <span>
                         # {{ $task->id }}
                     </span>

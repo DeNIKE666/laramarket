@@ -15,7 +15,7 @@ class CashbackRepository extends BaseRepository
     }
 
     /**
-     * Добавить кешбек
+     * Добавить кэшбэк
      *
      * @param int $user_id
      * @param int $order_id
@@ -36,7 +36,7 @@ class CashbackRepository extends BaseRepository
     }
 
     /**
-     * Установить статус выплат в кешбэке
+     * Установить статус выплат в кэшбэке
      *
      * @param int $order_id
      * @param int $status
@@ -51,7 +51,7 @@ class CashbackRepository extends BaseRepository
     }
 
     /**
-     * Установить период выплат в кешбэке
+     * Установить период выплат в кэшбэке
      *
      * @param int $order_id
      * @param int $period

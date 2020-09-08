@@ -29,7 +29,7 @@
                 начислений
             </div>
             <div class="lcPageContentCol">
-                Сумма кешбека
+                Сумма кэшбэка
             </div>
             <div class="lcPageContentCol">
                 Период выплат

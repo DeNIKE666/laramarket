@@ -80,7 +80,7 @@
             </button>
         </div>
     </div>
-    <form action="{{ route('withdraw') }}" method="POST">
+    <form action="{{ route('buyer.finance.withdraw') }}" method="POST">
         @CSRF
         <div class="lcPageContentPay">
             <div class="lcPageContentPayTop">
@@ -102,7 +102,7 @@
                                     name="method"
                                     type="radio"
                                     data-id="{{ $withdrawal->id }}"
-                           ж         value="{{ $withdrawal->id }}"
+                                    value="{{ $withdrawal->id }}"
                                     data-percent="{{ $withdrawal->withdrawMoney }}"
                                     @if($k == 0) checked @endif
                             />
@@ -391,7 +391,7 @@
                 Пополнение<br/>
                 банковские карты
             </div>
-            <form id="cardform" name="cardform" action="{{ route('qiwi.pay') }}" method="POST" class="cartBlockPay">
+            <form id="cardform" name="cardform" action="{{ route('buyer.finance.deposit.visa') }}" method="POST" class="cartBlockPay">
                 <div class="cardform__row">
                     <div class="cardform__row__col1">
                         <label for="card">Номер карты</label>

@@ -1,28 +1,28 @@
-<a href="{{ route('edit-profile') }}"
+<a href="{{ route('buyer.profile.edit') }}"
    class="{{ (request()->is('dashboard/buyer')) ? 'active' : '' }}">
     Личные данные
 </a>
-<a href="{{ route('user_orders_list') }}"
+<a href="{{ route('buyer.orders') }}"
    class="{{ (request()->is('dashboard/buyer/orders*')) ? 'active' : '' }}">
     Мои заказы
 </a>
-<a href="{{ route('user_history_order') }}"
+<a href="{{ route('buyer.orders.archive') }}"
    class="{{ (request()->is('dashboard/buyer/history_orders*')) ? 'active' : '' }}">
     История заказов
 </a>
-<a href="{{ route('history.withdraw') }}"
+<a href="{{ route('buyer.finance.history.personal-account') }}"
    class="{{ (request()->is('dashboard/buyer/history/withdraw')) ? 'active' : '' }}">
     История выводов
 </a>
-<a href="{{ route('user_list_cashback') }}"
+<a href="{{ route('buyer.finance.history.cashback-account') }}"
    class="{{ (request()->is('dashboard/buyer/list_cashback*')) ? 'active' : '' }}">
     Кэшбэк
 </a>
-<a href="{{ route('user_pay') }}"
+<a href="{{ route('buyer.finance.deposit-withdraw') }}"
    class="{{ (request()->is('dashboard/buyer/user_pay*')) ? 'active' : '' }}">
     Пополнение/снятие
 </a>
-<a href="{{ route('tasks.index') }}"
+<a href="{{ route('user.tasks.index') }}"
    class="{{ (request()->is('dashboard/buyer/tasks*')) ? 'active' : '' }}">
     Помощь
 </a>

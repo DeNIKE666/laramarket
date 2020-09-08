@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Attribute;
 use App\Models\Category;
 use App\Models\Page;
 use App\Models\Product;
 use App\Repositories\ProductRepository;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+use Illuminate\View\View;
+use Kalnoy\Nestedset\DescendantsRelation;
 
 
 class FrontController extends Controller
@@ -20,7 +20,7 @@ class FrontController extends Controller
         $this->productRepository = $productRepository;
     }
 
-    public function index()
+    public function index(): View
     {
         $products_popular = Product::getProductsById(Product::getPopularProductById());
         //dd(Product::ViewsId());
@@ -29,43 +29,14 @@ class FrontController extends Controller
         return view('front.page.home', compact('products_views', 'products_popular'));
     }
 
-    public function catalog(Request $request, string $slug)
+    /**
+     * О компании
+     *
+     * @return View
+     */
+    public function about(): View
     {
-        $category = Category::where('slug', $slug)->firstOrFail();
-        $arParentCat = $category->descendants()->defaultOrder()->pluck('id')->toArray();
-        $arParentCat[] = $category->id;
-
-        $filterAttributes = $request->has('attr') ? $request->get('attr') : [];
-
-        $attrChecks = array_values($filterAttributes ?: []);
-
-
-        $products = $this
-            ->productRepository
-            ->getProductsByCategory(
-                $arParentCat,
-                $filterAttributes
-            );
-
-
-        $minPrice = $request->get('min_price') ?: (int)$products->min('price');
-        $maxPrice = $request->get('max_price') ?: (int)$products->max('price');
-
-        $catFilter = $category->attributes()->where('is_filter', 1)->get();
-
-        $products = $products->wherein('price' , [$minPrice, $maxPrice])->paginate(Product::PAGINATE);
-
-
-        return view('front.page.catalog',
-            compact(
-                'category',
-                'products',
-                'catFilter',
-                'maxPrice',
-                'minPrice',
-                'attrChecks'
-            )
-        );
+        return view('front.page.about');
     }
 
     public function product($slug)
@@ -77,7 +48,7 @@ class FrontController extends Controller
         $products_views = Product::getProductsById(Product::ViewsId());
         $this->productRepository->addCookieViews($product->id);
         $arDataProductAttr = [];
-        foreach ($product->product_attributes()->get() as $productAttr) {
+        foreach ($product->productAttributes()->get() as $productAttr) {
             //dump($productAttr->attribute->name);
             $arDataProductAttr[] = [
                 'name'  => $productAttr->attribute->name,

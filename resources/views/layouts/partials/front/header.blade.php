@@ -24,7 +24,7 @@
                                     Войти
                                 </a>
                             @else
-                                <a href="@cannot('is-admin') {{ route('edit-profile') }} @endcannot @can('is-admin') {{ route('admin.home') }} @endcan" >
+                                <a href="@cannot('is-admin') {{ route('buyer.profile.edit') }} @endcannot @can('is-admin') {{ route('admin.home') }} @endcan" >
                                     Личный кабинет
                                 </a>
                                 <a href="{{ route('logout') }}"
@@ -159,7 +159,7 @@
                         </span>
                 </button>
                 <nav class="nav">
-                    <a href="">
+                    <a href="{{ route('front.about') }}">
                         О компании
                     </a>
                     <a href="">

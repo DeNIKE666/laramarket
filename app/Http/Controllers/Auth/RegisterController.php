@@ -57,7 +57,7 @@ class RegisterController extends Controller
             Cookie::queue('partner', $partnerToken, (60 * 24 * 365), '/', null, null, false);
         }
 
-        return redirect()->route('front_index');
+        return redirect()->route('front.index');
     }
 
     /**
@@ -107,7 +107,7 @@ class RegisterController extends Controller
      *
      * @return User
      */
-    protected function reate(array $data)
+    protected function create(array $data)
     {
         $partner = $this->detectPartner();
 

@@ -5,15 +5,15 @@
         <li class="nav-item nav-category">
             <span class="nav-link">{{ __('messages.cabinet') }}</span>
         </li>
-        <li class="nav-item {{ (request()->is(route('edit-profile'))) ? 'active' : '' }}">
-            <a class="nav-link" href="{{ route('edit-profile') }}">
+        <li class="nav-item {{ (request()->is(route('buyer.profile.edit'))) ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('buyer.profile.edit') }}">
                 <span class="menu-title">{{ __('messages.my_profile') }}</span>
                 <i class="icon-user menu-icon"></i>
             </a>
         </li>
         @can('is-buyer')
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('user_orders_list') }}">
+                <a class="nav-link" href="{{ route('index') }}">
                     <span class="menu-title">{{ __('messages.purchase') }}</span>
                     <i class="icon-basket menu-icon"></i>
                 </a>
@@ -110,7 +110,7 @@
 
         @can('is-seller')
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('tasks.index') }}">
+                <a class="nav-link" href="{{ route('user.tasks.index') }}">
                     <span class="menu-title">{{ __('messages.help') }}</span>
                     <i class="icon-bubble menu-icon"></i>
                 </a>
@@ -119,7 +119,7 @@
 
         @can('is-buyer')
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('tasks.index') }}">
+                <a class="nav-link" href="{{ route('user.tasks.index') }}">
                     <span class="menu-title">{{ __('messages.help') }}</span>
                     <i class="icon-bubble menu-icon"></i>
                 </a>
@@ -129,7 +129,7 @@
 
         @can('is-admin')
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('tasks.index') }}">
+                <a class="nav-link" href="{{ route('user.tasks.index') }}">
                     <span class="menu-title">Обращения</span>
                     <i class="icon-list menu-icon"></i>
                 </a>

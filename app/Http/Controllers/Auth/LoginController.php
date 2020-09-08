@@ -52,13 +52,13 @@ class LoginController extends Controller
         }
 
         if (!$request->wantsJson()) {
-            redirect()->intended($this->redirectPath());
+            return redirect()->intended($this->redirectPath());
         }
 
         /** @var User $user */
         $user = auth()->user();
 
-        $redirect = $user->isAdmin() ? route('admin.home') : route('edit-profile');
+        $redirect = $user->isAdmin() ? route('admin.home') : route('buyer.profile.edit');
         return response(compact('redirect'), Response::HTTP_OK);
     }
 

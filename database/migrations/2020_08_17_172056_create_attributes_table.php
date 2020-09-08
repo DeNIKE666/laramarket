@@ -17,7 +17,10 @@ class CreateAttributesTable extends Migration
             $table->id();
             $table->string('slug');
             $table->string('name');
-            $table->tinyInteger('is_filter')->default(1);
+
+            $table
+                ->boolean('is_filter')
+                ->default(true);
         });
 
     }

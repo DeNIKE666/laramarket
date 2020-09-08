@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Dashboard;
+namespace App\Http\Controllers\Dashboard\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Buyer\OrderChangeStatusRequest;
@@ -21,7 +21,7 @@ use Illuminate\Http\Response;
 use Illuminate\View\View;
 
 
-class UserController extends Controller
+class ProfileController extends Controller
 {
     protected $orderRepository;
 
@@ -38,31 +38,6 @@ class UserController extends Controller
         $this->userService = (new UserService());
 
         $this->orderChangeStatusService = (new OrderChangeStatusService($orderRepository));
-    }
-
-    /**
-     * Страница редактирования профиля
-     *
-     * @return View
-     */
-    public function editProfile(): View
-    {
-        $user = Auth::user();
-        return view('dashboard.edit_profile', compact('user'));
-    }
-
-    /**
-     * Обновить информацию о профиле
-     *
-     * @param Request $request
-     *
-     * @return RedirectResponse
-     */
-    public function updateProfile(Request $request): RedirectResponse
-    {
-        $user = Auth::user();
-        $user->edit($request->all());
-        return redirect()->back()->with('status', 'Профиль обновлён');
     }
 
     /**
@@ -109,27 +84,7 @@ class UserController extends Controller
 
         $userProp = $user->isPropery($user->id);
         $userProp->edit($request->all());
-        return redirect()->route('edit-profile')->with('status', 'Заявка отправлена');
-    }
-
-    public function listOrder()
-    {
-        $orders = $this->orderRepository->listOrdersUser();
-        if (Auth::user()->is_admin) {
-            return view(
-                'dashboard.admin.order_list',
-                compact(
-                    'orders'
-                )
-            );
-        } else {
-            return view(
-                'dashboard.user.my_order',
-                compact(
-                    'orders'
-                )
-            );
-        }
+        return redirect()->route('buyer.profile.edit')->with('status', 'Заявка отправлена');
     }
 
     /**
@@ -145,7 +100,7 @@ class UserController extends Controller
     {
         $order = $this->orderChangeStatusService->changeStatus($request);
 
-        if ($order->status === Order::STATUS_ORDER_RECEIVED) {
+        if ($order->status === Order::ORDER_STATUS_RECEIVED) {
             $CashbackService = new CashbackService();
 
             //Статус "Идут выплаты"
@@ -154,7 +109,7 @@ class UserController extends Controller
             //Период выплат
             $CashbackService->setPayoutsPeriod($order);
 
-            //Заполнить расписание выплат кешбэка
+            //Заполнить расписание выплат кэшбэка
             (new CashbackScheduleService())->fill($order);
         }
 
@@ -163,60 +118,12 @@ class UserController extends Controller
 
     public function historyOrder()
     {
-        $orders = $this->orderRepository->listOrdersUser();
-
-        return view(
-            'dashboard.user.history_orders'
-        );
+        dd(__METHOD__);
+//        $orders = $this->orderRepository->listOrdersUser();
+//
+//        return view(
+//            'dashboard.user.history_orders'
+//        );
     }
-
-    public function userCashback()
-    {
-        return view(
-            'dashboard.user.cashback'
-
-        );
-    }
-
-    public function userPay()
-    {
-        $refills = PaymentOption::getPaymentsRefill();
-        $withdrawals = PaymentOption::getPaymentWithdrawal();
-        //dd($refill);
-        return view(
-            'dashboard.user.pay',
-            compact(
-                'refills',
-                'withdrawals'
-            )
-        );
-    }
-
-    /**
-     * @param Request $request
-     */
-
-    public function withdraw(Request $request)
-    {
-        $request->merge([
-            'user_id'            => auth()->user()->id,
-            'payment_options_id' => $request->input('method'),
-        ]);
-
-        Withdraw::create($request->all());
-
-        return redirect()->route('history.withdraw');
-    }
-
-    public function histroryWithdraw()
-    {
-        $withdraws = Withdraw::query()
-            ->with('paymentOption:id,title')
-            ->whereUserId(auth()->user()->id)
-            ->get();
-
-        return view('dashboard.user.history_withdraw', compact('withdraws'));
-    }
-
 
 }

@@ -43,7 +43,7 @@ class CashbackScheduleService
         /** @var Collection $productsInOrder */
         $productsInOrder = $order->items;
 
-        //Id кешбека
+        //Id кэшбэка
         $cashbackId = $order->cashback->id;
 
         $productsInOrder->each(function (OrderItem $orderItem) use ($cashbackId) {
@@ -65,11 +65,11 @@ class CashbackScheduleService
     }
 
     /**
-     * Начислить кешбэк по периодам выплат
+     * Начислить кэшбэк по периодам выплат
      */
     public function addPeriodicBalance(): void
     {
-        //Получить список для начисления кешбэка
+        //Получить список для начисления кэшбэка
         $payouts = $this->cashbackScheduleRepository->getSchedulesForPayout();
 
         if ($payouts->isEmpty()) {
@@ -79,7 +79,7 @@ class CashbackScheduleService
         $UserRepository = app(UserRepository::class);
 
         $payouts->each(function (CashbackSchedule $payout) use ($UserRepository) {
-            //Добавить на баланс кешбэка пользователю
+            //Добавить на баланс кэшбэка пользователю
             $UserRepository->addToCashbackAccount(
                 $payout->cashback->user_id,
                 $payout->payout_amount
@@ -144,7 +144,7 @@ class CashbackScheduleService
         $periods = app(PaymentsScheduleRepository::class)->getPeriodsByPercentFee($orderItem->product_percent_fee);
 
         if (!$periods) {
-            abort(Response::HTTP_NOT_FOUND, 'Не найдены периоды выплат кешбэка с заданным процентом комиссии товара/услуги');
+            abort(Response::HTTP_NOT_FOUND, 'Не найдены периоды выплат кэшбэка с заданным процентом комиссии товара/услуги');
         }
 
         switch (request('period')) {

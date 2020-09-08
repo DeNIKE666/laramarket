@@ -23,9 +23,16 @@ Route::post('/comission/payout', 'ComissionsPayInOutController@getPayoutFee')->n
 //    dd($comission);
 //});
 
-Route::get('/', 'FrontController@index')->name('front_index');
-Route::get('catalog/{path}', 'FrontController@catalog')
-    ->where('path', '[a-zA-Z0-9/_-]+')->name('front_catalog');
+Route::get('/', 'FrontController@index')->name('front.index');
+Route::get('/about', 'FrontController@about')->name('front.about');
+
+
+
+Route::get('catalog/{slug}', 'CatalogController@index')
+    ->where('slug', '[a-zA-Z0-9/_-]+')
+    ->name('front_catalog');
+
+
 Route::get('product/{path}', 'FrontController@product')
     ->where('path', '[a-zA-Z0-9/_-]+')->name('front_product');
 
@@ -40,11 +47,19 @@ Route::get('/join/{partner_token}', 'Auth\RegisterController@rememberPartnerToke
  */
 
 
-Route::group(['middleware' => ['auth']], function () {
-    Route::get('/checkout', 'CheckoutController@getCheckout')->name('checkout');
-    Route::post('/checkout/order/', 'CheckoutController@placeOrder')->name('placeOrder');
-    Route::any('/checkout/order/{id}/{payMethod}', 'CheckoutController@infoOrder')->name('infoOrder');
-});
+Route::group(
+    [
+        'prefix'     => 'checkout',
+        'middleware' => ['auth'],
+        'as'         => 'checkout.',
+    ],
+    function () {
+//        Route::get('/', 'CheckoutController@get')->name('get');
+//        Route::post('/', 'CheckoutController@store')->name('store');
+//
+//        Route::get('/pay/{order}/{payMethod}', 'CheckoutController@showPayForm')->name('show-pay-form');
+//        Route::post('/pay/{order}/card', 'CheckoutController@orderPay')->name('pay-via-card');
+    });
 
 /**
  * Работа корзины
@@ -63,41 +78,83 @@ Route::group(
     }
 );
 
+Route::group(
+    [
+        'prefix'     => 'dashboard/user',
+        'namespace'  => 'Dashboard\User',
+        'middleware' => ['auth'],
+        'as'         => 'user.',
+    ],
+    function () {
+        //Тикеты
+        Route::resource('/tasks', 'TaskController');
+
+        Route::patch('/become-partner', 'ProfileController@becomePartner')->name('become-partner');
+        Route::get('/application-to-seller', 'ProfileController@applicationToSeller')->name('application-to-seller');
+        Route::post('/application-to-seller', 'ProfileController@storeApplicationToSeller')->name('store-application-to-seller');
+    }
+);
+
 /**
  * Раздел покупателя
  */
 Route::group(
     [
         'prefix'     => 'dashboard/buyer',
-        'namespace'  => 'Dashboard',
+        'namespace'  => 'Dashboard\Buyer',
         'middleware' => ['auth'],
+        'as'         => 'buyer.',
     ],
     function () {
-        Route::get('/', 'UserController@editProfile')->name('edit-profile');
-        Route::patch('/update-profile', 'UserController@updateProfile')->name('update-profile');
-        Route::patch('/become-partner', 'UserController@becomePartner')->name('become-partner');
-        Route::get('/application-to-seller', 'UserController@applicationToSeller')->name('application-to-seller');
-        Route::post('/application-to-seller', 'UserController@storeApplicationToSeller')->name('store-application-to-seller');
+        #################### ПРОФИЛЬ ####################
+        //Редактирование профиля
+        Route::get('/', 'ProfileController@edit')->name('profile.edit');
+        Route::patch('/profile/update', 'ProfileController@update')->name('profile.update');
+
+
+        #################### ЗАКАЗЫ ####################
+        //Список заказов
+        Route::get('/orders', 'OrderController@index')->name('orders');
+        Route::get('/orders/archive', 'OrderController@archive')->name('orders.archive');
+
+
+        //Оформление заказа
+        Route::get('/order/checkout-form', 'OrderController@checkoutForm')->name('order.checkout-form');
+        Route::post('/order/store', 'OrderController@store')->name('order.store');
+
+
+        //Оплата заказа
+        Route::get('/checkout/pay/{order}/{payMethod}', 'CheckoutController@showPayForm')->name('checkout.show-pay-form');
+
+        Route::post('/checkout/pay/{order}/card', 'CheckoutController@orderPay')->name('checkout.pay-via-card');
+        Route::post('/checkout/pay/{order}/card/callback', 'CheckoutController@orderPayCallback')->name('checkout.pay-via-card.callback');
+
+
+        #################### ФИНАНСЫ ####################
+        //Пополнение и вывод
+        Route::get('/finance/deposit-withdraw', 'FinanceController@userPay')->name('finance.deposit-withdraw');
+
+
+//        Route::prefix('payment')->group(function () {
+        //ПЕРЕПИСАТЬ!!! - В FinanceController
+        Route::post('/finance/deposit/visa', 'QiwiController@pay')->name('finance.deposit.visa');
+//            Route::post('/callback/visa/deposit/{orderPay}', 'QiwiController@callback')->name('qiwi.callback');
+//        });
+
+
+        //Вывод средств
+        Route::post('/finance/withdraw', 'FinanceController@withdraw')->name('finance.withdraw');
+
+        //История движения средств
+        Route::get('/finance/history/personal', 'FinanceController@historyOfPersonalAccount')->name('finance.history.personal-account');
+        Route::get('/finance/history/cashback', 'FinanceController@historyOfCompletedCashback')->name('finance.history.cashback-account');
+
         //Route::get('/data_seller', 'UserController@data_seller')->name('data_seller');
+//        Route::resource('/messages', 'MessageController');
+//
 
-        Route::resource('/tasks', 'TaskController');
-        Route::resource('/messages', 'MessageController');
-
-        Route::get('/orders', 'UserController@listOrder')->name('user_orders_list');
-        Route::patch('/order/{order}/status', 'UserController@changeStatus')->name('user_change_status');
-        Route::get('/history-orders', 'UserController@historyOrder')->name('user_history_order');
-        Route::get('/list_cashback', 'UserController@userCashback')->name('user_list_cashback');
-        Route::get('/user_pay', 'UserController@userPay')->name('user_pay');
-
-        Route::post('/withdraw', 'UserController@withdraw')->name('withdraw');
-        Route::get('/history/withdraw', 'UserController@histroryWithdraw')->name('history.withdraw');
-
-        Route::prefix('payment')->group(function () {
-            Route::post('/visa', 'QiwiController@pay')->name('qiwi.pay');
-            Route::post('/visa/order/{order}', 'QiwiController@orderPay')->name('qiwi.order.pay');
-            Route::post('/callback/visa/deposit/{orderPay}', 'QiwiController@callback')->name('qiwi.callback');
-            Route::post('/callback/visa/order/{order}/{orderPay}', 'QiwiController@callbackOrder')->name('qiwi.callback.order');
-        });
+//        Route::patch('/order/{order}/status', 'UserController@changeStatus')->name('user_change_status');
+//
 
         //Route::get('summernote',array('as'=>'summernote.get','uses'=>'FileController@getSummernote'));
         //Route::post('ckeditor/image_upload','CKEditorController@upload')->name('upload');

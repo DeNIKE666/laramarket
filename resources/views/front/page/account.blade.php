@@ -29,7 +29,7 @@
                         <a class="active" href="">
                             Пополнение/снятие
                         </a>
-                        <a href=""{{ route('history.withdraw') }}>
+                        <a href=""{{ route('buyer.finance.history.personal-account') }}>
                             История выводов
                         </a>
                         <a href="">

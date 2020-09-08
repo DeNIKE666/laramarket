@@ -55,9 +55,9 @@ class OrderShopController extends Controller
     public function listInProgress(): View
     {
         $statuses = [
-            Order::STATUS_ORDER_PAYED,
-            Order::STATUS_ORDER_CONFIRMED,
-            Order::STATUS_ORDER_SENT,
+            Order::ORDER_STATUS_PAYED,
+            Order::ORDER_STATUS_CONFIRMED,
+            Order::ORDER_STATUS_SENT,
         ];
 
         $orders = $this->orderRepository->listOrdersShopByStatus($statuses);
@@ -81,8 +81,8 @@ class OrderShopController extends Controller
     {
         $order = $this->orderService->changeStatus($request);
 
-        //Если Отправлено - добавить кешбек
-        if ($order->status === Order::STATUS_ORDER_SENT) {
+        //Если Отправлено - добавить кэшбэк
+        if ($order->status === Order::ORDER_STATUS_SENT) {
             (new CashbackService)->storeCashback($order);
         }
 

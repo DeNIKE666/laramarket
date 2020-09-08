@@ -13,7 +13,6 @@
     <link href="{{ asset('css/styles.css') }}" rel="stylesheet">
     <link href="{{ asset('css/main.css') }}" rel="stylesheet">
 
-
     @stack('styles')
 </head>
 <body>
@@ -27,12 +26,9 @@
 </main>
 @include('layouts.partials.front.footer')
 
-
 @include('layouts.partials.front.auth')
 @include('layouts.partials.front.register')
 
-    @include('layouts.partials.js_footer__front')
-
-
+@include('layouts.partials.js_footer__front')
 </body>
 </html>

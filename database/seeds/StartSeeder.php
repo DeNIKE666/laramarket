@@ -18,13 +18,17 @@ class StartSeeder extends Seeder
                 'email'      => 'admin@domain.com',
                 'password'   => \Illuminate\Support\Facades\Hash::make('password'),
                 'role'       => 'admin',
+                'phone'      => null,
+                'address'    => null,
                 'created_at' => \Illuminate\Support\Carbon::now(),
             ],
             [
-                'name'       => 'User',
+                'name'       => 'Reviakin антон оЛеГоВиЧ',
                 'email'      => 'user@domain.com',
                 'password'   => \Illuminate\Support\Facades\Hash::make('password'),
                 'role'       => 'buyer',
+                'phone'      => '+380(95)336-16-18',
+                'address'    => 'Address',
                 'created_at' => \Illuminate\Support\Carbon::now(),
             ],
             [
@@ -32,6 +36,8 @@ class StartSeeder extends Seeder
                 'email'      => 'seller@domain.com',
                 'password'   => \Illuminate\Support\Facades\Hash::make('password'),
                 'role'       => 'seller',
+                'phone'      => null,
+                'address'    => null,
                 'created_at' => \Illuminate\Support\Carbon::now(),
             ],
             [
@@ -39,6 +45,8 @@ class StartSeeder extends Seeder
                 'email'      => 'oleg.a@myfbr.ru',
                 'password'   => \Illuminate\Support\Facades\Hash::make('password'),
                 'role'       => 'buyer',
+                'phone'      => null,
+                'address'    => null,
                 'created_at' => \Illuminate\Support\Carbon::now(),
             ],
             [
@@ -46,6 +54,8 @@ class StartSeeder extends Seeder
                 'email'      => 'inspektorme@gmail.com',
                 'password'   => \Illuminate\Support\Facades\Hash::make('password'),
                 'role'       => 'buyer',
+                'phone'      => null,
+                'address'    => null,
                 'created_at' => \Illuminate\Support\Carbon::now(),
             ],
         ];
