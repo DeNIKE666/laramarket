@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Task;
 use Illuminate\Support\Facades\Gate;
 use Auth;
+use Mail;
 
 class TaskController extends Controller
 {
@@ -69,7 +70,14 @@ class TaskController extends Controller
 
         Message::create($dataMessage);
 
-        return redirect()->route('tasks.show', $task->id)->with('status', 'Сообщение отправлено');
+        Mail::send(['html' => 'emails.admin.new_task'], array('task' => $task),
+            function ($message)  {
+                $message->to([config('admin.email.admin'), config('admin.email.admin2')], config('app.name'))->subject('Новое обращение');
+                $message->from(config('mail.from.address'), config('mail.from.name'));
+            }
+        );
+
+        return redirect()->route('user.tasks.show', $task->id)->with('status', 'Сообщение отправлено');
     }
 
     /**
@@ -130,7 +138,14 @@ class TaskController extends Controller
         }
         Message::create($dataMessage);
 
-        return redirect()->route('tasks.show', $task->id)->with('status', 'Сообщение отправлено');
+        Mail::send(['html' => 'emails.admin.new_task'], array('task' => $task),
+            function ($message)  {
+                $message->to([config('admin.email.admin'), config('admin.email.admin2')], config('app.name'))->subject('Новое обращение');
+                $message->from(config('mail.from.address'), config('mail.from.name'));
+            }
+        );
+
+        return redirect()->route('user.tasks.show', $task->id)->with('status', 'Сообщение отправлено');
     }
 
     /**

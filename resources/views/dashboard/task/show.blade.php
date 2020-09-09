@@ -47,7 +47,7 @@
                         @foreach ($task->messages as $message)
                             <div class="lcPageHelpArchChatMsg">
                                 <div class="lcPageHelpArchChatMsg__name {{ $message->getTypeMessage() }}">
-                                    {{ getName($message->user() }}
+                                    {{ getName($message->user) }}
                                 </div>
                                 <div class="lcPageHelpArchChatMsg__text">
                                     {{ $message->content }}
@@ -58,7 +58,7 @@
 
                 </div>
 
-                {{ Form::open(['route' =>  ['tasks.update', $task->id], 'method' => 'put', 'class' => 'lcPageHelpArchSend']) }}
+                {{ Form::open(['route' =>  ['user.tasks.update', $task->id], 'method' => 'put', 'class' => 'lcPageHelpArchSend']) }}
 
                     {{ Form::text('content', '', ['placeholder' => 'Введите текст сообщения', 'required' => 'required']) }}
                     <button class="btn">
