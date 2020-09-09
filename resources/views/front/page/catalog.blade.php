@@ -12,9 +12,6 @@
 
     /** @var \Illuminate\Support\Collection $catFilter */
     $catFilter = $catalog['catFilter'];
-
-    /** @var array $filterAttributes */
-    $filterAttributes = $catalog['filterAttributes'];
 @endphp
 
 @extends('layouts.app')

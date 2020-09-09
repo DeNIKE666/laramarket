@@ -895,12 +895,16 @@ main {
     fill : #fff;
 }
 
+.top__title {
+    margin-top : 30px;
+}
+
 .txt p {
     margin-bottom : 10px;
 }
 
-.top__title {
-    margin-top : 30px;
+.txt li {
+    margin : 5px 0;
 }
 
 .block-4 {
@@ -1246,7 +1250,7 @@ footer {
     font-size     : 16px;
 }
 
-.takingCard__list li {
+.takingCard__list li, .txt li {
     list-style          : none;
     margin-top          : 15px;
     display             : -webkit-box;
@@ -1261,7 +1265,7 @@ footer {
     align-items         : flex-start;
 }
 
-.takingCard__list li::before {
+.takingCard__list li::before, .txt li::before {
     content          : '';
     width            : 10px;
     min-width        : 10px;
@@ -1274,6 +1278,14 @@ footer {
 
 .takingCard__list li:nth-child(1) {
     margin-top : 0;
+}
+
+.txt li {
+    margin-top : 10px;
+}
+
+.txt li::before {
+    margin-top : 6px;
 }
 
 .takingCard__btn {
@@ -2493,7 +2505,7 @@ footer {
     -moz-box-align      : center;
     -ms-flex-align      : center;
     align-items         : center;
-    padding             : 25px 0 50px 0;
+    padding             : 65px 0 65px;
     border-top          : 1px solid #ccc;
 }
 
@@ -2503,12 +2515,12 @@ footer {
 }
 
 .cartAddress__row:first-child {
-    padding    : 25px 0;
+    padding    : 25px 0 65px;
     border-top : none;
 }
 
 .cartAddress__row:last-child {
-    padding : 25px 0;
+    padding : 65px 0 25px;
 }
 
 .cartAddress__icon {

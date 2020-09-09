@@ -12,6 +12,12 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 
+/**
+ * Class CatalogService
+ *
+ * @package App\Services
+ * @author  Anton Reviakin
+ */
 class CatalogService
 {
     /** @var CategoryRepository $categoryRepository */
@@ -26,43 +32,144 @@ class CatalogService
         $this->productRepository = app(ProductRepository::class);
     }
 
-    public function getCatalogWithFilters(array $request, string $slug)
+    /**
+     * Каталог с фильтрами и сортировкой
+     *
+     * @param array  $request
+     * @param string $slug
+     *
+     * @return array
+     */
+    public function getCatalogWithFilters(array $request, string $slug): array
     {
+        $this->parseRequestFilter($request);
+
         /** @var Category $category */
         $category = $this
             ->categoryRepository
             ->getSingleBySlug($slug);
 
-        //Потомки
+        //Категории-потомки
         $descendants = $this->getDescendants($category);
 
         //Каталог фильтров
-        $catFilter = $this->getFilterCatalog($category);
+        $catFilter = $this->getFilterAttrOfCatalog($category);
 
-        //Фильтры
-        $filterAttributes = $this->getFilterAttributes($request);
+        //Атрибуты для фильтрации
+        $filter = $this->parseRequestFilter($request);
+
+        //Сортировка
+        $sort = $this->getSortableColumns($request);
 
         /** @var LengthAwarePaginator $products */
         $products = $this
             ->productRepository
             ->getProductsByCategoryBuilder($descendants)
-            ->active()                              //Активные
-            ->filterByAttributes($filterAttributes) //Фильтрация по атрибутам
-            ->betweenPrices(                        //Фильтр по ценам
-                Arr::get($request, 'min_price', 0),
-                Arr::get($request, 'max_price', 0),
+            ->active()                                  //Активные
+            ->filterByAttributes($filter['attributes']) //Фильтрация по атрибутам
+            ->betweenPrices(                            //Фильтр по ценам
+                $filter['prices']['min'],
+                $filter['prices']['max'],
+            )
+            ->sortBy(
+                $sort['column'],
+                $sort['direction']
             )
             ->paginate(Product::PAGINATE);
 
         //Минимальная и максимальная цены в выборке
-        $minPrice = (int)$products->min('price');
-        $maxPrice = (int)$products->max('price');
+        $minPrice = 1;
+        $maxPrice = 101;
 
-        return compact('category', 'descendants', 'filterAttributes', 'catFilter', 'minPrice', 'maxPrice', 'products');
+        return compact('category', 'descendants', 'catFilter', 'minPrice', 'maxPrice', 'products');
     }
 
     /**
-     * Потомки
+     * Распарсить фильтры
+     *
+     * @param array $request
+     *
+     * @return array
+     */
+    private function parseRequestFilter(array $request): array
+    {
+        $filter = Arr::get($request, 'filter', '{}');
+        $filter = json_decode($filter, true);
+
+        return [
+            'prices'     => $this->getPrices($filter),
+            'attributes' => $this->getAttributes($filter),
+        ];
+    }
+
+    /**
+     * Диапазон цен из запроса
+     *
+     * @param array $filter
+     *
+     * @return int[]
+     */
+    private function getPrices(array $filter): array
+    {
+        $prices = Arr::get($filter, 'prices', null);
+
+        $range = [
+            'min' => 0,
+            'max' => 0,
+        ];
+
+        if (!$prices) {
+            return $range;
+        }
+
+        $prices = explode('-', $prices);
+
+        if (count($prices) !== 2) {
+            return $range;
+        }
+
+        $range['min'] = (int)$prices[0];
+        $range['max'] = (int)$prices[1];
+
+        return $range;
+    }
+
+    /**
+     * Атрибуты фильтрации из запроса
+     *
+     * @param array $filter
+     *
+     * @return array
+     */
+    private function getAttributes(array $filter): array
+    {
+        $attributes = Arr::get($filter, 'attributes', null);
+
+        return $attributes ? explode(',', $attributes) : [];
+    }
+
+    /**
+     * Сортировка
+     *
+     * @param array $request
+     *
+     * @return array
+     */
+    private function getSortableColumns(array $request): array
+    {
+        $sort = Arr::get($request, 'sort', '{"views":"desc"}');
+        $sort = json_decode($sort, true);
+
+        $key = array_keys($sort)[0];
+
+        return [
+            'column'    => $key,
+            'direction' => $sort[$key],
+        ];
+    }
+
+    /**
+     * Категории-потомки
      *
      * @param Category $category
      *
@@ -82,31 +189,17 @@ class CatalogService
     }
 
     /**
-     * Каталог фильтров
+     * Получить атрибуты фильтров текущей категории
      *
      * @param Category $category
      *
      * @return Collection
      */
-    private function getFilterCatalog(Category $category): Collection
+    private function getFilterAttrOfCatalog(Category $category): Collection
     {
         return $category
             ->attributesWithValues()
             ->where('is_filter', true)
             ->get();
-    }
-
-    /**
-     * Атрибуты для фильтрации
-     *
-     * @param array $request
-     *
-     * @return array
-     */
-    private function getFilterAttributes(array $request): array
-    {
-        return !empty($request['attributes'])
-            ? explode(';', $request['attributes'])
-            : [];
     }
 }

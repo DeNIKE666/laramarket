@@ -15,11 +15,6 @@ class CategoryRepository
         $this->model = $model;
     }
 
-    public function list()
-    {
-
-    }
-
     /**
      * Получить категорию по slug
      *
@@ -29,7 +24,8 @@ class CategoryRepository
      */
     public function getSingleBySlug(string $slug): Category
     {
-        return $this->model
+        return $this
+            ->model
             ->query()
             ->where(compact('slug'))
             ->firstOrFail();

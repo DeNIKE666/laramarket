@@ -112,7 +112,7 @@ class RegisterController extends Controller
         $partner = $this->detectPartner();
 
         return User::create([
-            'partner_id' => $partner->id,
+            'partner_id' => $partner ? $partner->id : null,
             'phone'      => $data['phone'],
             'email'      => $data['email'],
             'password'   => Hash::make($data['password']),
