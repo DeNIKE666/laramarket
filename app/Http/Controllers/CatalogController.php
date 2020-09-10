@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\CatalogService;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class CatalogController extends Controller
 {
@@ -15,7 +16,15 @@ class CatalogController extends Controller
         $this->catalogService = app(CatalogService::class);
     }
 
-    public function index(Request $request, string $slug)
+    /**
+     * Каталог
+     *
+     * @param Request $request
+     * @param string  $slug
+     *
+     * @return View
+     */
+    public function index(Request $request, string $slug):View
     {
         $catalog = $this
             ->catalogService

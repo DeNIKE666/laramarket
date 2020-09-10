@@ -38,17 +38,19 @@
             <div class="lcPageContentData__title">
                 Заявка для продавца
             </div>
-            @switch($user->property->type_shop)
-                @case(\App\Models\User::TYPE1)
-                @include('dashboard.admin.block.seller_type1')
-                @break
-                @case(\App\Models\User::TYPE2)
-                @include('dashboard.admin.block.seller_type2')
-                @break
-                @case(\App\Models\User::TYPE3)
-                @include('dashboard.admin.block.seller_type3')
-                @break
-            @endswitch
+            @if($user->property)
+                @switch($user->property->type_shop)
+                    @case(\App\Models\User::TYPE1)
+                    @include('dashboard.admin.block.seller_type1')
+                    @break
+                    @case(\App\Models\User::TYPE2)
+                    @include('dashboard.admin.block.seller_type2')
+                    @break
+                    @case(\App\Models\User::TYPE3)
+                    @include('dashboard.admin.block.seller_type3')
+                    @break
+                @endswitch
+            @endif
             {{ Form::open(['route' => ['admin.approve-as-seller'], 'method' => 'put', 'class' => 'forms-sample']) }}
             {{ Form::hidden('user_id', $user->id) }}
             <button type="submit" class="btn btn-primary">Разрешить</button>

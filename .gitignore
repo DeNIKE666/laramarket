@@ -1,14 +1,9 @@
 /.idea
-/.phpstorm.meta.php
 /node_modules
+/storage/*.key
 /vendor
 .env
 _ide_helper.php
 _ide_helper_models.php
 .phpstorm.meta.php
-/storage
-<<<<<<<<< Temporary merge branch 1
-/composer.lock
-=========
 composer.lock
->>>>>>>>> Temporary merge branch 2

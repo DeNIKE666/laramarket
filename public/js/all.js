@@ -5988,21 +5988,25 @@ $(function () {
         }
     }); // Сортировка в каталоге
 
-    $('.catalogSort').on('click', function () {
-        $(this).find('.catalogSort__drop').fadeToggle();
-    });
-    $('.catalogSort__drop').hover(function () {}, function () {
-        $('.catalogSort__drop').fadeOut();
-    });
-    $('.catalog').on('click', function () {
-        $('.catalogSort__drop').fadeOut();
-    });
-    $('.catalogSort__drop span').on('click', function () {
-        var oldName = $('.catalogSort>span').html();
-        var newName = $(this).html();
-        $('.catalogSort>span').html(newName);
-        $(this).html(oldName);
-    }); // Фильтр в каталоге
+     $('.catalogSort').on('click', function () {
+         $(this).find('.catalogSort__drop').fadeToggle();
+     });
+     $('.catalogSort__drop').hover(function () {}, function () {
+         $('.catalogSort__drop').fadeOut();
+     });
+     $('.catalog').on('click', function () {
+         $('.catalogSort__drop').fadeOut();
+     });
+     $('.catalogSort__drop span').on('click', function () {
+         const oldName = $('.catalogSort>span').html();
+         const oldVal = $('.catalogSort>span').data('value');
+
+         const newName = $(this).html();
+         const newVal = $(this).data('value');
+
+         $('.catalogSort>span').html(newName).data('value', newVal);
+         $(this).html(oldName).data('value', oldVal);
+     }); // Фильтр в каталоге
 
     $('.catalogFilter__title').on('click', function () {
         $(this).next().slideToggle();
@@ -6014,29 +6018,6 @@ $(function () {
         $(this).parent().find('.catalogFilter__radio div').removeClass('active');
         $(this).find('div').addClass('active');
     }); // Ползунок в фильтре
-
-    let minPrice = $('.filterPrices').data('min');
-    let maxPrice = $('.filterPrices').data("max");
-    let minPriceInp = $('.filterPrice-min').val();
-    let maxPriceInp = $('.filterPrice-max').val();
-
-
-    $('.filterRange').slider({
-        animate: "slow",
-        range: true,
-        values: [minPriceInp, maxPriceInp],
-        step: 1,
-        min: minPrice,
-        max: maxPrice,
-        slide: function slide(event, ui) {
-            var values = ui.values;
-            $("#result-polzunok").text(ui.value);
-            var min = values[0];
-            var max = values[1];
-            $('.filterPrice-min').val(min);
-            $('.filterPrice-max').val(max);
-        }
-    }); // Личный кабинет
 
     $('.lc-btn').on('click', function () {
         $('.lc-menu').fadeIn();

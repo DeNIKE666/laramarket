@@ -30,7 +30,6 @@
             </div>
         </div>
         @each('dashboard.shop.product.block.item_product', $products, 'product')
-        
     </div>
 
 @endsection

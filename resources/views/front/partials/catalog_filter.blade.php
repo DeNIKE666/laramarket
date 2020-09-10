@@ -1,6 +1,5 @@
 <div class="catalogFilter">
     {{ Form::open(['method' => 'get', 'id' => 'filter-form']) }}
-    {{--        <input type="hidden" name="fiter" value="1">--}}
     <div class="catalogFilter__title catalogFilter-xs">
         <span>Фильтр</span>
         <svg
@@ -21,7 +20,7 @@
             </svg>
         </div>
         <div class="catalogFilter__price">
-            <div class="filterPrices" data-min="{{ $minPrice }}" data-max="{{ $maxPrice }}">
+            <div class="filterPrices">
                 <div class="filterPrice">
                     <span>от</span>
                     {{ Form::text('min_price', $minPrice, ['id' => 'filter-price-min', "class" => "filterPrice-min", "onkeyup" => "this.value = this.value.replace(/[^\d]/g,'')"]) }}
@@ -51,13 +50,7 @@
                 @foreach ($filter->children as $child)
                     <div class="catalogFilter__check">
                         <label class="check-inp">
-                            {{
-                                Form::checkbox(
-                                    '',
-                                    $child->id,
-                                    in_array($child->id, $filterAttributes)
-                                )
-                            }}
+                            {{ Form::checkbox('', $child->id) }}
                             <span>{{ $child['value'] }}</span>
                         </label>
                     </div>

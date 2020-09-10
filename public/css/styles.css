@@ -801,10 +801,10 @@ button {
     border             : none;
     outline            : none;
     background         : none;
-    -webkit-transition : 0.5s;
-    -o-transition      : 0.5s;
-    -moz-transition    : 0.5s;
-    transition         : 0.5s;
+    -webkit-transition : 0.25s;
+    -o-transition      : 0.25s;
+    -moz-transition    : 0.25s;
+    transition         : 0.25s;
     font-family        : "Gilroy";
     text-decoration    : none;
     color              : inherit;
@@ -895,12 +895,16 @@ main {
     fill : #fff;
 }
 
+.top__title {
+    margin-top : 30px;
+}
+
 .txt p {
     margin-bottom : 10px;
 }
 
-.top__title {
-    margin-top : 30px;
+.txt li {
+    margin : 5px 0;
 }
 
 .block-4 {
@@ -1246,7 +1250,7 @@ footer {
     font-size     : 16px;
 }
 
-.takingCard__list li {
+.takingCard__list li, .txt li {
     list-style          : none;
     margin-top          : 15px;
     display             : -webkit-box;
@@ -1261,7 +1265,7 @@ footer {
     align-items         : flex-start;
 }
 
-.takingCard__list li::before {
+.takingCard__list li::before, .txt li::before {
     content          : '';
     width            : 10px;
     min-width        : 10px;
@@ -1274,6 +1278,14 @@ footer {
 
 .takingCard__list li:nth-child(1) {
     margin-top : 0;
+}
+
+.txt li {
+    margin-top : 10px;
+}
+
+.txt li::before {
+    margin-top : 6px;
 }
 
 .takingCard__btn {
@@ -1856,7 +1868,7 @@ footer {
     box-shadow              : 0px 0px 5px 0px rgba(90, 84, 255, 0.2);
     border-radius           : 4px;
     background              : #fff;
-    padding                 : 0px 60px 0px;
+    padding                 : 15px 60px;
     -webkit-box-flex        : 1;
     -webkit-flex-grow       : 1;
     -moz-box-flex           : 1;
@@ -1867,7 +1879,7 @@ footer {
 
 .productImg img {
     width      : auto;
-    max-height : 360px;
+    max-height : 330px;
 }
 
 .cartContent__img img {
@@ -2493,7 +2505,7 @@ footer {
     -moz-box-align      : center;
     -ms-flex-align      : center;
     align-items         : center;
-    padding             : 25px 0 50px 0;
+    padding             : 65px 0 65px;
     border-top          : 1px solid #ccc;
 }
 
@@ -2503,12 +2515,12 @@ footer {
 }
 
 .cartAddress__row:first-child {
-    padding    : 25px 0;
+    padding    : 25px 0 65px;
     border-top : none;
 }
 
 .cartAddress__row:last-child {
-    padding : 25px 0;
+    padding : 65px 0 25px;
 }
 
 .cartAddress__icon {
@@ -3319,7 +3331,8 @@ footer {
     right      : 0;
     background : #fff;
     box-shadow : 0px 0px 5px 0px rgba(90, 84, 255, 0.2);
-    padding    : 15px 30px 45px 40px;
+    /*padding    : 15px 30px 45px 40px;*/
+    padding    : 15px 30px 15px 30px;
     display    : none;
 }
 
@@ -3392,7 +3405,7 @@ footer {
 
 .lc__menu a {
     display       : block;
-    color         : #333;
+    /*color         : #333;*/
     font-family   : "Geometria";
     margin-bottom : 15px;
     font-size     : 14px;
@@ -9038,3 +9051,49 @@ select.form-control {
         width : 110px;
     }
 }
+@media (max-width : 440px) {
+    .lcPageContentTop {
+        flex-wrap: wrap;
+    }
+    .lcPageContentTop__btn {
+        width: 100%;
+        margin-bottom: 5px;
+    }
+}
+
+.select-css {
+    display: block;
+    font-size: 12px;
+    font-family: "Geometria";
+    color: #999;
+    line-height: 18px;
+    padding: 10px 20px 10px 10px;
+    width: 238px;
+    box-sizing: border-box;
+    margin: 0;
+    border: none;
+    border-radius: 3px;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    background-color: #fff;
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212px%22%20height%3D%226px%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%3Cpath%20fill-rule%3D%22evenodd%22%20fill%3D%22rgb(153%2C%20153%2C%20153)%22%20d%3D%22M-0.000%2C-0.000%20L12.000%2C-0.000%20L6.000%2C6.000%20L-0.000%2C-0.000%20Z%22%3E%3C%2Fpath%3E%0A%20%20%20%20%20%20%20%20%3C%2Fsvg%3E');
+    background-repeat: no-repeat, repeat;
+    background-position: right 10px top 50%, 0 0;
+    background-size: 12px auto, 100%;
+}
+.select-css option {
+    font-size: 12px;
+    font-family: "Geometria";
+    color: #999;
+    line-height: 20px;
+}
+
+.select-css::-ms-expand { display: none; }
+.select-css:hover { border: none; }
+.select-css:focus {
+    border: none;
+    box-shadow: none;
+    outline: none;
+}
+.select-css option { font-weight:normal; }

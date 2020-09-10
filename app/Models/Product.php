@@ -51,6 +51,12 @@ class Product extends Model implements HasMedia
         'status',
     ];
 
+    protected $sortable = [
+        'id',
+        'views',
+        'price',
+    ];
+
     public function author()
     {
         return $this->belongsTo(User::class, 'user_id');
@@ -276,15 +282,30 @@ class Product extends Model implements HasMedia
      * @return Builder
      * @author Anton Reviakin
      */
-    public function scopeBetweenPrices(Builder $builder, float $min = 0, float $max = 0): Builder
+    public function scopeBetweenPrices(Builder $builder, int $min = 0, int $max = 0): Builder
     {
-        if ($min < 0 or $max < 0
-            or $max < 0.01
-            or $max < $min
-        ) {
+        if ($min === 0 or $max === 0 or $max < $min) {
             return $builder;
         }
 
         return $builder->whereBetween('price', [$min, $max]);
+    }
+
+    /**
+     * Сортировка по полю
+     *
+     * @param Builder $builder
+     * @param string  $column
+     * @param string  $dir
+     *
+     * @return Builder
+     */
+    public function scopeSortBy(Builder $builder, string $column, string $dir = 'asc')
+    {
+        if (!in_array($dir, ['asc', 'desc']) or !in_array($column, $this->sortable)) {
+            return $builder;
+        }
+
+        return $builder->orderBy($column, $dir);
     }
 }
