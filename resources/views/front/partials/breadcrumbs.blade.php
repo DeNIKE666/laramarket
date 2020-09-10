@@ -8,7 +8,7 @@
         <div class="bc">
             @foreach ($breadcrumbs as $breadcrumb)
                 @if ($breadcrumb->url && !$loop->last)
-                    <a href="">{{ $breadcrumb->title }}</a>
+                    <a href="{{ $breadcrumb->url }}">{{ $breadcrumb->title }}</a>
                     <span>></span>
                 @else
                     <a class="active">{{ $breadcrumb->title }}</a>

@@ -2,6 +2,12 @@
     <span>
         Сортировать по:
     </span>
+    <select name="sort" class="select-css" id="catalogSort">
+        <option value="views_desc">По популярности</option>
+        <option value="price_desc">От дорогих к дешевым</option>
+        <option value="price_asc">От дешевых к дорогим</option>
+    </select>
+    {{--
     <div class="catalogSort" id="catalogSort">
         <span></span>
         <svg
@@ -23,4 +29,5 @@
             </span>
         </div>
     </div>
+    --}}
 </div>

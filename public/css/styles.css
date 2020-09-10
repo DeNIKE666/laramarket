@@ -1868,7 +1868,7 @@ footer {
     box-shadow              : 0px 0px 5px 0px rgba(90, 84, 255, 0.2);
     border-radius           : 4px;
     background              : #fff;
-    padding                 : 0px 60px 0px;
+    padding                 : 15px 60px;
     -webkit-box-flex        : 1;
     -webkit-flex-grow       : 1;
     -moz-box-flex           : 1;
@@ -1879,7 +1879,7 @@ footer {
 
 .productImg img {
     width      : auto;
-    max-height : 360px;
+    max-height : 330px;
 }
 
 .cartContent__img img {
@@ -9051,3 +9051,49 @@ select.form-control {
         width : 110px;
     }
 }
+@media (max-width : 440px) {
+    .lcPageContentTop {
+        flex-wrap: wrap;
+    }
+    .lcPageContentTop__btn {
+        width: 100%;
+        margin-bottom: 5px;
+    }
+}
+
+.select-css {
+    display: block;
+    font-size: 12px;
+    font-family: "Geometria";
+    color: #999;
+    line-height: 18px;
+    padding: 10px 20px 10px 10px;
+    width: 238px;
+    box-sizing: border-box;
+    margin: 0;
+    border: none;
+    border-radius: 3px;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    background-color: #fff;
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212px%22%20height%3D%226px%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%3Cpath%20fill-rule%3D%22evenodd%22%20fill%3D%22rgb(153%2C%20153%2C%20153)%22%20d%3D%22M-0.000%2C-0.000%20L12.000%2C-0.000%20L6.000%2C6.000%20L-0.000%2C-0.000%20Z%22%3E%3C%2Fpath%3E%0A%20%20%20%20%20%20%20%20%3C%2Fsvg%3E');
+    background-repeat: no-repeat, repeat;
+    background-position: right 10px top 50%, 0 0;
+    background-size: 12px auto, 100%;
+}
+.select-css option {
+    font-size: 12px;
+    font-family: "Geometria";
+    color: #999;
+    line-height: 20px;
+}
+
+.select-css::-ms-expand { display: none; }
+.select-css:hover { border: none; }
+.select-css:focus {
+    border: none;
+    box-shadow: none;
+    outline: none;
+}
+.select-css option { font-weight:normal; }

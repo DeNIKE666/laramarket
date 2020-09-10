@@ -5988,25 +5988,25 @@ $(function () {
         }
     }); // Сортировка в каталоге
 
-    // $('.catalogSort').on('click', function () {
-    //     $(this).find('.catalogSort__drop').fadeToggle();
-    // });
-    // $('.catalogSort__drop').hover(function () {}, function () {
-    //     $('.catalogSort__drop').fadeOut();
-    // });
-    // $('.catalog').on('click', function () {
-    //     $('.catalogSort__drop').fadeOut();
-    // });
-    // $('.catalogSort__drop span').on('click', function () {
-    //     const oldName = $('.catalogSort>span').html();
-    //     const oldVal = $('.catalogSort>span').data('value');
-    //
-    //     const newName = $(this).html();
-    //     const newVal = $(this).data('value');
-    //
-    //     $('.catalogSort>span').html(newName).data('value', newVal);
-    //     $(this).html(oldName).data('value', oldVal);
-    // }); // Фильтр в каталоге
+     $('.catalogSort').on('click', function () {
+         $(this).find('.catalogSort__drop').fadeToggle();
+     });
+     $('.catalogSort__drop').hover(function () {}, function () {
+         $('.catalogSort__drop').fadeOut();
+     });
+     $('.catalog').on('click', function () {
+         $('.catalogSort__drop').fadeOut();
+     });
+     $('.catalogSort__drop span').on('click', function () {
+         const oldName = $('.catalogSort>span').html();
+         const oldVal = $('.catalogSort>span').data('value');
+
+         const newName = $(this).html();
+         const newVal = $(this).data('value');
+
+         $('.catalogSort>span').html(newName).data('value', newVal);
+         $(this).html(oldName).data('value', oldVal);
+     }); // Фильтр в каталоге
 
     $('.catalogFilter__title').on('click', function () {
         $(this).next().slideToggle();
