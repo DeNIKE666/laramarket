@@ -1,7 +1,14 @@
+@php
+/** @var \Illuminate\Support\Collection $depositings */
+/** @var \App\Models\PaymentOption $depositing */
+
+/** @var \Illuminate\Support\Collection $withdrawals */
+/** @var \App\Models\PaymentOption $withdrawal */
+@endphp
+
 @extends('layouts.admin')
 
 @section('content')
-
     @push('styles')
         <link href="{{ asset('css/common.css') }}" rel="stylesheet">
     @endpush
@@ -39,27 +46,27 @@
             </button>
         </div>
         <div id="payin" class="lcPageContentPayMiddle">
-            @foreach ($refills as $k=>$refill)
+            @foreach ($depositings as $k => $depositing)
                 <div class="payinMethods lcPageContentPayMiddle__item @if($k == 0) lcPageContentPayMiddle__item-active @endif">
                     <div class="lcPageContentPayMiddle__check ">
                     <span>
                     </span>
                         <input
                                 name="payinMethod"
-                                data-id="{{ $refill->id }}"
+                                data-id="{{ $depositing->id }}"
                                 type="radio"
-                                value="{{ $refill->title }}"
-                                data-percent="{{ $refill->depositeMoney }}"
+                                value="{{ $depositing->title }}"
+                                data-percent="{{ $depositing->depositeMoney }}"
                                 @if($k == 0) checked @endif
                         />
                     </div>
                     <div class="lcPageContentPayMiddle__inf" data-modal="#modal3">
-                        {{ $refill->title }}
-                        <span>Комиссия {{ $refill->depositeMoney * 100 }}%</span>
+                        {{ $depositing->title }}
+                        <span>Комиссия {{ $depositing->depositeMoney * 100 }}%</span>
                     </div>
-                    @if($refill->ico != '')
+                    @if($depositing->icon != '')
                         <div class="lcPageContentPayMiddle__img">
-                            <img src="{{ asset($refill->ico) }}" alt="">
+                            <img src="{{ asset($depositing->icon) }}" alt="">
                         </div>
                     @endif
                 </div>
@@ -93,7 +100,7 @@
             </div>
 
             <div id="payout" class="lcPageContentPayMiddle">
-                @foreach ($withdrawals as $k=>$withdrawal)
+                @foreach ($withdrawals as $k => $withdrawal)
                     <div class="payoutMethods lcPageContentPayMiddle__item @if($k == 0) lcPageContentPayMiddle__item-active @endif">
                         <div class="lcPageContentPayMiddle__check ">
                     <span>
@@ -111,9 +118,9 @@
                             {{ $withdrawal->title }}
                             <span>Комиссия {{ $withdrawal->withdrawMoney * 100 }}%</span>
                         </div>
-                        @if($withdrawal->ico != '')
+                        @if($withdrawal->icon != '')
                             <div class="lcPageContentPayMiddle__img">
-                                <img src="{{ asset($withdrawal->ico) }}" alt="">
+                                <img src="{{ asset($withdrawal->icon) }}" alt="">
                             </div>
                         @endif
                     </div>
@@ -391,11 +398,11 @@
                 Пополнение<br/>
                 банковские карты
             </div>
-            <form id="cardform" name="cardform" action="{{ route('buyer.finance.deposit.visa') }}" method="POST" class="cartBlockPay">
+            <form id="cardform" name="cardform" action="{{ route('buyer.finance.deposit_via_card') }}" method="POST" class="cartBlockPay">
                 <div class="cardform__row">
                     <div class="cardform__row__col1">
                         <label for="card">Номер карты</label>
-                        <input type="text" class="input-card-full" name="card" id="card" placeholder="2222 2222 2222 2222">
+                        <input type="text" class="input-card-full" name="card" id="card" placeholder="0000 0000 0000 0000">
                     </div>
                 </div>
 
@@ -410,9 +417,10 @@
                     </div>
                     <div class="cardform__row__col2">
                         <label for="cvv">cvv</label>
-                        <input type="text" class="input-card-full" placeholder="cvv" maxlength="3" name="cvv" id="cvv">
+                        <input type="password" class="input-card-full" placeholder="cvv" maxlength="3" name="cvv" id="cvv">
                     </div>
                     <input type="hidden" id="payinAmount" name="amount">
+                    <input type="hidden" id="paySystem" name="pay_system">
                 </div>
                 <div class="cardform__foot">
                     <button class="btn lcPageMenu__btn form-submit " id="pay_button">Пополнить счёт</button>

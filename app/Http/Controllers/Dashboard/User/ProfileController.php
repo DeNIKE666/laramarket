@@ -87,35 +87,6 @@ class ProfileController extends Controller
         return redirect()->route('buyer.profile.edit')->with('status', 'Заявка отправлена');
     }
 
-    /**
-     * Изменить статус заказа
-     *
-     * @param OrderChangeStatusRequest $request
-     *
-     * @return Response
-     *
-     * @author Anton Reviakin
-     */
-    public function changeStatus(OrderChangeStatusRequest $request): Response
-    {
-        $order = $this->orderChangeStatusService->changeStatus($request);
-
-        if ($order->status === Order::ORDER_STATUS_RECEIVED) {
-            $CashbackService = new CashbackService();
-
-            //Статус "Идут выплаты"
-            $CashbackService->setInProgressStatus($order);
-
-            //Период выплат
-            $CashbackService->setPayoutsPeriod($order);
-
-            //Заполнить расписание выплат кэшбэка
-            (new CashbackScheduleService())->fill($order);
-        }
-
-        return response($order, Response::HTTP_OK);
-    }
-
     public function historyOrder()
     {
         dd(__METHOD__);

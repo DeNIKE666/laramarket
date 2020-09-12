@@ -15,7 +15,7 @@ class CreatePaymentSchedulesTable extends Migration
     {
         Schema::create('payment_schedules', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('percent');
+            $table->unsignedTinyInteger('percent');
             $table->integer('quantity_pay_every_month');
             $table->integer('quantity_pay_each_quarter');
             $table->integer('quantity_pay_every_six_months');

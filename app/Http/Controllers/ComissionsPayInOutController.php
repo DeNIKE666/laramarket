@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Payments\InOutRequest;
-use App\Services\Payments\ComissionsService;
+use App\Services\Payments\CommissionsService;
 use Illuminate\Http\Response;
 
 class ComissionsPayInOutController extends Controller
@@ -17,12 +17,15 @@ class ComissionsPayInOutController extends Controller
      */
     public function getPayinFee(InOutRequest $request): Response
     {
-        $amount = (new ComissionsService())
-            ->method($request->input('method'))
-            ->amount($request->input('amount'))
-            ->payinComission($request->input('is_total_amount'));
+        $paySystem = $request->input('method');
 
-        return response(compact('amount', Response::HTTP_OK));
+        $withPaySystem = (new CommissionsService())->paySystem($paySystem);
+
+        $amount = $request->input('is_total_amount')
+            ? $withPaySystem->depositWithoutCommission($request->input('amount'))
+            : $withPaySystem->depositWithCommission($request->input('amount'));
+
+        return response(compact('amount', 'paySystem'), Response::HTTP_OK);
     }
 
     /**
@@ -34,11 +37,14 @@ class ComissionsPayInOutController extends Controller
      */
     public function getPayoutFee(InOutRequest $request)
     {
-        $amount = (new ComissionsService())
-            ->method($request->input('method'))
-            ->amount($request->input('amount'))
-            ->payoutComission($request->input('is_total_amount'));
+        $paySystem = $request->input('method');
 
-        return response(compact('amount', Response::HTTP_OK));
+        $withPaySystem = (new CommissionsService())->paySystem($paySystem);
+
+        $amount = $request->input('is_total_amount')
+            ? $withPaySystem->withdrawWithoutCommission($request->input('amount'))
+            : $withPaySystem->withdrawWithCommission($request->input('amount'));
+
+        return response(compact('amount', 'paySystem'), Response::HTTP_OK);
     }
 }

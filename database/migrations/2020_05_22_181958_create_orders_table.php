@@ -21,14 +21,7 @@ class CreateOrdersTable extends Migration
 
             $table->unsignedDecimal('cost');
 
-            $table
-                ->enum('payment_method', [
-                    'internal_personal',
-                    'visa',
-                    'mastercard',
-                    'webmoney'
-                ])
-            ->comment('Способ оплаты');
+            $table->unsignedBigInteger('pay_system');
 
             $table
                 ->enum('delivery_service', [
@@ -49,6 +42,7 @@ class CreateOrdersTable extends Migration
             $table->softDeletes();
             $table->timestamps();
 
+            $table->foreign('pay_system')->references('id')->on('payment_options');
             $table->foreign('delivery_profile_id')->references('id')->on('orders_delivery_profiles');
         });
     }

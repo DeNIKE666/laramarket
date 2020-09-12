@@ -17,6 +17,13 @@ class PersonalHistoryAccountRepository
         $this->model = $personalHistoryAccount;
     }
 
+    public function store(array $item): PersonalHistoryAccount
+    {
+        return $this
+            ->model
+            ->create($item);
+    }
+
     /**
      * История движения финансов
      *
@@ -27,7 +34,8 @@ class PersonalHistoryAccountRepository
      */
     public function historyByUser(int $userId, array $sort = ['id', 'asc']): LengthAwarePaginator
     {
-        return $this->model
+        return $this
+            ->model
             ->query()
             ->with('paySystem')
             ->where('user_id', $userId)

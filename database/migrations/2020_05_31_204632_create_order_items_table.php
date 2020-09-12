@@ -16,17 +16,22 @@ class CreateOrderItemsTable extends Migration
         Schema::create('order_items', function (Blueprint $table) {
             $table->bigIncrements('id');
 
-            $table->unsignedBigInteger('order_id')->index();
-            $table->unsignedBigInteger('product_id')->index();
+            $table->unsignedBigInteger('order_id');
+            $table->unsignedBigInteger('product_id');
             $table->unsignedInteger('quantity');
-            $table->unsignedInteger('price');
+            $table->unsignedDecimal('price');
 
-            $table->unsignedInteger('product_percent_fee')
+            $table->unsignedDecimal('product_percent_fee')
                 ->default(0)
                 ->comment('Зафиксированный % комиссии за товар');
 
-            $table->date('delivery_date')->nullable();
-            $table->string('status')->nullable();
+            $table
+                ->date('delivery_date')
+                ->nullable();
+            $table
+                ->string('status')
+                ->nullable();
+
             $table->foreign('order_id')->references('id')->on('orders');
             $table->foreign('product_id')->references('id')->on('products');
 

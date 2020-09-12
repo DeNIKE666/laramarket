@@ -2,7 +2,7 @@
     <link rel="stylesheet" href="{{ asset('css/common.css') }}">
 @endpush
 
-<form id="cardform" name="cardform" action="{{ route('buyer.checkout.pay-via-card', $order) }}" method="POST"  class="cartBlock cartAddress">
+<form id="cardform" name="cardform" action="{{ route('buyer.order.pay_via_card', $order) }}" method="POST"  class="cartBlock cartAddress">
     <input type="text" class="input-card-full"  name="card" id="card"  placeholder="2222 2222 2222 2222">
     <input type="text" class="input-card-full"  name="month" id="month" placeholder="Месяц" maxlength="2">
     <input type="text" class="input-card-full" placeholder="Год" maxlength="2" name="year" id="year">

@@ -2,39 +2,37 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class PaymentOption extends Model
 {
     protected $fillable = [
         'title',
-        'ico',
+        'icon',
+        'is_purchasing',
+        'purchasing_fee',
         'is_refill',
-        'is_withdrawal',
-        'sort',
         'depositeMoney',
-        'withdrawMoney'
+        'is_withdrawal',
+        'withdrawMoney',
+        'sort',
     ];
 
     public $timestamps = false;
 
-    public function scopeRefill($query) {
-        return $this->where('is_refill', 1)->orderBy("sort", "asc");
-    }
-
-    public static function getPaymentsRefill()
+    public function scopePurchasing(Builder $builder): Builder
     {
-        return PaymentOption::Refill()->get();
+        return $builder->where('is_purchasing', true);
     }
 
-    public function scopeWithdrawal($query) {
-        return $this->where('is_withdrawal', 1)->orderBy("sort", "asc");
-    }
-
-    public static function getPaymentWithdrawal()
+    public function scopeDepositing(Builder $builder): Builder
     {
-        return PaymentOption::Withdrawal()->get();
+        return $builder->where('is_refill', true);
     }
 
-
+    public function scopeWithdrawal(Builder $builder): Builder
+    {
+        return $builder->where('is_withdrawal', true);
+    }
 }

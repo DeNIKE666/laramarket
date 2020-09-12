@@ -46,12 +46,14 @@ class AddOrderService
             'user_id'             => auth()->user()->id,
             'delivery_profile_id' => $deliveryProfileId,
             'cost'                => Cart::getSubTotal(false),
-            'payment_method'      => $request['payment_method'],
+            'pay_system'          => $request['pay_system'],
             'delivery_service'    => $request['delivery_service'],
             'status'              => Order::ORDER_STATUS_NEW,
         ];
 
-        $order = $this->orderRepository->store($order);
+        $order = $this
+            ->orderRepository
+            ->store($order);
 
         $this->storeOrderItems($order);
 

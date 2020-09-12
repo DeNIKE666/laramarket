@@ -7,7 +7,6 @@ namespace App\Services\Cashback;
 use App\Models\Cashback;
 use App\Models\Order;
 use App\Repositories\CashbackRepository;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class CashbackService
@@ -28,32 +27,36 @@ class CashbackService
      */
     public function storeCashback(Order $order): Cashback
     {
-        return $this->cashbackRepository->store(
-            $order->user_id,
-            $order->id,
-            $order->cost,
-            Cashback::STATUS_WAIT_FOR_RECEIVE
-        );
+        return $this
+            ->cashbackRepository
+            ->store(
+                $order->user_id,
+                $order->id,
+                $order->cost,
+                Cashback::STATUS_WAIT_FOR_RECEIVE
+            );
     }
 
     /**
      * Установить период выплат в кэшбэке
      *
-     * @param Request $request
-     * @param Order   $order
+     * @param Order $order
+     * @param int   $period
      *
      * @return bool
      */
-    public function setPayoutsPeriod(Order $order): bool
+    public function setPayoutsPeriod(Order $order, int $period): bool
     {
-        if (!$this->periodExist()) {
+        if (!$this->periodExist($period)) {
             abort(Response::HTTP_UNPROCESSABLE_ENTITY, 'Не правильный период выплат');
         }
 
-        return $this->cashbackRepository->setPayoutsPeriod(
-            $order->id,
-            request('period')
-        );
+        return $this
+            ->cashbackRepository
+            ->setPayoutsPeriod(
+                $order->id,
+                $period
+            );
     }
 
     /**
@@ -63,20 +66,24 @@ class CashbackService
      *
      * @return bool
      */
-    public function setInProgressStatus(Order $order):bool
+    public function setInProgressStatus(Order $order): bool
     {
-        return $this->cashbackRepository->setPayoutsStatus(
-            $order->id,
-            Cashback::STATUS_PAYOUTS_IN_PROGRESS
-        );
+        return $this
+            ->cashbackRepository
+            ->setPayoutsStatus(
+                $order->id,
+                Cashback::STATUS_PAYOUTS_IN_PROGRESS
+            );
     }
 
     /**
      * Существует ли период
      *
+     * @param int $period
+     *
      * @return bool
      */
-    private function periodExist(): bool
+    private function periodExist(int $period): bool
     {
         $periods = [
             Cashback::PERIOD_EVERY_MONTH,
@@ -85,6 +92,6 @@ class CashbackService
             Cashback::PERIOD_SINGLE,
         ];
 
-        return in_array(request('period'), $periods);
+        return in_array($period, $periods);
     }
 }
