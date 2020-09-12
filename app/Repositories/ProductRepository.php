@@ -3,7 +3,6 @@
 namespace App\Repositories;
 
 use App\Models\Product;
-use App\Models\ProductAttribute;
 use Illuminate\Database\Eloquent\Builder;
 
 class ProductRepository
@@ -13,26 +12,31 @@ class ProductRepository
 
     public function __construct(Product $model)
     {
-//        parent::__construct($model);
         $this->model = $model;
     }
 
     /**
+     * Получить продукт по id
+     *
      * @param int $id
      *
-     * @return mixed
-     * @throws ModelNotFoundException
+     * @return Product
      */
-    public function findProductById(int $id)
+    public function findProductById(int $id): Product
     {
-        try {
-            return \Cache::remember('product_id_' . $id, 3600, function () use ($id) {
-                return $this->findOneOrFail($id);
-            });
-        } catch (ModelNotFoundException $e) {
-            throw new ModelNotFoundException($e);
-        }
+        return $this
+            ->model
+            ->query()
+            ->where('id', $id)
+            ->firstOrFail();
 
+//        try {
+//            return \Cache::remember('product_id_' . $id, 3600, function () use ($id) {
+//                return $this->findOneOrFail($id);
+//            });
+//        } catch (ModelNotFoundException $e) {
+//            throw new ModelNotFoundException($e);
+//        }
     }
 
     /**

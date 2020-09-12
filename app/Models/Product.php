@@ -245,10 +245,17 @@ class Product extends Model implements HasMedia
                 ->toArray();
         });
     }
-
-    public function scopeActive($query)
+    
+    /**
+     * Активные товары
+     *
+     * @param Builder $builder
+     *
+     * @return Builder
+     */
+    public function scopeActive(Builder $builder): Builder
     {
-        return $query->where('status', 'active');
+        return $builder->where('status', 'active');
     }
 
     /**

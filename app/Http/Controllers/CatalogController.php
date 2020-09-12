@@ -24,7 +24,7 @@ class CatalogController extends Controller
      *
      * @return View
      */
-    public function index(Request $request, string $slug):View
+    public function index(Request $request, string $slug): View
     {
         $catalog = $this
             ->catalogService
