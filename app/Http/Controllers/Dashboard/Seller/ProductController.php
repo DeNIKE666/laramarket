@@ -3,13 +3,14 @@
 namespace App\Http\Controllers\Dashboard\Seller;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Auth;
-use App\Models\Product;
 use App\Models\Category;
-use Gate;
-use App\Traits\UniqueModelSlug;
+use App\Models\Product;
 use App\Models\ProductAttribute;
+use App\Repositories\ProductRepository;
+use App\Traits\UniqueModelSlug;
+use Auth;
+use Gate;
+use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
@@ -36,14 +37,14 @@ class ProductController extends Controller
     {
         $categories = Category::getAllCategory();
 
-
         return view('dashboard.shop.product.create', compact('categories'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -51,42 +52,42 @@ class ProductController extends Controller
         //dd($request['attribute']);
 
         $this->validate($request, [
-            'title' => 'required|string|max:255',
-            'category_id' => 'required|integer',
+            'title'         => 'required|string|max:255',
+            'category_id'   => 'required|integer',
             'part_cashback' => 'required|integer',
-            'price' => 'required|regex:/^\d+(\.\d{1,2})?$/',
-            'old_price' => 'nullable|regex:/^\d+(\.\d{1,2})?$/',
+            'price'         => 'required|regex:/^\d+(\.\d{1,2})?$/',
+            'old_price'     => 'nullable|regex:/^\d+(\.\d{1,2})?$/',
             'group_product' => 'required',
             //'image' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
         ]);
 
         $data = [
-                    'title' => $request['title'],
-                    'category_id' => $request['category_id'],
-                    'content' => $request['content'],
-                    'price' => $request['price'],
-                    'old_price' => $request['old_price'],
-                    'group_product' => $request['group_product'],
-                    'brand' => $request['brand'],
-                    'part_cashback' => $request['part_cashback'],
-                    'status' => Product::STATUS_PRODUCT_ACTIVE,
-                    'user_id' => Auth::user()->id,
-                    'slug' => $this->generateSlug(
-                        Product::class,
-                        $request['title']
-                    )
-                ];
+            'title'         => $request['title'],
+            'category_id'   => $request['category_id'],
+            'content'       => $request['content'],
+            'price'         => $request['price'],
+            'old_price'     => $request['old_price'],
+            'group_product' => $request['group_product'],
+            'brand'         => $request['brand'],
+            'part_cashback' => $request['part_cashback'],
+            'status'        => Product::STATUS_PRODUCT_ACTIVE,
+            'user_id'       => Auth::user()->id,
+            'slug'          => $this->generateSlug(
+                Product::class,
+                $request['title']
+            ),
+        ];
         //dd($request['gallery']);
         $product = Product::create($data);
 
 
         if (isset($request['attribute'])) {
-            foreach ($request['attribute'] as $attribute_id=>$attribute_value) {
-                if($attribute_value != '') {
+            foreach ($request['attribute'] as $attribute_id => $attribute_value) {
+                if ($attribute_value != '') {
                     $dataAttr = [
-                        'product_id' => $product->id,
+                        'product_id'   => $product->id,
                         'attribute_id' => $attribute_id,
-                        'value' => $attribute_value
+                        'value'        => $attribute_value,
                     ];
                     ProductAttribute::add($dataAttr);
                 }
@@ -113,7 +114,8 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -124,7 +126,8 @@ class ProductController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -134,9 +137,9 @@ class ProductController extends Controller
         $categories = Category::getAllCategory();
         $gallery = [];
         if ($product->getGallery()) {
-            foreach($product->getGallery() as $gal) {
+            foreach ($product->getGallery() as $gal) {
                 $src = ['thumbnail' => $gal->getUrl()];
-                $gallery[] =  array_merge($gal->toArray(), $src);
+                $gallery[] = array_merge($gal->toArray(), $src);
             }
         }
 
@@ -148,8 +151,9 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int                      $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Product $product)
@@ -158,33 +162,33 @@ class ProductController extends Controller
 
 
         $this->validate($request, [
-            'title' => 'required|string|max:255',
-            'category_id' => 'required|integer',
-            'price' => 'required|regex:/^\d+(\.\d{1,2})?$/',
-            'old_price' => 'nullable|regex:/^\d+(\.\d{1,2})?$/',
+            'title'         => 'required|string|max:255',
+            'category_id'   => 'required|integer',
+            'price'         => 'required|regex:/^\d+(\.\d{1,2})?$/',
+            'old_price'     => 'nullable|regex:/^\d+(\.\d{1,2})?$/',
             'group_product' => 'required',
             //'image' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
         ]);
 
         $data = [
-            'title' => $request['title'],
-            'category_id' => $request['category_id'],
-            'content' => $request['content'],
-            'price' => $request['price'],
-            'old_price' => $request['old_price'],
+            'title'         => $request['title'],
+            'category_id'   => $request['category_id'],
+            'content'       => $request['content'],
+            'price'         => $request['price'],
+            'old_price'     => $request['old_price'],
             'group_product' => $request['group_product'],
-            'brand' => $request['brand'],
-            'status' => Product::STATUS_PRODUCT_ACTIVE,
+            'brand'         => $request['brand'],
+            'status'        => Product::STATUS_PRODUCT_ACTIVE,
         ];
 
         ProductAttribute::where('product_id', $product->id)->delete();
         if (isset($request['attribute'])) {
-            foreach ($request['attribute'] as $attribute_id=>$attribute_value) {
-                if($attribute_value != '') {
+            foreach ($request['attribute'] as $attribute_id => $attribute_value) {
+                if ($attribute_value != '') {
                     $dataAttr = [
-                        'product_id' => $product->id,
+                        'product_id'   => $product->id,
                         'attribute_id' => $attribute_id,
-                        'value' => $attribute_value
+                        'value'        => $attribute_value,
                     ];
                     ProductAttribute::add($dataAttr);
                 }
@@ -210,7 +214,8 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -221,22 +226,11 @@ class ProductController extends Controller
         return redirect()->back()->with('status', 'продукт удален');
     }
 
-    public function changeDelete(Request $request)
+    public function getAttributeProduct(Request $request)
     {
-        if (!empty($request->ids)) {
-            $products = Product::whereIn('id', $request->ids)->where('user_id', auth()->user()->id)->get();
-            if (count($products) > 0) {
-                foreach ($products as $product) {
-                    $product->delete();
-                }
-            }
-        }
-    }
-
-    public function getAttributeProduct(Request $request) {
         $attributes = Category::findOrFail($request->input('category_id'))->attributes->all();
 
-        if($request->input('id')) {
+        if ($request->input('id')) {
             $product = Product::findOrFail($request->input('id'));
             $productAttr = ProductAttribute::where('product_id', $product->id)->pluck('value', 'attribute_id');
         } else {
@@ -245,50 +239,57 @@ class ProductController extends Controller
 
         $returnHTML = view("dashboard.shop.product.attributes", compact('attributes', 'productAttr'))->render();
         $resArray = [
-            'msg'=> "ok",
-            'returnHTML' => $returnHTML,
-            'attributes' => $attributes,
-            'productAttr' => $productAttr
+            'msg'         => "ok",
+            'returnHTML'  => $returnHTML,
+            'attributes'  => $attributes,
+            'productAttr' => $productAttr,
         ];
         return response()->json($resArray, 200);
     }
 
-    public function changeStatus(string $status, Request $request)
+    /**
+     * Изменить статусы отмеченным товарам
+     *
+     * @param Request $request
+     * @param string  $status
+     *
+     * @return int
+     */
+    public function changeStatusForChecked(Request $request, string $status)
     {
-        if (!empty($request->ids)) {
-            $products = Product::whereIn('id', $request->ids)->where('user_id', auth()->user()->id)->get();
-            if (count($products) > 0) {
-               foreach ($products as $product) {
-                   switch ($status) {
-                       case 'activate':
-                           $product->setPublic();
-                           break;
-                       case 'disable':
-                           $product->setDraft();
-                           break;
-                   }
-               }
-            }
-        }
-        //dump($status);
+        return app(ProductRepository::class)->changeStatusBatchByUser(
+            auth()->user()->id,
+            $status,
+            $request->input('products')
+        );
     }
 
-    public function changeStatusAll(string $status, Request $request)
+    /**
+     * Изменить статусы всем товарам
+     *
+     * @param Request $request
+     * @param string  $status
+     *
+     * @return int
+     */
+    public function changeStatusForAll(Request $request, string $status)
     {
-        $products = Product::where('user_id', auth()->user()->id)->get();
-        if (count($products) > 0) {
-            foreach ($products as $product) {
-                switch ($status) {
-                    case 'activate':
-                        $product->setPublic();
-                        break;
-                    case 'disable':
-                        $product->setDraft();
-                        break;
-                }
-            }
-            return redirect()->back()->with('status', 'изменения сохранены');
-        }
-        return redirect()->back();
+        return app(ProductRepository::class)->changeStatusBatchByUser(
+            auth()->user()->id,
+            $status
+        );
+    }
+
+    /**
+     * Удалить отмеченные товары
+     *
+     * @param Request $request
+     */
+    public function destroyForChecked(Request $request)
+    {
+        return app(ProductRepository::class)->destroyBatchByUser(
+            auth()->user()->id,
+            $request->input('products')
+        );
     }
 }

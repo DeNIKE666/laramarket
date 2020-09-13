@@ -21,6 +21,8 @@ class ProductRepository
      * @param int $id
      *
      * @return Product
+     *
+     * @author Anton Reviakin
      */
     public function findProductById(int $id): Product
     {
@@ -37,6 +39,58 @@ class ProductRepository
 //        } catch (ModelNotFoundException $e) {
 //            throw new ModelNotFoundException($e);
 //        }
+    }
+
+    /**
+     * Обновить статусы товаров
+     *
+     * @param int    $userId
+     * @param string $status
+     * @param array  $ids
+     *
+     * @return int
+     *
+     * @author Anton Reviakin
+     */
+    public function changeStatusBatchByUser(int $userId, string $status, array $ids = []): int
+    {
+        $query = $this
+            ->model
+            ->query()
+            ->where('user_id', $userId);
+
+        //По определенным id
+        if (!empty($ids)) {
+            $query->whereIn('id', $ids);
+        }
+
+        return $query->update(compact('status'));
+    }
+
+    /**
+     * Удалить товары
+     *
+     * @param int   $userId
+     * @param array $ids
+     *
+     * @return bool|mixed|null
+     * @throws \Exception
+     *
+     * @author Anton Reviakin
+     */
+    public function destroyBatchByUser(int $userId, array $ids = []): ?bool
+    {
+        $query = $this
+            ->model
+            ->query()
+            ->where('user_id', $userId);
+
+        //По определенным id
+        if (!empty($ids)) {
+            $query->whereIn('id', $ids);
+        }
+
+        return $query->delete();
     }
 
     /**

@@ -6,13 +6,14 @@ use Auth;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Spatie\MediaLibrary\Models\Media;
 
 class Product extends Model implements HasMedia
 {
-    use HasMediaTrait;
+    use HasMediaTrait, SoftDeletes;
 
     /**
      * Список статусов
@@ -106,7 +107,6 @@ class Product extends Model implements HasMedia
         $this->delete();
     }
 
-
     public function setCategory($id)
     {
         if ($id == null) {
@@ -115,27 +115,6 @@ class Product extends Model implements HasMedia
         $this->category_id = $id;
         $this->save();
     }
-
-    public function setDraft()
-    {
-        $this->status = Product::STATUS_PRODUCT_DRAW;
-        $this->save();
-    }
-
-    public function setPublic()
-    {
-        $this->status = Product::STATUS_PRODUCT_ACTIVE;
-        $this->save();
-    }
-
-    public function toogleStatus($value)
-    {
-        if ($value == null) {
-            return $this->setDraft();
-        }
-        return $this->setPublic();
-    }
-
 
     public function registerMediaConversions(Media $media = null)
     {
@@ -245,7 +224,7 @@ class Product extends Model implements HasMedia
                 ->toArray();
         });
     }
-    
+
     /**
      * Активные товары
      *

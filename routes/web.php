@@ -189,11 +189,12 @@ Route::group(
                 'as' => 'products.',
             ],
             function () {
-                Route::patch('/change-status/{status}', 'ProductController@changeStatus')->name('change-status');
-                Route::get('/change-status-all/{status}', 'ProductController@changeStatusAll')->name('change-status-all');
-                Route::delete('/change-delete/', 'ProductController@changeDelete')->name('change-delete');
+                Route::patch('/change-status-for-checked/{status}', 'ProductController@changeStatusForChecked')->name('change_status_for_checked');
+                Route::patch('/change-status-for-all/{status}', 'ProductController@changeStatusForAll')->name('change_status_for_all');
+                Route::patch('/delete-for-checked/', 'ProductController@destroyForChecked')->name('destroy_for_checked');
             }
         );
+
         Route::post('/products/attributes', 'ProductController@getAttributeProduct')->name('product_attributes');
 
         Route::group(
