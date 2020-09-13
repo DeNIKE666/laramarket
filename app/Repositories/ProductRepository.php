@@ -24,7 +24,7 @@ class ProductRepository
      *
      * @author Anton Reviakin
      */
-    public function findProductById(int $id): Product
+    public function getProductById(int $id): Product
     {
         return $this
             ->model
@@ -129,7 +129,7 @@ class ProductRepository
      */
     public function updateProduct(array $params)
     {
-        $product = $this->findProductById($params['product_id']);
+        $product = $this->getProductById($params['product_id']);
 
         $collection = collect($params)->except('_token');
 
@@ -154,7 +154,7 @@ class ProductRepository
      */
     public function deleteProduct($id)
     {
-        $product = $this->findProductById($id);
+        $product = $this->getProductById($id);
 
         $product->delete();
 

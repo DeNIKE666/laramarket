@@ -31,7 +31,6 @@
         <div class="lcPageContentCol__more">
             <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    xmlns:xlink="http://www.w3.org/1999/xlink"
                     width="17px" height="5px">
                 <path fill-rule="evenodd" fill="rgb(255, 255, 255)"
                       d="M14.250,4.219 C13.232,4.219 12.406,3.393 12.406,2.375 C12.406,1.357 13.232,0.531 14.250,0.531 C15.268,0.531 16.094,1.357 16.094,2.375 C16.094,3.393 15.268,4.219 14.250,4.219 ZM8.375,4.219 C7.357,4.219 6.531,3.393 6.531,2.375 C6.531,1.357 7.357,0.531 8.375,0.531 C9.393,0.531 10.219,1.357 10.219,2.375 C10.219,3.393 9.393,4.219 8.375,4.219 ZM2.469,4.219 C1.450,4.219 0.625,3.393 0.625,2.375 C0.625,1.357 1.450,0.531 2.469,0.531 C3.487,0.531 4.312,1.357 4.312,2.375 C4.312,3.393 3.487,4.219 2.469,4.219 Z"/>
@@ -40,7 +39,6 @@
                 <span>
                     <svg
                             xmlns="http://www.w3.org/2000/svg"
-                            xmlns:xlink="http://www.w3.org/1999/xlink"
                             width="16px" height="16px">
                         <path fill-rule="evenodd" fill="rgb(174, 174, 180)"
                               d="M15.013,3.923 L14.346,4.590 L11.233,1.478 L11.900,0.810 C12.196,0.514 12.641,0.514 12.938,0.810 L15.013,2.886 C15.309,3.182 15.309,3.627 15.013,3.923 ZM6.080,12.896 L2.935,9.751 L10.168,2.519 L13.312,5.663 L6.080,12.896 ZM0.412,15.412 L1.894,10.816 L5.007,13.929 L0.412,15.412 Z"/>
@@ -51,7 +49,7 @@
                 </span>
                 <span>
                     <svg width="14px" xmlns="http://www.w3.org/2000/svg"
-                         xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+                         version="1.1"
                          id="Capa_1" x="0px" y="0px" viewBox="0 0 512 512"
                          style="enable-background:new 0 0 512 512;" xml:space="preserve">
                         <g>
@@ -67,13 +65,12 @@
 
                         </svg>
                         {!! Form::open(['route' => ['products.destroy', $product->id], 'method' => 'delete']) !!}
-                            <button onclick="return confirm('Точно удалить?')" type="submit"  class="btn-delete" title="">Удалить</button>
+                            <button onclick="return confirm('Точно удалить?')" type="submit" class="btn-delete" title="">Удалить</button>
                         {!! Form::close() !!}
-
                 </span>
-                <!--span>
+                <span>
                     <svg width="14px" xmlns="http://www.w3.org/2000/svg"
-                         xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+                         version="1.1"
                          id="Capa_1" x="0px" y="0px" viewBox="0 0 512 512"
                          style="enable-background:new 0 0 512 512;" xml:space="preserve">
                         <g>
@@ -93,10 +90,10 @@
                         </g>
 
                         </svg>
-                    <a href="">
+                    <a href="{{ route('products.create_from_copy', ['product' => $product->id]) }}">
                         Копировать
                     </a>
-                </span-->
+                </span>
             </div>
         </div>
     </div>

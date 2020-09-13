@@ -55,6 +55,11 @@
             });
     };
 
+    /**
+     * Удалить отмеченные товары
+     *
+     * @param route
+     */
     const destroyForChecked = (route) => {
         const products = getCheckedProducts();
         if (!products.length) {
@@ -112,6 +117,9 @@
             setStatusForAll($(this).data("route"));
         });
 
+        /**
+         * Удалить отмеченные товары
+         */
         $("#js_product_destroy").on("click", function () {
             destroyForChecked($(this).data("route"));
         });

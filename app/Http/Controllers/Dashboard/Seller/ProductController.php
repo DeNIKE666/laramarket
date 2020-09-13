@@ -11,10 +11,19 @@ use App\Traits\UniqueModelSlug;
 use Auth;
 use Gate;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class ProductController extends Controller
 {
     use UniqueModelSlug;
+
+    /** @var ProductRepository $productRepository */
+    private $productRepository;
+
+    public function __construct()
+    {
+        $this->productRepository = app(ProductRepository::class);
+    }
 
     /**
      * Display a listing of the resource.
@@ -23,7 +32,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::where('user_id', Auth::user()->id)->paginate(20);
+        $products = Product::where('user_id', auth()->user()->id)->paginate(20);
         //dump($products);
         return view('dashboard.shop.product.index', compact('products'));
     }
@@ -33,11 +42,29 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(): View
     {
         $categories = Category::getAllCategory();
 
         return view('dashboard.shop.product.create', compact('categories'));
+    }
+
+    /**
+     * Создать товар из копии
+     *
+     * @param int $product
+     *
+     * @return View
+     */
+    public function createFromCopy(int $product): View
+    {
+        $product = $this
+            ->productRepository
+            ->getProductById($product);
+
+        $categories = Category::getAllCategory();
+
+        return view('dashboard.shop.product.create', compact('categories', 'product'));
     }
 
     /**
@@ -130,7 +157,7 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($id): View
     {
         $product = Product::findOrFail($id);
         abort_if(Gate::denies('update-post', $product), 403, 'Sorry, you are not an admin');
@@ -254,6 +281,8 @@ class ProductController extends Controller
      * @param string  $status
      *
      * @return int
+     *
+     * @author Anton Reviakin
      */
     public function changeStatusForChecked(Request $request, string $status)
     {
@@ -271,6 +300,8 @@ class ProductController extends Controller
      * @param string  $status
      *
      * @return int
+     *
+     * @author Anton Reviakin
      */
     public function changeStatusForAll(Request $request, string $status)
     {
@@ -284,6 +315,8 @@ class ProductController extends Controller
      * Удалить отмеченные товары
      *
      * @param Request $request
+     *
+     * @author Anton Reviakin
      */
     public function destroyForChecked(Request $request)
     {
