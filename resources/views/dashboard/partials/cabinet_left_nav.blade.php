@@ -15,7 +15,7 @@
 
     @cannot('is-admin')
         <div class="lcPageMenuNav">
-            @if(request()->is('dashboard/user', 'dashboard/buyer', 'dashboard/buyer/*'))
+            @if(request()->is('dashboard/user', 'dashboard/buyer', 'dashboard/buyer/*', 'dashboard/user/tasks*'))
                 @include('dashboard.partials.nav_buyer')
             @endif
             @if(request()->is('dashboard/partner', 'dashboard/partner/*'))

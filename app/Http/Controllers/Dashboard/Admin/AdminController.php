@@ -10,6 +10,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use App\Models\Task;
+use App\Models\Message;
 
 class AdminController extends Controller
 {
@@ -82,5 +84,16 @@ class AdminController extends Controller
                 'orders'
             )
         );
+    }
+
+    /**
+     * Список сообщений в техподдержку
+     *
+     * @return View
+     */
+    public function taskAdminList()
+    {
+        $tasks = Task::orderBy("id", "desc")->paginate(20);
+        return view('dashboard.task.index', compact('tasks'));
     }
 }

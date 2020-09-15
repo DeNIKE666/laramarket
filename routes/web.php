@@ -169,6 +169,9 @@ Route::group(
             Artisan::call('cache:clear');
             return redirect()->back();
         })->name('clear-cache');
+
+        //Техподдержка
+        Route::get('/tasks', 'AdminController@taskAdminList')->name('tasks');
     }
 );
 

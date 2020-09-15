@@ -1,15 +1,17 @@
 @extends('layouts.admin')
 
 @section('content')
-    <div class="lcPageHelpTop lcPageHelpTop-sm">
-        <span class="lcPageHelpTop__text">
-            Помощь
-        </span>
-        <a href="{{ route('user.tasks.index') }}#chat" class="btn lcPageHelpTop__btn">
-            Задать вопрос
-        </a>
-    </div>
-    @include("dashboard.task.block.frequent_question")
+    @cannot('is-admin')
+        <div class="lcPageHelpTop lcPageHelpTop-sm">
+            <span class="lcPageHelpTop__text">
+                Помощь
+            </span>
+            <a href="{{ route('user.tasks.index') }}#chat" class="btn lcPageHelpTop__btn">
+                Задать вопрос
+            </a>
+        </div>
+        @include("dashboard.task.block.frequent_question")
+    @endcannot
 
     <div id="chat" class="lcPageHelpArch">
         <div class="lcPageHelpArchTop">

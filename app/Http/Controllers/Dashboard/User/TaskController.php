@@ -19,15 +19,9 @@ class TaskController extends Controller
      */
     public function index()
     {
-        if (Gate::allows('is-admin')) {
-            $tasks = Task::orderBy("id", "desc")->paginate(20);
-            return view('dashboard.task.index', compact('tasks'));
-        } else {
-
-            $userId = Auth::user()->id;
-            $tasks = Task::where('user_id', '=', $userId)->orderBy("id", "desc")->paginate(20);
-            return view('dashboard.task.index', compact('tasks'));
-        }
+        $userId = Auth::user()->id;
+        $tasks = Task::where('user_id', '=', $userId)->orderBy("id", "desc")->paginate(20);
+        return view('dashboard.task.index', compact('tasks'));
     }
 
     /**
