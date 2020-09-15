@@ -26,7 +26,13 @@ Route::post('/comission/payout', 'ComissionsPayInOutController@getPayoutFee')->n
 Route::get('/', 'FrontController@index')->name('front.index');
 Route::get('/about', 'FrontController@about')->name('front.about');
 
-
+//Route::get('{seller}/catalog', function (\Illuminate\Http\Request $request) {
+//    dump($request);
+//});
+//
+//Route::get('{seller}/{partner}/catalog', function (\Illuminate\Http\Request $request) {
+//    dump($request);
+//});
 
 Route::get('catalog/{slug}', 'CatalogController@index')
     ->where('slug', '[a-zA-Z0-9/_-]+')
@@ -39,27 +45,7 @@ Route::get('product/{path}', 'FrontController@product')
 Auth::routes();
 
 Route::get('/logout', 'AuthController@logout');
-//Route::get('/register}', 'Auth\RegisterController@showRegistrationForm')->name('register');
 Route::get('/join/{partner_token}', 'Auth\RegisterController@rememberPartnerToken')->name('join');
-
-/**
- * Оформление заказа
- */
-
-
-Route::group(
-    [
-        'prefix'     => 'checkout',
-        'middleware' => ['auth'],
-        'as'         => 'checkout.',
-    ],
-    function () {
-//        Route::get('/', 'CheckoutController@get')->name('get');
-//        Route::post('/', 'CheckoutController@store')->name('store');
-//
-//        Route::get('/pay/{order}/{payMethod}', 'CheckoutController@showPayForm')->name('show-pay-form');
-//        Route::post('/pay/{order}/card', 'CheckoutController@orderPay')->name('pay-via-card');
-    });
 
 /**
  * Работа корзины
@@ -119,27 +105,24 @@ Route::group(
 
 
         //Оформление заказа
-        Route::get('/order/checkout-form', 'OrderController@checkoutForm')->name('order.checkout-form');
+        Route::get('/order/checkout-form', 'OrderController@checkoutForm')->name('order.checkout_form');
         Route::post('/order/store', 'OrderController@store')->name('order.store');
 
-
         //Оплата заказа
-        Route::get('/checkout/pay/{order}/{payMethod}', 'CheckoutController@showPayForm')->name('checkout.show-pay-form');
+        Route::get('/order/pay/{order}/{paySystem}', 'OrderController@showPayForm')->name('order.show_pay_form');
+        //Оплата картой
+        Route::post('/order/pay/{order}/card', 'OrderController@payViaCard')->name('order.pay_via_card');
+        Route::post('/order/pay/{order}/card/callback/{externalPayment}', 'OrderController@payViaCardCallback')->name('order.pay_via_card_callback');
 
-        Route::post('/checkout/pay/{order}/card', 'CheckoutController@orderPay')->name('checkout.pay-via-card');
-        Route::post('/checkout/pay/{order}/card/callback', 'CheckoutController@orderPayCallback')->name('checkout.pay-via-card.callback');
-
+        //Изменить статус заказа
+        Route::patch('/order/{order}/status', 'OrderController@changeStatus')->name('order.change_status');
 
         #################### ФИНАНСЫ ####################
         //Пополнение и вывод
-        Route::get('/finance/deposit-withdraw', 'FinanceController@userPay')->name('finance.deposit-withdraw');
-
-
-//        Route::prefix('payment')->group(function () {
-        //ПЕРЕПИСАТЬ!!! - В FinanceController
-        Route::post('/finance/deposit/visa', 'QiwiController@pay')->name('finance.deposit.visa');
-//            Route::post('/callback/visa/deposit/{orderPay}', 'QiwiController@callback')->name('qiwi.callback');
-//        });
+        Route::get('/finance/deposit-withdraw', 'FinanceController@depositOrWithdrawForm')->name('finance.deposit_withdraw');
+        //Пополнение картой
+        Route::post('/finance/deposit/card', 'FinanceController@depositViaCard')->name('finance.deposit_via_card');
+        Route::post('/finance/deposit/{user}/card/callback/{externalPayment}', 'FinanceController@depositViaCardCallback')->name('finance.deposit_via_card_callback');
 
 
         //Вывод средств
@@ -151,9 +134,6 @@ Route::group(
 
         //Route::get('/data_seller', 'UserController@data_seller')->name('data_seller');
 //        Route::resource('/messages', 'MessageController');
-//
-
-//        Route::patch('/order/{order}/status', 'UserController@changeStatus')->name('user_change_status');
 //
 
         //Route::get('summernote',array('as'=>'summernote.get','uses'=>'FileController@getSummernote'));
@@ -189,6 +169,9 @@ Route::group(
             Artisan::call('cache:clear');
             return redirect()->back();
         })->name('clear-cache');
+
+        //Техподдержка
+        Route::get('/tasks', 'AdminController@taskAdminList')->name('tasks');
     }
 );
 
@@ -202,18 +185,13 @@ Route::group(
         'middleware' => ['auth', 'seller'],
     ],
     function () {
+        Route::get('/products/{product}/copy', 'ProductController@createFromCopy')->name('products.create_from_copy');
+        Route::patch('/products/change-status-for-checked/{status}', 'ProductController@changeStatusForChecked')->name('products.change_status_for_checked');
+        Route::patch('/products/change-status-for-all/{status}', 'ProductController@changeStatusForAll')->name('products.change_status_for_all');
+        Route::patch('/products/delete-for-checked', 'ProductController@destroyForChecked')->name('products.destroy_for_checked');
         Route::resource('/categories', 'CategoryController');
         Route::resource('/products', 'ProductController');
-        Route::group(
-            [
-                'as'     => 'products.',
-            ],
-            function () {
-                Route::patch('/change-status/{status}', 'ProductController@changeStatus')->name('change-status');
-                Route::get('/change-status-all/{status}', 'ProductController@changeStatusAll')->name('change-status-all');
-                Route::delete('/change-delete/', 'ProductController@changeDelete')->name('change-delete');
-            }
-        );
+
         Route::post('/products/attributes', 'ProductController@getAttributeProduct')->name('product_attributes');
 
         Route::group(

@@ -29,40 +29,46 @@ class OrderService
      */
     public function changeStatus(Request $request): Order
     {
-        $order = $this->orderRepository->getOwnOrderShopById($request->input('order_id'));
+        /** @var Order $order */
+        $order = $this
+            ->orderRepository
+            ->getById($request->input('order_id'))
+            ->ofSeller(auth()->user()->id)
+            ->firstOrFail();
 
-        if (!$order) {
-            abort(Response::HTTP_NOT_FOUND, 'Заказ не найден');
-        }
-
-        if (!$this->statusAllowed($order, $request)) {
+        if (!$this->statusAllowed($order, $request->input('status'))) {
             abort(Response::HTTP_FORBIDDEN, 'Невозможно выбрать этот статус');
         }
 
-        //Добавить статус в историю заказа
-        (new OrderHistoryStatusService)->storeOrderHistoryStatus(
-            $order,
-            $request->input('status'),
-            $request->input('notes')
-        );
-
         //Изменить статус заказа
-        return $this->orderRepository->changeOrderStatus(
-            $order,
-            $request->input('status'),
-            $request->input('notes')
-        );
+        $order = $this
+            ->orderRepository
+            ->changeStatus(
+                $order->id,
+                $request->input('status'),
+                $request->input('notes')
+            );
+
+        //Добавить статус в историю заказа
+        (new OrderHistoryStatusService)
+            ->storeOrderHistoryStatus(
+                $order,
+                $request->input('status'),
+                $request->input('notes')
+            );
+
+        return $order;
     }
 
     /**
      * Разрешен ли выбранный статус
      *
-     * @param Order   $order
-     * @param Request $request
+     * @param Order $order
+     * @param int   $status
      *
      * @return bool
      */
-    private function statusAllowed(Order $order, Request $request): bool
+    private function statusAllowed(Order $order, int $status): bool
     {
         $allow = [];
 
@@ -85,6 +91,6 @@ class OrderService
             }
         }
 
-        return in_array($request->input('status'), $allow);
+        return in_array($status, $allow);
     }
 }

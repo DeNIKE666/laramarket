@@ -28,7 +28,6 @@ class OrderStoreRequest extends FormRequest
         $Order = new Order();
 
         $deliveryServices = implode(",", $Order->getDeliveryServices());
-        $paymentMethods = implode(",", $Order->getPaymentMethods());
 
         return [
             'delivery_profile_id' => 'bail|required|integer',
@@ -37,7 +36,7 @@ class OrderStoreRequest extends FormRequest
             'email'               => 'bail|required|email:filter|unique:users,email,' . auth()->user()->id . ',id',
             'address'             => 'bail|required|string|max:255',
             'delivery_service'    => 'bail|required|string|in:' . $deliveryServices,
-            'payment_method'      => 'bail|required|string|in:' . $paymentMethods,
+            'pay_system'          => 'bail|required|integer|exists:payment_options,id',
         ];
     }
 
@@ -61,8 +60,9 @@ class OrderStoreRequest extends FormRequest
             'delivery_service.required' => __('buyer/checkout/validation.delivery_service.required'),
             'delivery_service.in'       => __('buyer/checkout/validation.delivery_service.in'),
 
-            'payment_method.required' => __('buyer/checkout/validation.payment_method.required'),
-            'payment_method.in'       => __('buyer/checkout/validation.payment_method.in'),
+            'pay_system.required' => __('buyer/checkout/validation.payment_method.required'),
+            'pay_system.integer'  => __('buyer/checkout/validation.payment_method.required'),
+            'pay_system.exists'   => __('buyer/checkout/validation.payment_method.exists'),
         ];
     }
 

@@ -30,16 +30,38 @@ class OrderRepository
     }
 
     /**
+     * Получить заказ по id заказа
+     *
+     * @param int $id
+     *
+     * @return Builder
+     *
+     * @author Anton Reviakin
+     */
+    public function getById(int $id): Builder
+    {
+        return $this
+            ->model
+            ->query()
+            ->where('id', $id);
+    }
+
+    /**
      * Изменить статус заказа
      *
-     * @param Order       $order
+     * @param int         $id
      * @param int         $status
      * @param string|null $notes
      *
      * @return Order
      */
-    public function changeOrderStatus(Order $order, int $status, string $notes = null): Order
+    public function changeStatus(int $id, int $status, string $notes = null): Order
     {
+        /** @var Order $order */
+        $order = $this
+            ->getById($id)
+            ->firstOrFail();
+
         $order->status = $status;
         $order->notes = $notes ?? $order->notes;
 
@@ -56,18 +78,15 @@ class OrderRepository
     /**
      * Заказы пользователя
      *
-     * @param int            $userId
-     * @param array|string[] $sort
+     * @param int $userId
      *
-     * @return LengthAwarePaginator
+     * @return Builder
      */
-    public function ordersByUser(int $userId, array $sort = ['id', 'asc']): LengthAwarePaginator
+    public function ordersByUser(int $userId): Builder
     {
         return $this->model
             ->query()
-            ->where('user_id', $userId)
-            ->orderBy($sort)
-            ->paginate(10);
+            ->where('user_id', $userId);
     }
 
     public function listOrdersShop()
@@ -80,42 +99,6 @@ class OrderRepository
             })
             ->orderBy('id', 'desc')
             ->paginate(10);
-    }
-
-    /**
-     * Получить заказ покупателя по id заказа
-     *
-     * @param int $id
-     *
-     * @return Order|null
-     *
-     * @author Anton Reviakin
-     */
-    public function getOwnOrderBuyerById(int $id): ?Order
-    {
-        return Order::where('id', $id)
-            ->where('user_id', auth()->user()->id)
-            ->first();
-    }
-
-    /**
-     * Получить заказ продавца-владельца по id заказа
-     *
-     * @param int $id
-     *
-     * @return Order|null
-     *
-     * @author Anton Reviakin
-     */
-    public function getOwnOrderShopById(int $id): ?Order
-    {
-        return Order::where('id', $id)
-            ->whereHas('items', function (Builder $query) {
-                $query->whereHas('product', function (Builder $query) {
-                    $query->where('user_id', auth()->user()->id);
-                });
-            })
-            ->first();
     }
 
     /**

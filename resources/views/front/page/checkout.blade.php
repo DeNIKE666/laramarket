@@ -2,6 +2,9 @@
     /** @var \App\Models\User $user */
     $user = auth()->user();
 
+    /** @var \App\Repositories\PaySystemsRepository $paySystems */
+    /** @var \App\Models\PaymentOption $paySystem */
+
     /** @var \App\Models\Order $order */
     $order = new \App\Models\Order();
 @endphp
@@ -120,26 +123,13 @@
                 </div>
                 <div class="cartAddress__row">
                     <div>
-                        <div style="margin: 1rem 0;">
-                            <label>
-                                {{ Form::radio('payment_method', $order::PAY_METHOD_INTERNAL_PERSONAL) }} @lang('orders/payment.methods.' . $order::PAY_METHOD_INTERNAL_PERSONAL)
-                            </label>
-                        </div>
-                        <div style="margin: 1rem 0;">
-                            <label>
-                                {{ Form::radio('payment_method', $order::PAY_METHOD_VISA) }} @lang('orders/payment.methods.' . $order::PAY_METHOD_VISA)
-                            </label>
-                        </div>
-                        <div style="margin: 1rem 0;">
-                            <label>
-                                {{ Form::radio('payment_method', $order::PAY_METHOD_MASTERCARD) }} @lang('orders/payment.methods.' . $order::PAY_METHOD_MASTERCARD)
-                            </label>
-                        </div>
-                        <div style="margin: 1rem 0;">
-                            <label>
-                                {{ Form::radio('payment_method', $order::PAY_METHOD_WEBMONEY) }} @lang('orders/payment.methods.' . $order::PAY_METHOD_WEBMONEY)
-                            </label>
-                        </div>
+                        @foreach($paySystems as $paySystem)
+                            <div style="margin: 1rem 0;">
+                                <label>
+                                    {{ Form::radio('pay_system', $paySystem->id) }} {{ $paySystem->title }}
+                                </label>
+                            </div>
+                        @endforeach
                     </div>
                 </div>
             </div>
@@ -149,7 +139,7 @@
                     Сумма итого:
                 </div>
                 <div class="cartPay__price">
-                    {!! formatByCurrency(\Cart::getSubTotal(), 2) !!}
+                    {!! formatByCurrency(\Cart::getSubTotal(false), 2) !!}
                 </div>
                 <button class="cartPay__btn btn" type="submit">
                     <span>Оформить заказ</span>

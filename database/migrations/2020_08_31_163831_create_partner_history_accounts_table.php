@@ -27,7 +27,7 @@ class CreatePartnerHistoryAccountsTable extends Migration
             $table->unsignedBigInteger('order_id');
 
             $table
-                ->unsignedDecimal('percent')
+                ->unsignedTinyInteger('percent')
                 ->default(0)
                 ->comment('Партнерский процент');
 

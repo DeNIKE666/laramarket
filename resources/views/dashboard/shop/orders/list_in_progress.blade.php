@@ -18,7 +18,7 @@
     </script>
 
     <script src="{{ asset('js/helpers.js') }}"></script>
-    <script src="{{ asset('js/dashboard/shop/orders/changeStatus.js') }}"></script>
+    <script src="{{ asset('js/dashboard/seller/orders/changeStatus.js') }}"></script>
 @endpush
 
 @section('content')

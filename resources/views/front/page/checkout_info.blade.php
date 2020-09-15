@@ -1,3 +1,11 @@
+@php
+
+/** @var \App\Models\Order $order */
+
+/** @var \App\Models\PaymentOption $paySystem */
+
+@endphp
+
 @extends('layouts.app')
 @section('breadcrumbs')
     {{ Breadcrumbs::render('page', 'Заказ') }}
@@ -7,15 +15,12 @@
     @include('front.partials.breadcrumbs')
     <div class="block-cart">
         <div class="wrapper">
-            <h1 class="title">Заказ #{{ $orderItem->id }}</h1>
+            <h1 class="title">Заказ #{{ $order->id }}</h1>
 
-            @include('__shared.pay-method.' . $payment, [
-               'order' => $orderItem
-            ])
-
+            @include(
+                '__shared.pay-systems.' . $paySystem->slug,
+                compact('order')
+            )
         </div>
     </div>
-
-
-
 @endsection

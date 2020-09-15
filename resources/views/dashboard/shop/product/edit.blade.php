@@ -144,7 +144,7 @@
                  data-id="{{ $product->id }}"
             >
                 <div class="lcPageAddChars__title">
-                    Техническое характеристики
+                    Технические характеристики
                 </div>
             </div>
         </div>

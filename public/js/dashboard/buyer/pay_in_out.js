@@ -122,6 +122,8 @@
 
         axios.post('/comission/payin', data)
             .then(response => {
+                $("#paySystem").val(response.data.paySystem);
+
                 if (isTotalAmount) {
                     $("#payinAmount").val(data.amount);
                     accountPayinCost.val(response.data.amount);

@@ -26,6 +26,8 @@ class CreateProductsTable extends Migration
             $table->string('group_product')->nullable();
             $table->integer('price')->default(0);
 
+            $table->softDeletes();
+
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('category_id')->references('id')->on('categories');

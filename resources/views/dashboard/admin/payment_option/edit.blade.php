@@ -23,7 +23,7 @@
                     <span>
                         Иконка
                     </span>
-                    {{ Form::text('ico', $paymentOption->ico, ['class' => 'form-control', 'required' => 'required']) }}
+                    {{ Form::text('ico', $paymentOption->icon, ['class' => 'form-control', 'required' => 'required']) }}
                     @if ($errors->has('ico'))
                         <span class="invalid-feedback"><strong>{{ $errors->first('ico') }}</strong></span>
                     @endif

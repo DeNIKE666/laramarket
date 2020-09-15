@@ -161,7 +161,7 @@ $(function () {
     });
 
     if ($('#createProductAttribute').length > 0) {
-        loadProductAttributes($('#createProductAttribute').data('url'), 0);
+        loadProductAttributes($('#createProductAttribute').data('url'), $('#createProductAttribute').data('id'));
         $('#category_id').on('change', function () {
             loadProductAttributes($('#createProductAttribute').data('url'), 0);
         });
@@ -173,7 +173,6 @@ $(function () {
             loadProductAttributes($('#editProductAttribute').data('url'), $('#editProductAttribute').data('id'));
         });
     }
-
 });
 
 function loadProductAttributes(url, id) {

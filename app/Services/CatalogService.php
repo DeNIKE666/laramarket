@@ -65,7 +65,13 @@ class CatalogService
         $products = $this
             ->productRepository
             ->getProductsByCategoryBuilder($descendants)
-            ->active()                                  //Активные
+            ->active(); //Активные
+
+        //Минимальная и максимальная цены в выборке
+        $minPrice = $products->min('price');
+        $maxPrice = $products->max('price');
+
+        $products = $products
             ->filterByAttributes($filter['attributes']) //Фильтрация по атрибутам
             ->betweenPrices(                            //Фильтр по ценам
                 $filter['prices']['min'],
@@ -76,10 +82,6 @@ class CatalogService
                 $sort['direction']
             )
             ->paginate(Product::PAGINATE);
-
-        //Минимальная и максимальная цены в выборке
-        $minPrice = 1;
-        $maxPrice = 101;
 
         return compact('category', 'descendants', 'catFilter', 'minPrice', 'maxPrice', 'products');
     }

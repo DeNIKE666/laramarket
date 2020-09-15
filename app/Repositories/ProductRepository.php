@@ -3,7 +3,6 @@
 namespace App\Repositories;
 
 use App\Models\Product;
-use App\Models\ProductAttribute;
 use Illuminate\Database\Eloquent\Builder;
 
 class ProductRepository
@@ -13,26 +12,85 @@ class ProductRepository
 
     public function __construct(Product $model)
     {
-//        parent::__construct($model);
         $this->model = $model;
     }
 
     /**
+     * Получить продукт по id
+     *
      * @param int $id
      *
-     * @return mixed
-     * @throws ModelNotFoundException
+     * @return Product
+     *
+     * @author Anton Reviakin
      */
-    public function findProductById(int $id)
+    public function getProductById(int $id): Product
     {
-        try {
-            return \Cache::remember('product_id_' . $id, 3600, function () use ($id) {
-                return $this->findOneOrFail($id);
-            });
-        } catch (ModelNotFoundException $e) {
-            throw new ModelNotFoundException($e);
+        return $this
+            ->model
+            ->query()
+            ->where('id', $id)
+            ->firstOrFail();
+
+//        try {
+//            return \Cache::remember('product_id_' . $id, 3600, function () use ($id) {
+//                return $this->findOneOrFail($id);
+//            });
+//        } catch (ModelNotFoundException $e) {
+//            throw new ModelNotFoundException($e);
+//        }
+    }
+
+    /**
+     * Обновить статусы товаров
+     *
+     * @param int    $userId
+     * @param string $status
+     * @param array  $ids
+     *
+     * @return int
+     *
+     * @author Anton Reviakin
+     */
+    public function changeStatusBatchByUser(int $userId, string $status, array $ids = []): int
+    {
+        $query = $this
+            ->model
+            ->query()
+            ->where('user_id', $userId);
+
+        //По определенным id
+        if (!empty($ids)) {
+            $query->whereIn('id', $ids);
         }
 
+        return $query->update(compact('status'));
+    }
+
+    /**
+     * Удалить товары
+     *
+     * @param int   $userId
+     * @param array $ids
+     *
+     * @return bool|mixed|null
+     * @throws \Exception
+     *
+     * @author Anton Reviakin
+     */
+    public function destroyBatchByUser(int $userId, array $ids = []): ?bool
+    {
+        $query = $this
+            ->model
+            ->query()
+            ->where('user_id', $userId);
+
+        //По определенным id
+        if (!empty($ids)) {
+            $query->whereIn('id', $ids);
+        }
+
+        return $query->delete();
     }
 
     /**
@@ -71,7 +129,7 @@ class ProductRepository
      */
     public function updateProduct(array $params)
     {
-        $product = $this->findProductById($params['product_id']);
+        $product = $this->getProductById($params['product_id']);
 
         $collection = collect($params)->except('_token');
 
@@ -96,7 +154,7 @@ class ProductRepository
      */
     public function deleteProduct($id)
     {
-        $product = $this->findProductById($id);
+        $product = $this->getProductById($id);
 
         $product->delete();
 

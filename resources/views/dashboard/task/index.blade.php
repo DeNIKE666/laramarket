@@ -1,16 +1,17 @@
 @extends('layouts.admin')
 
 @section('content')
-    <div class="lcPageHelpTop lcPageHelpTop-sm">
-        <span class="lcPageHelpTop__text">
-            Помощь
-        </span>
-        <a href="#chat" class="btn lcPageHelpTop__btn">
-            Задать вопрос
-        </a>
-    </div>
-    @include("dashboard.task.block.frequent_question")
-
+    @cannot('is-admin')
+        <div class="lcPageHelpTop lcPageHelpTop-sm">
+            <span class="lcPageHelpTop__text">
+                Помощь
+            </span>
+            <a href="#chat" class="btn lcPageHelpTop__btn">
+                Задать вопрос
+            </a>
+        </div>
+        @include("dashboard.task.block.frequent_question")
+    @endcannot
     <div id="chat" class="lcPageHelpArch">
         <div class="lcPageHelpArchTop">
             <span class="lcPageHelpArchTop__title">
@@ -39,17 +40,18 @@
 
             </div>
             <div class="lcPageHelpArchRight">
+                @cannot('is-admin')
+                    <h4 class="card-title">Новое обращение</h4>
+                    {{ Form::open(['route' => 'user.tasks.store', 'files' => true, 'method' => 'post', 'class' => 'forms-sample']) }}
 
-                <h4 class="card-title">Новое обращение</h4>
-                {{ Form::open(['route' => 'user.tasks.store', 'files' => true, 'method' => 'post', 'class' => 'forms-sample']) }}
+                        {{ Form::text('title', '', ['placeholder' => 'Заголовок обращения', 'class' => 'form-control', 'required' => 'required']) }}
 
-                    {{ Form::text('title', '', ['placeholder' => 'Заголовок обращения', 'class' => 'form-control', 'required' => 'required']) }}
+                        {{ Form::textarea('content', '', ['placeholder' => 'Текст обращения', 'class' => 'form-control', 'required' => 'required']) }}
 
-                    {{ Form::textarea('content', '', ['placeholder' => 'Текст обращения', 'class' => 'form-control', 'required' => 'required']) }}
+                        <button type="submit" class="btn lcPageHelpTop__btn">Отправить</button>
 
-                    <button type="submit" class="btn lcPageHelpTop__btn">Отправить</button>
-
-                {{ Form::close() }}
+                    {{ Form::close() }}
+                @endcannot
             </div>
         </div>
     </div>

@@ -1,3 +1,6 @@
+@push('scripts')
+    <script src="{{ asset('js/dashboard/seller/products/actionsPanel.js') }}"></script>
+@endpush
 <div class="lcPageContentProductsTop">
     <div class="lcPageContentProductsTop__add">
         <a href="{{ route('products.create') }}" style=" width: 150px" class="lcPageContentSort__btn btn">Добавить</a>
@@ -6,22 +9,19 @@
         <input type="text" placeholder="Поиск">
         <svg
                 xmlns="http://www.w3.org/2000/svg"
-                xmlns:xlink="http://www.w3.org/1999/xlink"
                 width="20px" height="20px">
             <path fill-rule="evenodd" fill="rgb(153, 153, 153)"
                   d="M19.993,18.636 L14.879,13.639 C16.038,12.217 16.739,10.161 16.739,8.187 C16.739,3.621 12.954,0.009 8.369,0.009 C3.784,0.009 -0.000,3.621 -0.000,8.187 C-0.000,12.753 3.784,16.365 8.369,16.365 C10.319,16.365 12.067,15.668 13.484,14.548 L18.599,19.999 L19.993,18.636 ZM8.369,14.548 C4.809,14.548 1.860,11.732 1.860,8.187 C1.860,4.641 4.809,1.826 8.369,1.826 C11.930,1.826 14.879,4.641 14.879,8.187 C14.879,11.732 11.930,14.548 8.369,14.548 Z"/>
         </svg>
     </div>
     <div class="lcPageContentProductsTop__actions">
-            <span>
-                Выберите действие:
-            </span>
-        <button id="js_product_activate"
+        <span>Выберите действие:</span>
+        <button id="js_product_enable"
                 class="lcPageContentProductsTop__action tooltip"
                 title="Включить отмеченные"
-                data-route="{{ route('products.change-status', 'activate') }}"
+                data-route="{{ route('products.change_status_for_checked', 'active') }}"
         >
-            <svg width="26px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+            <svg width="26px" xmlns="http://www.w3.org/2000/svg"
                  version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 512 512"
                  style="enable-background:new 0 0 512 512;" xml:space="preserve">
             <g>
@@ -36,9 +36,9 @@
         <button id="js_product_disable"
                 class="lcPageContentProductsTop__action tooltip"
                 title="Отключить отмеченные"
-                data-route="{{ route('products.change-status', 'disable') }}"
+                data-route="{{ route('products.change_status_for_checked', 'disable') }}"
         >
-            <svg width="26px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+            <svg width="26px" xmlns="http://www.w3.org/2000/svg"
                  version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 512 512"
                  style="enable-background:new 0 0 512 512;" xml:space="preserve">
                 <g>
@@ -50,11 +50,12 @@
             </svg>
         </button>
 
-        <a href="{{ route('products.change-status-all', 'activate') }}"
-           class="lcPageContentProductsTop__action tooltip"
-           title="Включить все"
+        <button id="js_product_enable_all"
+                class="lcPageContentProductsTop__action tooltip"
+                title="Включить все"
+                data-route="{{ route('products.change_status_for_all', 'active') }}"
         >
-            <svg width="26px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+            <svg width="26px" xmlns="http://www.w3.org/2000/svg"
                  version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 512 512"
                  style="enable-background:new 0 0 512 512;" xml:space="preserve">
             <g>
@@ -64,66 +65,30 @@
             </g>
 
             </svg>
-        </a>
+        </button>
 
-        <button id="js_product_disableAll"
+        <button id="js_product_disable_all"
                 class="lcPageContentProductsTop__action tooltip"
                 title="Отключить все"
-                data-route="{{ route('products.change-status', 'disable') }}"
+                data-route="{{ route('products.change_status_for_all', 'disable') }}"
         >
-            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="26" height="26" viewBox="0 0 26 26">
+            <svg width="26px" xmlns="http://www.w3.org/2000/svg"
+                 version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 55 55"
+                 style="enable-background:new 0 0 55 55;" xml:space="preserve">
                 <g>
                     <g>
-                        <image width="26" height="26"
-                               xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAYAAACpSkzOAAADa0lEQVRIS62WX2gcVRTGv3NnNomJbVWU5EH6IPogBcViIYXQCiFGN7Mme4cuPkhBI/Stmka0hVArUcxDKuZF0FaK7YsE52zWmU2FVkKrUGkeFASh0EILWkpTzR8N3SU7c2Q2f4jJzGxac59253zn+82dO+ecIWxgMX/bBhhtgDwHyHYRIiLcBPALoH6sVP65kMvl/CQriguOj4/Xl8v+WyL0JoCnatzP70Q4VV+vhtPp9FyUNhI0NuZmgoA+A/D4Bja8WnIHkH6tM6fX5q0DMbuHADp+j4A1chnSOnNk9cX/gJiLfYB88v8gK9kfaW0NLP9bAeXzbrsInd8kSNVGhPbbdteZ8HcVNDo6aphm4zSALbVAIvIhQDNEGK6lDeOVSv1DuVzHbBXkOF7/RhObmlIPdnZ2zjN7shEQQCNad71dBTF7twE8lpB4EZA6gFqVomfq6uhGqRTMAnIFULcA2ZuQW0mlZBs5zngrUXApXig/aZ3ZzVzsBmQsCPxng6DxhmmWZ0Rw1LatQWaPAWTjPERkH+XzxQERGYwTGYa/tVwui2k2XgXQ3NCgtoVFufTo5gzDf7q7u/sms3cXQEOMz+fE7BUAvBItkLNaZ9KrNSLoUwp3RLD4NpH8nM1mdjK7J4BqF4la54i5eBmQXVFREbxj29ZxZm8BgBm3a62t0McCxI3RXKZ83psUwfMxoD7btj5l9ioAjBqglwA5G62hyRBUFEE6xoS1tmxmbwLACzGaa1pbTzK7IwAdjNF8H57RBwCOxgj8qamWB1pa/njE941bURql1I6envRvzF7YtSMLXgRfkuMU9xDJhYQ6OKe19WKhUGj2fWMUwJ5FLU0qhd6enq5fmYtfAbI/oUReo4mJCXN6ev5PAFsTYN9obe2LijuOd5IIvUldImxDSy3IPUZE7yeJAZRE8DUg3ymlKkEg7UR4FcDDyXl0SuuuN6qgcJqWSsHfAFI1YPcRTjVr3Xl7ZUwwe+GjCc9g01ZY3GF5VE90tSuz+zFAhzeDJIIvbNs6sOy1bpQ7jjtIRCuT8X6gayHrdrRsms97vUGAESI03SMoAPCe1ta6oRj7ubVYN+a7gLxe+81C2LlPExlD2ezL16NuLha0LC4UClt83+hYGm5PAHh08QNS/hKh60rRDwsLdD6XS08l7f5f9NBf0s8FaBwAAAAASUVORK5CYII="/>
+                        <path d="M 9.7599432,48.83379 C 3.1795154,42.831503 0.27659027,36.937009 0.11451526,27.899967 -0.03199254,19.730928 3.1298799,12.726334 8.1777241,7.7755648 13.225568,2.8247954 20.159384,-0.07214975 27.556763,-0.02589156 35.87409,0.02611936 41.988917,1.9116292 47.334833,7.5859553 52.21399,12.45006 55.139869,19.01923 55.063531,26.559344 55.243016,37.177732 53.530828,40.75379 47.317093,47.960306 41.751691,52.870982 36.375368,54.854365 27.933736,55.007126 23.300717,55.090965 15.099664,53.704374 9.7599432,48.83379 Z M 31.482048,38.130408 c 3.317108,-1.050479 6.021923,-3.371047 7.238598,-6.323381 1.216674,-2.952334 1.195207,-6.369767 -0.190249,-8.947309 -1.287028,-2.394424 -2.797569,-4.686832 -4.467871,-4.353499 -1.154687,0.230435 -0.989449,2.114458 0.607526,4.361022 3.885762,5.466342 -0.149432,12.297929 -7.070717,12.297929 -6.921289,0 -11.184874,-7.00135 -7.070717,-12.297929 1.680306,-2.163231 1.784981,-4.361022 0.607523,-4.361022 -1.586966,0 -3.514174,2.292408 -4.801202,4.686832 -1.345837,2.503834 -1.215031,5.875252 0.01461,8.778064 1.22964,2.902813 3.629876,4.818376 6.524285,5.96643 2.280535,0.904564 3.81488,0.77709 4.721842,0.810629 0.909012,0.03362 1.102897,0.263719 3.886372,-0.617766 z M 29.785547,18.506219 c 0,-3.591636 -0.567129,-6.446915 -2.186212,-6.530248 -1.616943,-0.08322 -2.186213,2.938612 -2.186213,6.530248 0,3.591636 0.3213,6.380186 2.186213,6.530247 1.701223,0.13689 2.186212,-2.938611 2.186212,-6.530247 z"/>
                     </g>
                 </g>
             </svg>
         </button>
 
-    <!--a href="{{ route('products.create') }}"
-           class="lcPageContentProductsTop__action tooltip" title="Добавить">
-            <svg width="26px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                 version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 512 512"
-                 style="enable-background:new 0 0 512 512;" xml:space="preserve">
-                <g>
-                    <g>
-                        <g>
-                            <path d="M304.909,390.25l-27.584,27.584V298.666c0-11.776-9.536-21.333-21.333-21.333c-11.797,0-21.333,9.557-21.333,21.333     v119.168l-27.584-27.584c-8.341-8.341-21.824-8.341-30.165,0c-8.341,8.341-8.341,21.824,0,30.165l63.979,63.979     c1.963,1.984,4.331,3.541,6.955,4.629c2.603,1.067,5.376,1.643,8.149,1.643c2.773,0,5.547-0.576,8.149-1.643     c2.624-1.088,4.992-2.645,6.955-4.629l63.979-63.979c8.341-8.341,8.341-21.824,0-30.165     C326.733,381.908,313.25,381.908,304.909,390.25z"/>
-                            <path d="M446.784,175.446c-9.749-73.387-76.949-154.112-157.76-154.112c-43.328,0-87.381,21.291-116.8,55.445     c-9.408-3.435-19.371-5.205-29.525-5.205c-45.973,0-83.648,36.224-85.952,81.643C22.784,175.105,0,215.532,0,256.001     c0,25.344,8.405,53.461,23.061,77.12c19.413,31.381,55.019,50.88,92.907,50.88h15.915c3.136-8.875,8.021-17.067,14.869-23.915     c12.075-12.096,28.16-18.752,45.248-18.752v-42.667c0-35.285,28.693-64,64-64c35.285,0,64,28.715,64,64v42.667     c17.067,0,33.152,6.656,45.248,18.752c6.848,6.848,11.712,15.04,14.869,23.915h22.336c55.36,0,103.168-41.216,108.843-93.845     c0.469-4.203,0.704-8.491,0.704-12.821C512,228.353,486.912,190.017,446.784,175.446z"/>
-                        </g>
-                    </g>
-                </g>
-
-            </svg>
-        </a>
-        <button class="lcPageContentProductsTop__action tooltip" title="Скопировать">
-            <svg width="21px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                 version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 512 512"
-                 style="enable-background:new 0 0 512 512;" xml:space="preserve">
-                                        <g>
-                                            <g>
-                                                <path d="M376.098,0h-300c-24.814,0-45,20.186-45,45v362.001c0,19.53,12.578,36.024,30,42.237V147.422    c0-20.024,7.808-38.862,21.973-53.027l42.422-42.422C139.658,37.808,158.496,30,178.52,30h239.815    C412.122,12.578,395.628,0,376.098,0z"/>
-                                            </g>
-                                        </g>
-                <g>
-                    <g>
-                        <path d="M436.102,60.199c-132.53,0-93.96,0-225,0v104.8c0,8.29-6.71,15.2-15,15.2h-105V467c0,24.82,20.18,45,45,45h300    c24.81,0,44.8-20.18,44.8-45V104.999C480.902,80.189,460.912,60.199,436.102,60.199z M406.102,422h-240c-8.29,0-15-6.71-15-15    c0-8.29,6.71-15,15-15h240c8.29,0,15,6.71,15,15C421.102,415.29,414.392,422,406.102,422z M406.102,362h-240    c-8.29,0-15-6.71-15-15c0-8.29,6.71-15,15-15h240c8.29,0,15,6.71,15,15C421.102,355.29,414.392,362,406.102,362z M406.102,302    h-240c-8.29,0-15-6.71-15-15c0-8.29,6.71-15,15-15h240c8.29,0,15,6.71,15,15C421.102,295.29,414.392,302,406.102,302z     M406.102,242h-240c-8.29,0-15-6.71-15-15s6.71-15,15-15h240c8.29,0,15,6.71,15,15S414.392,242,406.102,242z"/>
-                    </g>
-                </g>
-                <g>
-                    <g>
-                        <path d="M178.52,60c-12.012,0-23.32,4.688-31.816,13.184l-42.422,42.422c-10.001,10-13.184,21.182-13.184,34.394h90V60H178.52z"/>
-                    </g>
-                </g>
-
-                                        </svg>
-        </button-->
-        <button
-                id="js_product_delete"
-                data-route="{{ route('products.change-delete') }}"
-                class="lcPageContentProductsTop__action tooltip" title="Удалить">
-            <svg width="22px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+        <button id="js_product_destroy"
+                data-route="{{ route('products.destroy_for_checked') }}"
+                class="lcPageContentProductsTop__action tooltip"
+                title="Удалить отмеченные"
+        >
+            <svg width="22px" xmlns="http://www.w3.org/2000/svg"
                  version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 512 512"
                  style="enable-background:new 0 0 512 512;" xml:space="preserve">
                 <g>
@@ -139,5 +104,27 @@
 
             </svg>
         </button>
+
+{{--        <button class="lcPageContentProductsTop__action tooltip" title="Скопировать">--}}
+{{--            <svg width="21px" xmlns="http://www.w3.org/2000/svg"--}}
+{{--                 version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 512 512"--}}
+{{--                 style="enable-background:new 0 0 512 512;" xml:space="preserve">--}}
+{{--                    <g>--}}
+{{--                        <g>--}}
+{{--                            <path d="M376.098,0h-300c-24.814,0-45,20.186-45,45v362.001c0,19.53,12.578,36.024,30,42.237V147.422    c0-20.024,7.808-38.862,21.973-53.027l42.422-42.422C139.658,37.808,158.496,30,178.52,30h239.815    C412.122,12.578,395.628,0,376.098,0z"/>--}}
+{{--                        </g>--}}
+{{--                    </g>--}}
+{{--                <g>--}}
+{{--                    <g>--}}
+{{--                        <path d="M436.102,60.199c-132.53,0-93.96,0-225,0v104.8c0,8.29-6.71,15.2-15,15.2h-105V467c0,24.82,20.18,45,45,45h300    c24.81,0,44.8-20.18,44.8-45V104.999C480.902,80.189,460.912,60.199,436.102,60.199z M406.102,422h-240c-8.29,0-15-6.71-15-15    c0-8.29,6.71-15,15-15h240c8.29,0,15,6.71,15,15C421.102,415.29,414.392,422,406.102,422z M406.102,362h-240    c-8.29,0-15-6.71-15-15c0-8.29,6.71-15,15-15h240c8.29,0,15,6.71,15,15C421.102,355.29,414.392,362,406.102,362z M406.102,302    h-240c-8.29,0-15-6.71-15-15c0-8.29,6.71-15,15-15h240c8.29,0,15,6.71,15,15C421.102,295.29,414.392,302,406.102,302z     M406.102,242h-240c-8.29,0-15-6.71-15-15s6.71-15,15-15h240c8.29,0,15,6.71,15,15S414.392,242,406.102,242z"/>--}}
+{{--                    </g>--}}
+{{--                </g>--}}
+{{--                <g>--}}
+{{--                    <g>--}}
+{{--                        <path d="M178.52,60c-12.012,0-23.32,4.688-31.816,13.184l-42.422,42.422c-10.001,10-13.184,21.182-13.184,34.394h90V60H178.52z"/>--}}
+{{--                    </g>--}}
+{{--                </g>--}}
+{{--            </svg>--}}
+{{--        </button>--}}
     </div>
 </div>

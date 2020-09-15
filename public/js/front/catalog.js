@@ -20,8 +20,6 @@
     const markSelectedAttributes = () => {
         const params = parseParams();
 
-        console.log({params});
-
         initStatesOfFilters(params, () => {
             console.log(initParams);
             initPriceRangeComponent();
@@ -77,15 +75,14 @@
      * Инициализация сортировки
      *
      * @param params
-     * @param cb
      */
-    const initStatesOfSort = (params, cb) => {
+    const initStatesOfSort = (params,) => {
         if (!params.hasOwnProperty("sort")) return;
 
         const column = Object.keys(params["sort"])[0];
         const direction = params["sort"][column];
 
-        catalogSortElem.setValue(`${column}_${direction}`);
+        catalogSortElem.val(`${column}_${direction}`);
     };
 
     /**
@@ -174,8 +171,7 @@
      * @returns {string}
      */
     const buildSort = () => {
-        let sort = catalogSortElem.getValue();
-        sort = sort["value"].split("_");
+        let sort = catalogSortElem.val().split("_");
 
         const sortObj = {};
 
@@ -224,10 +220,10 @@
     };
 
     $(document).ready(function () {
-        catalogSortElem = $("#catalogSort").customSelect({
-            onChange: (value => {
-                $("#filter-form").submit();
-            })
+        catalogSortElem = $("#catalogSort");
+
+        catalogSortElem.on("change", function () {
+            $("#filter-form").submit();
         });
 
         markSelectedAttributes();

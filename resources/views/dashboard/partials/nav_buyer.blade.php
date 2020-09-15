@@ -18,11 +18,11 @@
    class="{{ (request()->is('dashboard/buyer/list_cashback*')) ? 'active' : '' }}">
     Кэшбэк
 </a>
-<a href="{{ route('buyer.finance.deposit-withdraw') }}"
+<a href="{{ route('buyer.finance.deposit_withdraw') }}"
    class="{{ (request()->is('dashboard/buyer/user_pay*')) ? 'active' : '' }}">
     Пополнение/снятие
 </a>
 <a href="{{ route('user.tasks.index') }}"
-   class="{{ (request()->is('dashboard/buyer/tasks*')) ? 'active' : '' }}">
+   class="{{ (request()->segment(3) == 'tasks') ? 'active' : '' }}">
     Помощь
 </a>

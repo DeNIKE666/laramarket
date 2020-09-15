@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
@@ -31,21 +32,11 @@ class Order extends Model
     const DELIVERY_WITH_ENERGY = 'energy';
     const DELIVERY_WITH_COURIER = 'courier';
 
-    /**
-     * Способы оплаты
-     *
-     * @author Anton Reviakin
-     */
-    const PAY_METHOD_INTERNAL_PERSONAL = 'internal_personal';
-    const PAY_METHOD_VISA = 'visa';
-    const PAY_METHOD_MASTERCARD = 'mastercard';
-    const PAY_METHOD_WEBMONEY = 'webmoney';
-
     protected $fillable = [
         'user_id',
         'delivery_profile_id',
         'cost',
-        'payment_method',
+        'pay_system',
         'delivery_service',
         'status',
         'notes',
@@ -61,7 +52,12 @@ class Order extends Model
         return $this->hasMany(OrderItem::class);
     }
 
-    public function deliveryContact()
+    public function paySystem()
+    {
+        return $this->belongsTo(PaymentOption::class, 'pay_system');
+    }
+
+    public function deliveryProfile()
     {
         return $this->hasOne(OrdersDeliveryProfile::class);
     }
@@ -92,18 +88,45 @@ class Order extends Model
     }
 
     /**
-     * Список способов оплаты
+     * Заказ покупателя
      *
-     * @return string[]
-     * @author Anton Reviakin
+     * @param Builder  $builder
+     * @param int|null $userId
+     *
+     * @return Builder
+     * @author Reviakin Anton
      */
-    public function getPaymentMethods(): array
+    public function scopeOfBuyer(Builder $builder, int $userId = null): Builder
     {
-        return [
-            self::PAY_METHOD_INTERNAL_PERSONAL,
-            self::PAY_METHOD_VISA,
-            self::PAY_METHOD_MASTERCARD,
-            self::PAY_METHOD_WEBMONEY,
-        ];
+        if (!$userId) {
+            return $builder;
+        }
+
+        return $builder->where('user_id', $userId);
+    }
+
+    /**
+     * Заказ продавца
+     *
+     * @param Builder  $builder
+     * @param int|null $userId
+     *
+     * @return Builder
+     */
+    public function scopeOfSeller(Builder $builder, int $userId = null): Builder
+    {
+        if (!$userId) {
+            return $builder;
+        }
+
+        return $builder
+            ->whereHas('items', function (Builder $query) use ($userId) {
+                $query->whereHas(
+                    'product',
+                    function (Builder $query) use ($userId) {
+                        $query->where('user_id', $userId);
+                    }
+                );
+            });
     }
 }

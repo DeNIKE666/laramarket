@@ -32,10 +32,9 @@ class CashbackScheduleService
     }
 
     /**
-     * Заполнить таблицу заданиями выплат для заказа
+     * Заполнить таблицу расписанием выплат
      *
-     * @param Request $request
-     * @param Order   $order
+     * @param Order $order
      */
     public function fill(Order $order)
     {
@@ -60,7 +59,9 @@ class CashbackScheduleService
                 ];
             }
 
-            $this->cashbackScheduleRepository->fill($schedules);
+            $this
+                ->cashbackScheduleRepository
+                ->fill($schedules);
         });
     }
 
@@ -70,7 +71,9 @@ class CashbackScheduleService
     public function addPeriodicBalance(): void
     {
         //Получить список для начисления кэшбэка
-        $payouts = $this->cashbackScheduleRepository->getSchedulesForPayout();
+        $payouts = $this
+            ->cashbackScheduleRepository
+            ->getSchedulesForPayout();
 
         if ($payouts->isEmpty()) {
             return;
@@ -85,14 +88,15 @@ class CashbackScheduleService
                 $payout->payout_amount
             );
 
-            $this->cashbackScheduleRepository->setAsCompletePayout($payout->id);
+            $this
+                ->cashbackScheduleRepository
+                ->setAsCompletePayout($payout->id);
         });
     }
 
     /**
      * Расчитать даты и суммы выплат
      *
-     * @param Request   $request
      * @param OrderItem $orderItem
      *
      * @return array

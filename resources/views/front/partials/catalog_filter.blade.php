@@ -33,8 +33,6 @@
             <div class="filterRange"></div>
         </div>
 
-        {{ Form::text('attr', '', ['id' => 'filter-attr']) }}
-
         @foreach($catFilter as $filter)
             <div class="catalogFilter__title">
                 <span>{{ $filter->name }}</span>

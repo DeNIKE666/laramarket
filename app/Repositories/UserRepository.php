@@ -69,11 +69,12 @@ class UserRepository
      *
      * @return Collection
      */
-    public function getReferrals(int $partner_id): Collection
+    public function getReferrals(int $partnerId): Collection
     {
-        return $this->model
+        return $this
+            ->model
             ->query()
-            ->where(compact('partner_id'))
+            ->where('partner_id', $partnerId)
             ->get();
     }
 
@@ -87,7 +88,9 @@ class UserRepository
      */
     public function addToPersonalAccount(int $id, $amount): int
     {
-        return $this->model->query()
+        return $this
+            ->model
+            ->query()
             ->where(compact('id'))
             ->increment('personal_account', $amount);
     }
@@ -102,7 +105,9 @@ class UserRepository
      */
     public function takeOffPersonalBalance(int $id, $amount): int
     {
-        return $this->model->query()
+        return $this
+            ->model
+            ->query()
             ->where(compact('id'))
             ->decrement('personal_account', $amount);
     }
@@ -117,7 +122,9 @@ class UserRepository
      */
     public function addToCashbackAccount(int $id, $amount): int
     {
-        return $this->model->query()
+        return $this
+            ->model
+            ->query()
             ->where(compact('id'))
             ->increment('cashback_account', $amount);
     }
@@ -132,7 +139,9 @@ class UserRepository
      */
     public function takeOffCashbackBalance(int $id, $amount): int
     {
-        return $this->model->query()
+        return $this
+            ->model
+            ->query()
             ->where(compact('id'))
             ->decrement('cashback_account', $amount);
     }
@@ -147,7 +156,9 @@ class UserRepository
      */
     public function addToShopAccount(int $id, $amount): int
     {
-        return $this->model->query()
+        return $this
+            ->model
+            ->query()
             ->where(compact('id'))
             ->increment('seller_account', $amount);
     }
@@ -162,7 +173,9 @@ class UserRepository
      */
     public function takeOffShopBalance(int $id, $amount): int
     {
-        return $this->model->query()
+        return $this
+            ->model
+            ->query()
             ->where(compact('id'))
             ->decrement('seller_account', $amount);
     }
@@ -177,7 +190,9 @@ class UserRepository
      */
     public function addToPartnerAccount(int $id, $amount): int
     {
-        return $this->model->query()
+        return $this
+            ->model
+            ->query()
             ->where(compact('id'))
             ->increment('partner_account', $amount);
     }
@@ -192,7 +207,9 @@ class UserRepository
      */
     public function takeOffPartnerBalance(int $id, $amount): int
     {
-        return $this->model->query()
+        return $this
+            ->model
+            ->query()
             ->where(compact('id'))
             ->decrement('partner_account', $amount);
     }
@@ -207,7 +224,9 @@ class UserRepository
      */
     public function transferFromPartnerToPersonal(int $id, $amount): bool
     {
-        $user = $this->model->query()
+        $user = $this
+            ->model
+            ->query()
             ->where(compact('id'))
             ->firstOrFail();
 
