@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class PartnerHistoryAccount extends Model
+class PartnerAsAloneHistoryAccount extends Model
 {
     public function sender()
     {

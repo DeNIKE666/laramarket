@@ -6,6 +6,6 @@
     Мои рефералы
 </a>
 
-<a href="{{ route('partner.history-account') }}" class="{{ (request()->is('dashboard/partner/history-account*')) ? 'active' : '' }}">
+<a href="{{ route('partner.as_alone_history_account') }}" class="{{ (request()->is('dashboard/partner/as-alone-history-account*')) ? 'active' : '' }}">
     История начислений
 </a>

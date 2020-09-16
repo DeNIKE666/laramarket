@@ -4,13 +4,13 @@ namespace App\Http\Controllers\Dashboard\Partner;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Partner\TransferToPersonalAccountRequest;
-use App\Services\Partner\HistoryAccountService;
+use App\Services\Partner\AsAlone\HistoryAccountService;
 use App\Services\Partner\RefferalsService;
 use App\Services\Partner\TransferService;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
 
-class PartnerController extends Controller
+class AsAlonePartnerController extends Controller
 {
     private $transferService;
     private $refferalsService;
@@ -49,7 +49,9 @@ class PartnerController extends Controller
 
     public function transferToPersonalAccount(TransferToPersonalAccountRequest $request)
     {
-        $transfer = $this->transferService->transferToPersonalAccount();
+        $transfer = $this
+            ->transferService
+            ->transferToPersonalAccount();
 
         return response(
             ['message' => $transfer],

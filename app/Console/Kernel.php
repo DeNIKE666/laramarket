@@ -25,6 +25,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('cashback:payout')->withoutOverlapping()->everyMinute();
+        $schedule->command('holds:finish-expired')->withoutOverlapping()->everyMinute();
     }
 
     /**

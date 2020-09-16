@@ -4,8 +4,7 @@
 namespace App\Repositories;
 
 
-use App\Models\PartnerHistoryAccount;
-use App\Models\User;
+use App\Models\PartnerAsAloneHistoryAccount;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
@@ -15,12 +14,12 @@ use Illuminate\Support\Collection;
  * @package App\Repositories
  * @author  Anton Reviakin
  */
-class PartnerHistoryAccountRepository
+class PartnerAsAloneHistoryAccountRepository
 {
-    /** @var Model */
+    /** @var PartnerAsAloneHistoryAccount */
     private $model;
 
-    public function __construct(PartnerHistoryAccount $model)
+    public function __construct(PartnerAsAloneHistoryAccount $model)
     {
         $this->model = $model;
     }
@@ -41,5 +40,18 @@ class PartnerHistoryAccountRepository
             ->get();
     }
 
-
+    /**
+     * Заполнить историю
+     *
+     * @param array $items
+     *
+     * @return bool
+     */
+    public function fill(array $items): bool
+    {
+        return $this
+            ->model
+            ->query()
+            ->insert($items);
+    }
 }

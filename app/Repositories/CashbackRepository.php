@@ -6,62 +6,86 @@ namespace App\Repositories;
 
 use App\Models\Cashback;
 
-class CashbackRepository extends BaseRepository
+class CashbackRepository
 {
+    /** @var Cashback $model */
+    private $model;
+
     public function __construct(Cashback $model)
     {
-        parent::__construct($model);
         $this->model = $model;
+    }
+
+    /**
+     * Получить кэшбэк по номеру заказа
+     *
+     * @param int $orderId
+     *
+     * @return Cashback
+     */
+    public function getByOrder(int $orderId): Cashback
+    {
+        return $this
+            ->model
+            ->query()
+            ->where('order_id', $orderId)
+            ->firstOrFail();
     }
 
     /**
      * Добавить кэшбэк
      *
-     * @param int $user_id
-     * @param int $order_id
+     * @param int $userId
+     * @param int $orderId
      * @param     $cost
      * @param int $status
      *
      * @return Cashback
      */
-    public function store(int $user_id, int $order_id, $cost, int $status): Cashback
+    public function store(int $userId, int $orderId, $cost, int $status): Cashback
     {
         return $this
-            ->create(compact(
-                'user_id',
-                'order_id',
-                'cost',
-                'status'
-            ));
+            ->model
+            ->query()
+            ->create([
+                'user_id'  => $userId,
+                'order_id' => $orderId,
+                'cost'     => $cost,
+                'status'   => $status,
+            ]);
     }
 
     /**
      * Установить статус выплат в кэшбэке
      *
-     * @param int $order_id
+     * @param int $orderId
      * @param int $status
      *
      * @return bool
      */
-    public function setPayoutsStatus(int $order_id, int $status): bool
+    public function setPayoutsStatus(int $orderId, int $status): bool
     {
         return $this
-            ->findOneBy(compact('order_id'))
-            ->update(compact('status'));
+            ->getByOrder($orderId)
+            ->update([
+                'status' => $status,
+            ]);
     }
 
     /**
      * Установить период выплат в кэшбэке
      *
-     * @param int $order_id
+     * @param int $orderId
      * @param int $period
      *
      * @return bool
      */
-    public function setPayoutsPeriod(int $order_id, int $period): bool
+    public function setPayoutsPeriod(int $orderId, int $period): bool
     {
         return $this
-            ->findOneBy(compact('order_id'))
-            ->update(compact('period'));
+            ->getByOrder($orderId)
+            ->update([
+                'period' => $period,
+            ]);
     }
 }

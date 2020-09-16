@@ -42,17 +42,17 @@ class PageController extends Controller
      */
     public function store(PageFormRequest $request)
     {
+        $slug = $request->input('slug')
+            ? $request->input('slug')
+            : $this->generateSlug(Page::class, $request->input('name'));
 
         $data = [
-            'name'    => $request['name'],
-            'slug'    => $this->generateSlug(
-                Page::class,
-                $request['name']
-            ),
-            'content' => $request['content'],
+            'name'    => $request->input('name'),
+            'slug'    => $slug,
+            'content' => $request->input('content'),
         ];
 
-        $page = Page::create($data);
+        Page::create($data);
 
         return redirect()->route('admin.page.index');
     }
@@ -89,12 +89,16 @@ class PageController extends Controller
      *
      * @return RedirectResponse
      */
-    public function update(PageFormRequest $request, Page $page):RedirectResponse
+    public function update(PageFormRequest $request, Page $page): RedirectResponse
     {
+        $slug = $request->input('slug')
+            ? $request->input('slug')
+            : $this->generateSlug(Page::class, $request->input('name'));
+
         $data = [
-            'name'    => $request['name'],
-            'slug'    => $request['slug'],
-            'content' => $request['content'],
+            'name'    => $request->input('name'),
+            'slug'    => $slug,
+            'content' => $request->input('content'),
         ];
 
         $page->update($data);
@@ -109,8 +113,15 @@ class PageController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id): RedirectResponse
     {
-        //
+        Page::destroy($id);
+
+        return redirect()
+            ->route('admin.page.index')
+            ->with(
+                'status',
+                'Страница удалена'
+            );
     }
 }

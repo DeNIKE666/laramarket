@@ -233,10 +233,11 @@ Route::group(
         'as'         => 'partner.',
     ],
     function () {
-        Route::get('/', 'PartnerController@index')->name('index');
-        Route::get('/referrals', 'PartnerController@referrals')->name('referrals');
-        Route::get('/history-account', 'PartnerController@historyAccount')->name('history-account');
-        Route::patch('/account/transfer-to-personal-account', 'PartnerController@transferToPersonalAccount')->name('transfer-to-personal-account');
+        Route::get('/', 'AsAlonePartnerController@index')->name('index');
+        Route::get('/referrals', 'AsAlonePartnerController@referrals')->name('referrals');
+        Route::get('/as-alone-history-account', 'AsAlonePartnerController@historyAccount')->name('as_alone_history_account');
+//        Route::get('/as-seller-history-account', 'AsAlonePartnerController@historyAccount')->name('history-account');
+        Route::patch('/account/transfer-to-personal-account', 'AsAlonePartnerController@transferToPersonalAccount')->name('transfer-to-personal-account');
     }
 );
 

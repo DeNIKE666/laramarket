@@ -1,3 +1,8 @@
+@php
+    /** @var \App\Models\Product $product */
+    //dump($product);
+@endphp
+
 <div class="popular">
     <a class="popular__img" href="{{ $product->getUrl() }}">
         @if($product->getImageSrc('medium') != '')
@@ -21,12 +26,13 @@
         @endif
         <form action="{{ route('cart.store') }}" method="POST" class="js_add_product">
             {{ csrf_field() }}
-            <input type="hidden" value="{{ $product->id }}"  name="id">
-            <input type="hidden" value="{{ $product->title }}"  name="name">
-            <input type="hidden" value="{{ $product->price }}"  name="price">
-            <input type="hidden" value="{{ $product->getImageSrc() }}"  name="img">
-            <input type="hidden" value="{{ $product->getUrl() }}"  name="slug">
-            <input type="hidden" value="1"  name="quantity">
+            <input type="hidden" value="{{ $product->id }}" name="id">
+            <input type="hidden" value="{{ $product->user_id }}" name="user_id">
+            <input type="hidden" value="{{ $product->title }}" name="name">
+            <input type="hidden" value="{{ $product->price }}" name="price">
+            <input type="hidden" value="{{ $product->getImageSrc() }}" name="img">
+            <input type="hidden" value="{{ $product->getUrl() }}" name="slug">
+            <input type="hidden" value="1" name="quantity">
             <button class="popular__cart btn" type="submit">
                 <svg
                         xmlns="http://www.w3.org/2000/svg"

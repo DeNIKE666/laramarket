@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePartnerHistoryAccountsTable extends Migration
+class CreatePartnerAsAloneHistoryAccountsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreatePartnerHistoryAccountsTable extends Migration
      */
     public function up()
     {
-        Schema::create('partner_history_accounts', function (Blueprint $table) {
+        Schema::create('partner_as_alone_history_accounts', function (Blueprint $table) {
             $table->id();
             $table
                 ->unsignedBigInteger('receiver_id')
@@ -48,6 +48,6 @@ class CreatePartnerHistoryAccountsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('partner_history_accounts');
+        Schema::dropIfExists('partner_as_alone_history_accounts');
     }
 }

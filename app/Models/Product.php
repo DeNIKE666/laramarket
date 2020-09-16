@@ -25,7 +25,7 @@ class Product extends Model implements HasMedia
     /**
      * Типы товара
      */
-    public const TYPE_PRODUCT_FIZ = 'fiz';
+    public const TYPE_PRODUCT_REAL = 'real';
     public const TYPE_PRODUCT_INFO = 'info';
 
     /**

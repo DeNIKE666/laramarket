@@ -91,11 +91,31 @@ class StartSeeder extends Seeder
         DB::table('payment_schedules')->insert($payment_schedules);
 
         $products = [
-            ['id' => '1', 'user_id' => '1', 'category_id' => '3', 'title' => 'Palit GTX 1660 Super Jet Strim', 'slug' => 'palit-gtx-1660-super-jet-strim', 'status' => 'active', 'content' => null, 'is_moderation' => '1', 'moderation_comment' => null, 'group_product' => 'fiz', 'price' => '1', 'created_at' => '2020-07-23 20:30:25', 'updated_at' => '2020-07-29 19:06:20', 'part_cashback' => '30', 'old_price' => null, 'views' => '6'],
-            ['id' => '2', 'user_id' => '1', 'category_id' => '7', 'title' => 'Телевизоры', 'slug' => 'televizory', 'status' => 'active', 'content' => '<p>1212 q23 qe q2</p>', 'is_moderation' => '1', 'moderation_comment' => null, 'group_product' => 'fiz', 'price' => '1', 'created_at' => '2020-08-06 07:27:43', 'updated_at' => '2020-08-06 07:27:43', 'part_cashback' => '30', 'old_price' => null, 'views' => '0'],
+            ['id' => '1', 'user_id' => '1', 'category_id' => '3', 'title' => 'Palit GTX 1660 Super Jet Strim', 'slug' => 'palit-gtx-1660-super-jet-strim', 'status' => 'active', 'content' => null, 'is_moderation' => '1', 'moderation_comment' => null, 'group_product' => 'real', 'price' => '1', 'created_at' => '2020-07-23 20:30:25', 'updated_at' => '2020-07-29 19:06:20', 'part_cashback' => '30', 'old_price' => null, 'views' => '6'],
+            ['id' => '2', 'user_id' => '1', 'category_id' => '7', 'title' => 'Телевизоры', 'slug' => 'televizory', 'status' => 'active', 'content' => '<p>1212 q23 qe q2</p>', 'is_moderation' => '1', 'moderation_comment' => null, 'group_product' => 'real', 'price' => '1', 'created_at' => '2020-08-06 07:27:43', 'updated_at' => '2020-08-06 07:27:43', 'part_cashback' => '30', 'old_price' => null, 'views' => '0'],
         ];
 
         DB::table('products')->insert($products);
 
+        $settings = [
+            [
+                'name'       => 'Период холда для заказов',
+                'slug'       => 'orders_hold_period',
+                'value'      => '{"real":3,"info":1}',
+                'is_json'    => true,
+                'created_at' => \Illuminate\Support\Carbon::now(),
+                'updated_at' => \Illuminate\Support\Carbon::now(),
+            ],
+            [
+                'name'       => 'Процент от заказа одноуровневой партнерской программы',
+                'slug'       => 'percent_for_single_level_program',
+                'value'      => '3',
+                'is_json'    => false,
+                'created_at' => \Illuminate\Support\Carbon::now(),
+                'updated_at' => \Illuminate\Support\Carbon::now(),
+            ],
+        ];
+
+        DB::table('settings')->insert($settings);
     }
 }

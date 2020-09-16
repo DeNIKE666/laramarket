@@ -72,10 +72,12 @@
                     <div id="totalPrice" class="cartPay__price">
                         {{ \Cart::getTotal() }} рублей
                     </div>
+                    @guest()
                     <div class="cartSum__inf">
                         Для оформления заказа необходимо
                         вторизоваться или зарегистрироваться
                     </div>
+                    @endguest
                     <a class="cartPay__btn btn" href="{{ route('buyer.order.checkout_form') }}">
                         <span>Оформить заказ</span>
                         <svg

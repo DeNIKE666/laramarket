@@ -12,8 +12,6 @@ class Setting extends Model
         'value',
     ];
 
-    public $timestamps = false;
-
     public static function getNumberValue($slug) {
 
         try {

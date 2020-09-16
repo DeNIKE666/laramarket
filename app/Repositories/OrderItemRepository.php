@@ -5,6 +5,7 @@ namespace App\Repositories;
 
 
 use App\Models\OrderItem;
+use Illuminate\Support\Collection;
 
 class OrderItemRepository
 {
@@ -28,6 +29,23 @@ class OrderItemRepository
         return $this->model
             ->query()
             ->insert($orderItems);
+    }
+
+    /**
+     * Получить товары по номеру заказа
+     *
+     * @param int $orderId
+     *
+     * @return Collection
+     */
+    public function getProductsByOrder(int $orderId): Collection
+    {
+        return $this
+            ->model
+            ->query()
+            ->with('product')
+            ->where('order_id', $orderId)
+            ->get();
     }
 
 }

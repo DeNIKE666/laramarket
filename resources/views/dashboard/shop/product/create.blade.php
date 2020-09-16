@@ -72,7 +72,7 @@
                         Form::select(
                             'group_product',
                             [
-                                \App\Models\Product::TYPE_PRODUCT_FIZ => 'физический',
+                                \App\Models\Product::TYPE_PRODUCT_REAL => 'физический',
                                 \App\Models\Product::TYPE_PRODUCT_INFO => 'информационый'
                             ],
                            optional($product)->group_product,

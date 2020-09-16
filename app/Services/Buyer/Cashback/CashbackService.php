@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Services\Cashback;
+namespace App\Services\Buyer\Cashback;
 
 
 use App\Models\Cashback;
@@ -25,7 +25,7 @@ class CashbackService
      *
      * @return Cashback
      */
-    public function storeCashback(Order $order): Cashback
+    public function store(Order $order): Cashback
     {
         return $this
             ->cashbackRepository
@@ -43,20 +43,25 @@ class CashbackService
      * @param Order $order
      * @param int   $period
      *
-     * @return bool
+     * @return CashbackService
      */
-    public function setPayoutsPeriod(Order $order, int $period): bool
+    public function setPayoutsPeriod(Order $order, int $period): self
     {
         if (!$this->periodExist($period)) {
-            abort(Response::HTTP_UNPROCESSABLE_ENTITY, 'Не правильный период выплат');
+            abort(
+                Response::HTTP_UNPROCESSABLE_ENTITY,
+                'Не правильный период выплат'
+            );
         }
 
-        return $this
+        $this
             ->cashbackRepository
             ->setPayoutsPeriod(
                 $order->id,
                 $period
             );
+
+        return $this;
     }
 
     /**
@@ -64,16 +69,18 @@ class CashbackService
      *
      * @param Order $order
      *
-     * @return bool
+     * @return CashbackService
      */
-    public function setInProgressStatus(Order $order): bool
+    public function setInProgressStatus(Order $order): self
     {
-        return $this
+        $this
             ->cashbackRepository
             ->setPayoutsStatus(
                 $order->id,
                 Cashback::STATUS_PAYOUTS_IN_PROGRESS
             );
+
+        return $this;
     }
 
     /**

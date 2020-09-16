@@ -15,25 +15,18 @@ class CreateSettingsTable extends Migration
     {
         Schema::create('settings', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('slug');
             $table->string('name');
+            $table->string('slug');
             $table->string('value');
+            $table
+                ->boolean('is_json')
+                ->default(false);
+            $table->timestamps();
         });
 
         Schema::table('products', function(Blueprint $table){
             $table->integer('part_cashback')->default(30);
         });
-
-//        Schema::table('cashbacks', function (Blueprint $table) {
-//            $table->unsignedBigInteger('user_id');
-//            $table->unsignedBigInteger('order_id');
-//            $table->integer('cost')->default(0);
-//            $table->date('payment_date');
-//            $table->string('status')->default('wait');
-//            $table->softDeletes();
-//            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-//            $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
-//        });
     }
 
     /**
@@ -44,18 +37,5 @@ class CreateSettingsTable extends Migration
     public function down()
     {
         Schema::dropIfExists('settings');
-
-//        Schema::table('orders', function(Blueprint $table) {
-//            $table->dropColumn('part_cashback');
-//        });
-
-//        Schema::table('cashbacks', function(Blueprint $table) {
-//            $table->dropColumn('user_id');
-//            $table->dropColumn('order_id');
-//            $table->dropColumn('cost');
-//            $table->dropColumn('payment_date');
-//            $table->dropColumn('status');
-//            $table->dropColumn('deleted_at');
-//        });
     }
 }

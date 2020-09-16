@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Services\Shop;
+namespace App\Services\Seller;
 
 
 use App\Models\Order;
@@ -15,9 +15,9 @@ class OrderService
     /** @var OrderRepository $orderRepository */
     private $orderRepository;
 
-    public function __construct(OrderRepository $orderRepository)
+    public function __construct()
     {
-        $this->orderRepository = $orderRepository;
+        $this->orderRepository = app(OrderRepository::class);
     }
 
     /**

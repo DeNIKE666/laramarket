@@ -72,7 +72,7 @@ class CreateUsersTable extends Migration
 
             $table->timestamps();
 
-            $table->index('partner_id');
+            $table->foreign('partner_id')->references('id')->on('users');
         });
     }
 

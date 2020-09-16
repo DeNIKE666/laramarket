@@ -23,7 +23,14 @@ class CreateProductsTable extends Migration
             $table->text('content')->nullable();
             $table->tinyInteger('is_moderation')->default(1);
             $table->string('moderation_comment')->nullable();
-            $table->string('group_product')->nullable();
+
+            $table
+                ->enum('group_product', [
+                    'real',
+                    'info',
+                ])
+                ->default('real');
+
             $table->integer('price')->default(0);
 
             $table->softDeletes();

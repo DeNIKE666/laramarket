@@ -6,25 +6,30 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Shop\OrderChangeStatusRequest;
 use App\Models\Order;
 use App\Repositories\OrderRepository;
-use App\Services\Cashback\CashbackService;
-use App\Services\Shop\OrderService;
+use App\Services\Buyer\Cashback\CashbackService;
+use App\Services\Seller\OrderService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
 
 class OrderShopController extends Controller
 {
-    /** @var OrderRepository $orderRepository */
-    protected $orderRepository;
-
     /** @var OrderService $orderService */
     private $orderService;
 
-    public function __construct(OrderRepository $orderRepository)
-    {
-        $this->orderRepository = $orderRepository;
+    /** @var CashbackService $cashbackService */
+    private $cashbackService;
 
-        $this->orderService = (new OrderService($orderRepository));
+    /** @var OrderRepository $orderRepository */
+    protected $orderRepository;
+
+    public function __construct()
+    {
+        $this->orderService = app(OrderService::class);
+
+        $this->cashbackService = app(CashbackService::class);
+
+        $this->orderRepository = app(OrderRepository::class);
     }
 
     /**
@@ -49,8 +54,8 @@ class OrderShopController extends Controller
      * Заказы в работе
      *
      * @return View
-     * @author Anton Reviakin
      *
+     * @author Anton Reviakin
      */
     public function listInProgress(): View
     {
@@ -76,6 +81,8 @@ class OrderShopController extends Controller
      * @param OrderChangeStatusRequest $request
      *
      * @return Response
+     *
+     * @author  Anton Reviakin
      */
     public function changeStatus(OrderChangeStatusRequest $request): Response
     {
@@ -83,7 +90,9 @@ class OrderShopController extends Controller
 
         //Если Отправлено - добавить кэшбэк
         if ($order->status === Order::ORDER_STATUS_SENT) {
-            (new CashbackService)->storeCashback($order);
+            $this
+                ->cashbackService
+                ->store($order);
         }
 
         return response($order, Response::HTTP_OK);

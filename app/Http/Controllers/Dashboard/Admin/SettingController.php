@@ -5,14 +5,14 @@ namespace App\Http\Controllers\Dashboard\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Setting;
-use App\Repositories\Admin\SettingRepository;
+use App\Repositories\Admin\SettingsRepository;
 
 class SettingController extends Controller
 {
     protected $adminSettingRepository;
 
     public function __construct(
-        SettingRepository $adminSettingRepository
+        SettingsRepository $adminSettingRepository
     )
     {
         $this->adminSettingRepository = $adminSettingRepository;

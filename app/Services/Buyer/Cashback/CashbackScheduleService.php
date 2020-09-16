@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Services\Cashback;
+namespace App\Services\Buyer\Cashback;
 
 
 use App\Models\Cashback;
@@ -11,7 +11,6 @@ use App\Models\OrderItem;
 use App\Repositories\CashbackScheduleRepository;
 use App\Repositories\PaymentsScheduleRepository;
 use App\Repositories\UserRepository;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -19,7 +18,7 @@ use Illuminate\Support\Collection;
 /**
  * Class CashbackScheduleService
  *
- * @package App\Services\Cashback
+ * @package App\Services\Buyer\Cashback
  * @author  Anton Reviakin
  */
 class CashbackScheduleService
@@ -35,8 +34,9 @@ class CashbackScheduleService
      * Заполнить таблицу расписанием выплат
      *
      * @param Order $order
+     * @param int   $period
      */
-    public function fill(Order $order)
+    public function fill(Order $order, int $period)
     {
         //Товары в заказе
         /** @var Collection $productsInOrder */
@@ -45,8 +45,8 @@ class CashbackScheduleService
         //Id кэшбэка
         $cashbackId = $order->cashback->id;
 
-        $productsInOrder->each(function (OrderItem $orderItem) use ($cashbackId) {
-            $payouts = $this->calcPayoutPeriods($orderItem);
+        $productsInOrder->each(function (OrderItem $orderItem) use ($cashbackId, $period) {
+            $payouts = $this->calcPayoutPeriods($orderItem, $period);
 
             $schedules = [];
 
@@ -66,7 +66,7 @@ class CashbackScheduleService
     }
 
     /**
-     * Начислить кэшбэк по периодам выплат
+     * Начислить кэшбэк по периодам выплат (Command)
      */
     public function addPeriodicBalance(): void
     {
@@ -98,12 +98,13 @@ class CashbackScheduleService
      * Расчитать даты и суммы выплат
      *
      * @param OrderItem $orderItem
+     * @param int       $period
      *
      * @return array
      */
-    private function calcPayoutPeriods(OrderItem $orderItem): array
+    private function calcPayoutPeriods(OrderItem $orderItem, int $period): array
     {
-        $periods = $this->getPayoutPeriod($orderItem);
+        $periods = $this->getPayoutPeriod($orderItem, $period);
 
         $payouts = [];
 
@@ -139,10 +140,11 @@ class CashbackScheduleService
      * Получить период выплат по размеру комиссии и выбранной периодичности выплат
      *
      * @param OrderItem $orderItem
+     * @param int       $period
      *
      * @return array
      */
-    private function getPayoutPeriod(OrderItem $orderItem): array
+    private function getPayoutPeriod(OrderItem $orderItem, int $period): array
     {
         //Периоды выплат по размеру комиссии
         $periods = app(PaymentsScheduleRepository::class)->getPeriodsByPercentFee($orderItem->product_percent_fee);
@@ -151,7 +153,7 @@ class CashbackScheduleService
             abort(Response::HTTP_NOT_FOUND, 'Не найдены периоды выплат кэшбэка с заданным процентом комиссии товара/услуги');
         }
 
-        switch (request('period')) {
+        switch ($period) {
             case Cashback::PERIOD_EVERY_MONTH:
             {
                 return [

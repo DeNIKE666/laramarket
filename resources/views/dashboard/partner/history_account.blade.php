@@ -1,6 +1,6 @@
 @php
     /** @var \Illuminate\Support\Collection $history */
-    /** @var \App\Models\PartnerHistoryAccount $historyItem */
+    /** @var \App\Models\PartnerAsAloneHistoryAccount $historyItem */
 @endphp
 
 @extends('layouts.admin')

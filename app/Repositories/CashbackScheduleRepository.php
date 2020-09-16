@@ -26,7 +26,16 @@ class CashbackScheduleRepository extends BaseRepository
      */
     public function fill(array $schedules): bool
     {
-        return $this->model->insert($schedules);
+        $schedules = array_map(function ($item) {
+            $item['created_at'] = Carbon::now();
+            $item['updated_at'] = Carbon::now();
+
+            return $item;
+        }, $schedules);
+
+        return $this
+            ->model
+            ->insert($schedules);
     }
 
     /**
@@ -36,7 +45,9 @@ class CashbackScheduleRepository extends BaseRepository
      */
     public function getSchedulesForPayout(): Collection
     {
-        return $this->model::query()
+        return $this
+            ->model
+            ->query()
             ->with('cashback')
             ->where('payout_complete', false)
             ->where('payout_at', '<=', Carbon::now())
@@ -73,7 +84,7 @@ class CashbackScheduleRepository extends BaseRepository
         return $this->model
             ->query()
             ->with('paySystem')
-//            ->where('user_id', $userId)
+            ->where('user_id', $userId)
             ->where('payout_complete', true)
             ->orderBy($sort)
             ->paginate(10);

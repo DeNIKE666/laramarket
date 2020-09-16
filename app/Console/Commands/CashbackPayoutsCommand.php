@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Services\Cashback\CashbackScheduleService;
+use App\Services\Buyer\Cashback\CashbackScheduleService;
 use Illuminate\Console\Command;
 
 class CashbackPayoutsCommand extends Command
@@ -38,7 +38,7 @@ class CashbackPayoutsCommand extends Command
      */
     public function handle()
     {
-        (new CashbackScheduleService())->addPeriodicBalance();
+        app(CashbackScheduleService::class)->addPeriodicBalance();
 
         return 0;
     }

@@ -73,6 +73,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function partner()
+    {
+        return $this->hasOne(self::class, 'id', 'partner_id');
+    }
+
     /**
      * Является ли пользователь администратором
      *

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateHoldsSchedulesTable extends Migration
+class CreateOrdersHoldsSchedulesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateHoldsSchedulesTable extends Migration
      */
     public function up()
     {
-        Schema::create('holds_schedules', function (Blueprint $table) {
+        Schema::create('orders_holds_schedules', function (Blueprint $table) {
             $table->id();
 
             $table->unsignedBigInteger('order_id');
@@ -46,6 +46,6 @@ class CreateHoldsSchedulesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('holds_schedules');
+        Schema::dropIfExists('orders_holds_schedules');
     }
 }

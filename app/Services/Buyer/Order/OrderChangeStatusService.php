@@ -7,7 +7,6 @@ namespace App\Services\Buyer\Order;
 use App\Models\Order;
 use App\Repositories\OrderRepository;
 use App\Services\Order\OrderHistoryStatusService;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class OrderChangeStatusService
@@ -23,20 +22,22 @@ class OrderChangeStatusService
     /**
      * Изменить статус заказа
      *
-     * @param Request $request
+     * @param int $orderId
+     * @param int $userId
+     * @param int $status
      *
      * @return Order
      */
-    public function changeStatus(Request $request): Order
+    public function changeStatus(int $orderId, int $userId, int $status): Order
     {
         /** @var Order $order */
         $order = $this
             ->orderRepository
-            ->getById($request->input('order_id'))
-            ->ofBuyer(auth()->user()->id)
+            ->getById($orderId)
+            ->ofBuyer($userId)
             ->firstOrFail();
 
-        if (!$this->statusAllowed($order, $request->input('status'))) {
+        if (!$this->statusAllowed($order, $status)) {
             abort(Response::HTTP_FORBIDDEN, 'Невозможно выбрать этот статус');
         }
 
@@ -45,14 +46,14 @@ class OrderChangeStatusService
             ->orderRepository
             ->changeStatus(
                 $order->id,
-                $request->input('status')
+                $status
             );
 
         //Добавить статус в историю заказа
         (new OrderHistoryStatusService)
             ->storeOrderHistoryStatus(
                 $order,
-                $request->input('status')
+                $status
             );
 
         return $order;

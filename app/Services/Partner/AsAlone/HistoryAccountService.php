@@ -1,11 +1,11 @@
 <?php
 
 
-namespace App\Services\Partner;
+namespace App\Services\Partner\AsAlone;
 
 
 use App\Models\User;
-use App\Repositories\PartnerHistoryAccountRepository;
+use App\Repositories\PartnerAsAloneHistoryAccountRepository;
 use App\Repositories\UserRepository;
 
 /**
@@ -17,19 +17,18 @@ use App\Repositories\UserRepository;
 class HistoryAccountService
 {
     private $userRepository;
-    private $partnerHistoryAccountRepository;
+    private $partnerAsAloneHistoryAccountRepository;
 
     public function __construct()
     {
         $this->userRepository = app(UserRepository::class);
-        $this->partnerHistoryAccountRepository = app(PartnerHistoryAccountRepository::class);
+        $this->partnerAsAloneHistoryAccountRepository = app(PartnerAsAloneHistoryAccountRepository::class);
     }
 
     public function list()
     {
-        /** @var User $user */
-        $user = auth()->user();
-
-        return $this->partnerHistoryAccountRepository->get($user->id);
+        return $this
+            ->partnerAsAloneHistoryAccountRepository
+            ->get(auth()->user()->id);
     }
 }

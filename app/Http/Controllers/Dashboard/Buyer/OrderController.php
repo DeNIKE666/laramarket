@@ -15,11 +15,11 @@ use App\Repositories\PaySystemsRepository;
 use App\Services\Buyer\Order\AddOrderService;
 use App\Services\Buyer\Order\DeliveryProfilesService;
 use App\Services\Buyer\Order\OrderChangeStatusService;
-use App\Services\Cashback\CashbackScheduleService;
-use App\Services\Cashback\CashbackService;
+use App\Services\Buyer\Order\OrdersHoldsScheduleService;
+use App\Services\Buyer\Order\ProductReceivedService;
 use App\Services\Order\OrderHistoryStatusService;
 use App\Services\QiwiP2P;
-use App\Services\Shop\OrderService;
+use App\Services\Seller\OrderService;
 use Carbon\Carbon;
 use Cart;
 use Illuminate\Http\RedirectResponse;
@@ -41,11 +41,11 @@ class OrderController extends Controller
     /** @var OrderHistoryStatusService $orderHistoryStatusService */
     private $orderHistoryStatusService;
 
-    /** @var CashbackService $cashbackService */
-    private $cashbackService;
+    /** @var OrdersHoldsScheduleService $ordersHoldsScheduleService */
+    private $ordersHoldsScheduleService;
 
-    /** @var CashbackScheduleService $cashbackScheduleService */
-    private $cashbackScheduleService;
+    /** @var ProductReceivedService $productReceivedService */
+    private $productReceivedService;
 
     /** @var PaySystemsRepository $paySystemsRepository */
     private $paySystemsRepository;
@@ -62,8 +62,10 @@ class OrderController extends Controller
         $this->addOrderService = app(AddOrderService::class);
         $this->orderChangeStatusService = app(OrderChangeStatusService::class);
         $this->orderHistoryStatusService = app(OrderHistoryStatusService::class);
-        $this->cashbackService = app(CashbackService::class);
-        $this->cashbackScheduleService = app(CashbackScheduleService::class);
+
+        $this->ordersHoldsScheduleService = app(OrdersHoldsScheduleService::class);
+
+        $this->productReceivedService = app(ProductReceivedService::class);
 
         $this->paySystemsRepository = app(PaySystemsRepository::class);
         $this->externalPaymentsRepository = app(ExternalPaymentsRepository::class);
@@ -242,6 +244,11 @@ class OrderController extends Controller
                 ExternalPayment::STATUS_COMPLETE
             );
 
+        //Расписание холда
+        $this
+            ->ordersHoldsScheduleService
+            ->store($order->id);
+
         return redirect()
             ->route('buyer.orders')
             ->with('success', 'Вы оплатили ваш заказ');
@@ -260,27 +267,20 @@ class OrderController extends Controller
     {
         $order = $this
             ->orderChangeStatusService
-            ->changeStatus($request);
+            ->changeStatus(
+                $request->input('order_id'),
+                auth()->user()->id,
+                $request->input('status')
+            );
 
         //Заказ получен
         if ($order->status === Order::ORDER_STATUS_RECEIVED) {
-            //Статус "Идут выплаты"
             $this
-                ->cashbackService
-                ->setInProgressStatus($order);
-
-            //Период выплат
-            $this
-                ->cashbackService
-                ->setPayoutsPeriod(
+                ->productReceivedService
+                ->productHasBeenReceived(
                     $order,
                     $request->input('period')
                 );
-
-            //Заполнить расписание выплат кэшбэка
-            $this
-                ->cashbackScheduleService
-                ->fill($order);
         }
 
         return response($order, Response::HTTP_OK);

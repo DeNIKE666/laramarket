@@ -5,7 +5,6 @@ namespace App\Repositories;
 
 
 use App\Models\User;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
 /**
@@ -16,12 +15,56 @@ use Illuminate\Support\Collection;
  */
 class UserRepository
 {
-    /** @var Model */
+    /** @var User */
     private $model;
 
     public function __construct(User $model)
     {
         $this->model = $model;
+    }
+
+    /**
+     * Найти партнера пользователя
+     *
+     * @param int $userId
+     *
+     * @return User|null
+     */
+    public function getPartnerByUser(int $userId): ?User
+    {
+        $item = $this
+            ->model
+            ->query()
+            ->where('id', $userId)
+            ->first();
+
+        return $item ? $item->partner : $item;
+    }
+
+    /**
+     * Получить партнеров по кол-ву уровней
+     *
+     * @param int $userId
+     * @param int $levels
+     *
+     * @return array
+     */
+    public function getPartnerByUserWithLevels(int $userId, int $levels = 1): array
+    {
+        $list = [];
+
+        //Массив пригласителей начинается с 1 (для удобства уровней)
+        for ($i = 1; $i <= $levels; $i++) {
+            $list[$i] = $userId
+                ? $this->getPartnerByUser($userId) //Если есть userId - выбрать
+                : null;
+
+            $userId = $list[$i]
+                ? $list[$i]->partner_id //Сменить userId на пригласителя для следующей итерации
+                : null;
+        }
+
+        return $list;
     }
 
     /**
@@ -81,12 +124,12 @@ class UserRepository
     /**
      * Добавить на основной счет
      *
-     * @param int $id
-     * @param     $amount
+     * @param int   $id
+     * @param float $amount
      *
      * @return int
      */
-    public function addToPersonalAccount(int $id, $amount): int
+    public function addToPersonalAccount(int $id, float $amount): int
     {
         return $this
             ->model
@@ -98,12 +141,12 @@ class UserRepository
     /**
      * Отнять с основного счета
      *
-     * @param int $id
-     * @param     $amount
+     * @param int   $id
+     * @param float $amount
      *
      * @return int
      */
-    public function takeOffPersonalBalance(int $id, $amount): int
+    public function takeOffPersonalBalance(int $id, float $amount): int
     {
         return $this
             ->model
@@ -115,12 +158,12 @@ class UserRepository
     /**
      * Добавить на счет кэшбэка
      *
-     * @param int $id
-     * @param     $amount
+     * @param int   $id
+     * @param float $amount
      *
      * @return int
      */
-    public function addToCashbackAccount(int $id, $amount): int
+    public function addToCashbackAccount(int $id, float $amount): int
     {
         return $this
             ->model
@@ -132,12 +175,12 @@ class UserRepository
     /**
      * Отнять со счета кэшбэка
      *
-     * @param int $id
-     * @param     $amount
+     * @param int   $id
+     * @param float $amount
      *
      * @return int
      */
-    public function takeOffCashbackBalance(int $id, $amount): int
+    public function takeOffCashbackBalance(int $id, float $amount): int
     {
         return $this
             ->model
@@ -149,12 +192,12 @@ class UserRepository
     /**
      * Добавить на счет продавца
      *
-     * @param int $id
-     * @param     $amount
+     * @param int   $id
+     * @param float $amount
      *
      * @return int
      */
-    public function addToShopAccount(int $id, $amount): int
+    public function addToSellerAccount(int $id, float $amount): int
     {
         return $this
             ->model
@@ -164,14 +207,14 @@ class UserRepository
     }
 
     /**
-     * Отнять со счета магазина
+     * Отнять со счета продавца
      *
-     * @param int $id
-     * @param     $amount
+     * @param int   $id
+     * @param float $amount
      *
      * @return int
      */
-    public function takeOffShopBalance(int $id, $amount): int
+    public function takeOffSellerBalance(int $id, float $amount): int
     {
         return $this
             ->model
@@ -183,12 +226,12 @@ class UserRepository
     /**
      * Добавить на партнерский счет
      *
-     * @param int $id
-     * @param     $amount
+     * @param int   $id
+     * @param float $amount
      *
      * @return int
      */
-    public function addToPartnerAccount(int $id, $amount): int
+    public function addToPartnerAccount(int $id, float $amount): int
     {
         return $this
             ->model
@@ -200,12 +243,12 @@ class UserRepository
     /**
      * Отнять с партнерского счета
      *
-     * @param int $id
-     * @param     $amount
+     * @param int   $id
+     * @param float $amount
      *
      * @return int
      */
-    public function takeOffPartnerBalance(int $id, $amount): int
+    public function takeOffPartnerBalance(int $id, float $amount): int
     {
         return $this
             ->model
@@ -217,12 +260,12 @@ class UserRepository
     /**
      * Перенести сумму с партнерского на персональный счет
      *
-     * @param int $id
-     * @param     $amount
+     * @param int   $id
+     * @param float $amount
      *
      * @return bool
      */
-    public function transferFromPartnerToPersonal(int $id, $amount): bool
+    public function transferFromPartnerToPersonal(int $id, float $amount): bool
     {
         $user = $this
             ->model
