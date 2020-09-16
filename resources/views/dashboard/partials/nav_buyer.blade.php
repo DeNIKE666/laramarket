@@ -23,6 +23,6 @@
     Пополнение/снятие
 </a>
 <a href="{{ route('user.tasks.index') }}"
-   class="{{ (request()->is('dashboard/buyer/tasks*')) ? 'active' : '' }}">
+   class="{{ (request()->segment(3) == 'tasks') ? 'active' : '' }}">
     Помощь
 </a>

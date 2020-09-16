@@ -27,4 +27,8 @@
        class="{{ (request()->is('dashboard/admin/page*')) ? 'active' : '' }}">
         Текстовые страницы
     </a>
+    <a href="{{ route('admin.tasks') }}"
+       class="{{ (request()->segment(3) == 'tasks') ? 'active' : '' }}">
+        Техподдержка
+    </a>
 </div>

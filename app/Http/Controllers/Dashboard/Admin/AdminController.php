@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Dashboard\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Task;
 use App\Models\User;
 use App\Repositories\Admin\OrderRepository;
 use App\Repositories\Admin\UserRepository;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -82,5 +84,16 @@ class AdminController extends Controller
                 'orders'
             )
         );
+    }
+
+    /**
+     * Список сообщений в техподдержку
+     *
+     * @return View
+     */
+    public function taskAdminList()
+    {
+        $tasks = Task::orderBy("id", "desc")->paginate(20);
+        return view('dashboard.task.index', compact('tasks'));
     }
 }
