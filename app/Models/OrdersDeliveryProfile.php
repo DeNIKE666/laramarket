@@ -14,5 +14,6 @@ class OrdersDeliveryProfile extends Model
         'name',
         'phone',
         'address',
+        'delivery_service',
     ];
 }

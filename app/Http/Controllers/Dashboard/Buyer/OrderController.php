@@ -5,12 +5,12 @@ namespace App\Http\Controllers\Dashboard\Buyer;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Buyer\OrderChangeStatusRequest;
 use App\Http\Requests\Buyer\OrderStoreRequest;
-use App\Models\ExternalPayment;
 use App\Models\Order;
 use App\Models\OrdersDeliveryProfile;
+use App\Models\Payment;
 use App\Models\PaymentOption;
-use App\Repositories\ExternalPaymentsRepository;
 use App\Repositories\OrderRepository;
+use App\Repositories\PaymentsRepository;
 use App\Repositories\PaySystemsRepository;
 use App\Services\Buyer\Order\AddOrderService;
 use App\Services\Buyer\Order\DeliveryProfilesService;
@@ -50,8 +50,8 @@ class OrderController extends Controller
     /** @var PaySystemsRepository $paySystemsRepository */
     private $paySystemsRepository;
 
-    /** @var ExternalPaymentsRepository $externalPaymentsRepository */
-    private $externalPaymentsRepository;
+    /** @var PaymentsRepository $paymentsRepository */
+    private $paymentsRepository;
 
     /** @var OrderRepository $orderRepository */
     private $orderRepository;
@@ -68,7 +68,7 @@ class OrderController extends Controller
         $this->productReceivedService = app(ProductReceivedService::class);
 
         $this->paySystemsRepository = app(PaySystemsRepository::class);
-        $this->externalPaymentsRepository = app(ExternalPaymentsRepository::class);
+        $this->paymentsRepository = app(PaymentsRepository::class);
         $this->orderRepository = app(OrderRepository::class);
     }
 
@@ -80,7 +80,7 @@ class OrderController extends Controller
      */
     public function checkoutForm(): View
     {
-        /** @var ExternalPayment $paySystems */
+        /** @var Payment $paySystems */
         $paySystems = $this
             ->paySystemsRepository
             ->list()
@@ -99,8 +99,6 @@ class OrderController extends Controller
      */
     public function store(OrderStoreRequest $request): RedirectResponse
     {
-        $payMethod = $request->input('pay_system');
-
         /**
          * Профиль доставки
          *
@@ -111,6 +109,22 @@ class OrderController extends Controller
             ->storeIfNotExists($request->input());
 
         /**
+         * Добавить в таблицу оплат
+         *
+         * @var Payment $payment
+         */
+        $payment = $this
+            ->paymentsRepository
+            ->store([
+                'user_id'         => auth()->user()->id,
+                'pay_system'      => $request->input('pay_system'),
+                'trans_direction' => Payment::DIR_IN,
+                'trans_type'      => Payment::TYPE_PURCHASE,
+                'amount'          => Cart::getSubTotal(false), //ДОБАВИТЬ КОМИССИЮ!!!
+                'status'          => Payment::STATUS_PENDING,
+            ]);
+
+        /**
          * Добавить заказ
          *
          * @var Order $order
@@ -118,8 +132,8 @@ class OrderController extends Controller
         $order = $this
             ->addOrderService
             ->storeOrder(
-                $request->input(),
-                $deliveryProfile->id
+                $deliveryProfile->id,
+                $payment->id
             );
 
         //Добавить статус в историю - ПЕРЕПИСАТЬ НА OBSERVERS
@@ -137,7 +151,7 @@ class OrderController extends Controller
                 'buyer.order.show_pay_form',
                 [
                     'order'     => $order->id,
-                    'paySystem' => $order->pay_system,
+                    'paySystem' => $request->input('pay_system'),
                 ]
             )
             ->with('status', 'Заказ добавлен');
@@ -168,22 +182,6 @@ class OrderController extends Controller
     {
         $year = substr(Carbon::now()->format('Y'), 0, 2) . $request->input('year');
 
-        /**
-         * Добавить статус в оплаты
-         *
-         * @var ExternalPayment $externalPayment
-         */
-        $externalPayment = $this
-            ->externalPaymentsRepository
-            ->store([
-                'user_id'         => auth()->user()->id,
-                'pay_system'      => $order->pay_system,
-                'trans_direction' => ExternalPayment::DIR_IN,
-                'trans_type'      => ExternalPayment::TYPE_PURCHASE,
-                'amount'          => $order->cost,
-                'status'          => ExternalPayment::STATUS_PENDING,
-            ]);
-
         (new QiwiP2P)
             ->token()
             ->setCard($request->input('card'))
@@ -192,8 +190,8 @@ class OrderController extends Controller
             ->setCvc($request->input('cvv'))
             ->setAmount($order->cost)
             ->setCallback(route('buyer.order.pay_via_card_callback', [
-                'order'           => $order->id,
-                'externalPayment' => $externalPayment->id,
+                'order'   => $order->id,
+                'payment' => $order->payment_id,
             ]))
             ->createOrder()
             ->sendPay();
@@ -202,14 +200,14 @@ class OrderController extends Controller
     /**
      * ПЕРЕПИСАТЬ!!!
      *
-     * @param Request         $request
-     * @param Order           $order
-     * @param ExternalPayment $externalPayment
+     * @param Request $request
+     * @param Order   $order
+     * @param Payment $payment
      *
      * @return RedirectResponse
      * @throws \Exception
      */
-    public function payViaCardCallback(Request $request, Order $order, ExternalPayment $externalPayment)
+    public function payViaCardCallback(Request $request, Order $order, Payment $payment)
     {
         $payStatus = (new QiwiP2P())
             ->sendCallback($request->input('PaRes'), $request->input('MD'));
@@ -238,10 +236,10 @@ class OrderController extends Controller
 
         //Статус оплаты
         $this
-            ->externalPaymentsRepository
+            ->paymentsRepository
             ->changeStatus(
-                $externalPayment->id,
-                ExternalPayment::STATUS_COMPLETE
+                $payment->id,
+                Payment::STATUS_COMPLETE
             );
 
         //Расписание холда

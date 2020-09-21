@@ -33,8 +33,7 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::where('user_id', auth()->user()->id)->paginate(20);
-        //dump($products);
-        return view('dashboard.shop.product.index', compact('products'));
+        return view('dashboard.seller.product.index', compact('products'));
     }
 
     /**
@@ -46,7 +45,7 @@ class ProductController extends Controller
     {
         $categories = Category::getAllCategory();
 
-        return view('dashboard.shop.product.create', compact('categories'));
+        return view('dashboard.seller.product.create', compact('categories'));
     }
 
     /**
@@ -64,7 +63,7 @@ class ProductController extends Controller
 
         $categories = Category::getAllCategory();
 
-        return view('dashboard.shop.product.create', compact('categories', 'product'));
+        return view('dashboard.seller.product.create', compact('categories', 'product'));
     }
 
     /**
@@ -135,7 +134,7 @@ class ProductController extends Controller
                 $fileAdder->toMediaCollection('gallery');
             });
         }
-        return redirect()->route('products.edit', $product->id)->with('status', 'товар добавлен');;
+        return redirect()->route('seller.products.edit', $product->id)->with('status', 'товар добавлен');;
     }
 
     /**
@@ -172,7 +171,7 @@ class ProductController extends Controller
 
         //dump($product->category->attributes);
 
-        return view('dashboard.shop.product.edit', compact('categories', 'product', 'gallery'));
+        return view('dashboard.seller.product.edit', compact('categories', 'product', 'gallery'));
     }
 
     /**
@@ -264,7 +263,7 @@ class ProductController extends Controller
             $productAttr = [];
         }
 
-        $returnHTML = view("dashboard.shop.product.attributes", compact('attributes', 'productAttr'))->render();
+        $returnHTML = view("dashboard.seller.product.attributes", compact('attributes', 'productAttr'))->render();
         $resArray = [
             'msg'         => "ok",
             'returnHTML'  => $returnHTML,

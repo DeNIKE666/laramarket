@@ -18,7 +18,9 @@ class CreateCashbacksTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('order_id');
 
-            $table->unsignedInteger('cost')->default(0);
+            $table
+                ->unsignedDecimal('cost')
+                ->default(0);
 
             $table->unsignedTinyInteger('status')
                 ->default(0)

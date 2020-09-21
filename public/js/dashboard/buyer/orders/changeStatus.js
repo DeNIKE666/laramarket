@@ -40,7 +40,6 @@
     /**
      * Сообщение в модалке в зависимости от статуса
      *
-     * @param status
      * @returns {string}
      */
     const getPopupMessage = () => {

@@ -112,7 +112,7 @@ Route::group(
         Route::get('/order/pay/{order}/{paySystem}', 'OrderController@showPayForm')->name('order.show_pay_form');
         //Оплата картой
         Route::post('/order/pay/{order}/card', 'OrderController@payViaCard')->name('order.pay_via_card');
-        Route::post('/order/pay/{order}/card/callback/{externalPayment}', 'OrderController@payViaCardCallback')->name('order.pay_via_card_callback');
+        Route::post('/order/pay/{order}/card/callback/{payment}', 'OrderController@payViaCardCallback')->name('order.pay_via_card_callback');
 
         //Изменить статус заказа
         Route::patch('/order/{order}/status', 'OrderController@changeStatus')->name('order.change_status');
@@ -122,7 +122,7 @@ Route::group(
         Route::get('/finance/deposit-withdraw', 'FinanceController@depositOrWithdrawForm')->name('finance.deposit_withdraw');
         //Пополнение картой
         Route::post('/finance/deposit/card', 'FinanceController@depositViaCard')->name('finance.deposit_via_card');
-        Route::post('/finance/deposit/{user}/card/callback/{externalPayment}', 'FinanceController@depositViaCardCallback')->name('finance.deposit_via_card_callback');
+        Route::post('/finance/deposit/{user}/card/callback/{payment}', 'FinanceController@depositViaCardCallback')->name('finance.deposit_via_card_callback');
 
 
         //Вывод средств
@@ -183,14 +183,23 @@ Route::group(
         'prefix'     => 'dashboard/seller',
         'namespace'  => 'Dashboard\Seller',
         'middleware' => ['auth', 'seller'],
+        'as'         => 'seller.',
     ],
     function () {
+        #################### ТОВАРЫ ####################
+        //CRUD и копирование товара
         Route::get('/products/{product}/copy', 'ProductController@createFromCopy')->name('products.create_from_copy');
-        Route::patch('/products/change-status-for-checked/{status}', 'ProductController@changeStatusForChecked')->name('products.change_status_for_checked');
-        Route::patch('/products/change-status-for-all/{status}', 'ProductController@changeStatusForAll')->name('products.change_status_for_all');
-        Route::patch('/products/delete-for-checked', 'ProductController@destroyForChecked')->name('products.destroy_for_checked');
-        Route::resource('/categories', 'CategoryController');
         Route::resource('/products', 'ProductController');
+
+        //Изменить статусы отмеченным товарам
+        Route::patch('/products/change-status-for-checked/{status}', 'ProductController@changeStatusForChecked')->name('products.change_status_for_checked');
+        //Удалить отмеченные товары
+        Route::patch('/products/delete-for-checked', 'ProductController@destroyForChecked')->name('products.destroy_for_checked');
+
+        //Изменить статусы всем товарам
+        Route::patch('/products/change-status-for-all/{status}', 'ProductController@changeStatusForAll')->name('products.change_status_for_all');
+
+        Route::resource('/categories', 'CategoryController');
 
         Route::post('/products/attributes', 'ProductController@getAttributeProduct')->name('product_attributes');
 
@@ -207,16 +216,22 @@ Route::group(
             }
         );
 
+        #################### ЗАКАЗЫ (ПРОДАЖИ) ####################
         Route::group(
             [
                 'prefix' => 'order',
                 'as'     => 'order.',
             ],
             function () {
-                Route::get('/list', 'OrderShopController@index')->name('list');
-                Route::get('/list/in-progress', 'OrderShopController@listInProgress')->name('list.in-progress');
-                Route::patch('/{order}/status', 'OrderShopController@changeStatus')->name('change-status');
-                Route::get('/item/{order}', 'OrderShopController@detail')->name('detail');
+                //Список заказов
+                Route::get('/list', 'OrderController@index')->name('list');
+                Route::get('/list/in-progress', 'OrderController@listInProgress')->name('list.in_progress');
+                Route::get('/list/in-archive', 'OrderController@listInArchive')->name('list.in-archive');
+                //Детали заказа
+                Route::get('/{order}/details', 'OrderController@orderDetails')->name('details');
+
+                //Изменить статус
+                Route::patch('/{order}/status', 'OrderController@changeStatus')->name('change-status');
             }
         );
 

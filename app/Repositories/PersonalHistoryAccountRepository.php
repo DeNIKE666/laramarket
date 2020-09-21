@@ -6,6 +6,7 @@ namespace App\Repositories;
 
 use App\Models\PersonalHistoryAccount;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Builder;
 
 class PersonalHistoryAccountRepository
 {
@@ -30,16 +31,15 @@ class PersonalHistoryAccountRepository
      * @param int            $userId
      * @param array|string[] $sort
      *
-     * @return LengthAwarePaginator
+     * @return Builder
      */
-    public function historyByUser(int $userId, array $sort = ['id', 'asc']): LengthAwarePaginator
+    public function historyByUser(int $userId, array $sort = ['id', 'desc']): Builder
     {
         return $this
             ->model
             ->query()
             ->with('paySystem')
             ->where('user_id', $userId)
-            ->orderBy($sort)
-            ->paginate(10);
+            ->orderBy($sort[0], $sort[1]);
     }
 }

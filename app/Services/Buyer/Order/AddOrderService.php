@@ -35,19 +35,18 @@ class AddOrderService
     /**
      * Добавить заказ
      *
-     * @param array $request
      * @param int   $deliveryProfileId
+     * @param int   $paymentId
      *
      * @return Order
      */
-    public function storeOrder(array $request, int $deliveryProfileId): Order
+    public function storeOrder(int $deliveryProfileId, int $paymentId): Order
     {
         $order = [
             'user_id'             => auth()->user()->id,
             'delivery_profile_id' => $deliveryProfileId,
+            'payment_id'          => $paymentId,
             'cost'                => Cart::getSubTotal(false),
-            'pay_system'          => $request['pay_system'],
-            'delivery_service'    => $request['delivery_service'],
             'status'              => Order::ORDER_STATUS_NEW,
         ];
 
@@ -89,6 +88,8 @@ class AddOrderService
             ];
         }
 
-        return $this->orderItemRepository->batchStore($orderItems);
+        return $this
+            ->orderItemRepository
+            ->batchStore($orderItems);
     }
 }

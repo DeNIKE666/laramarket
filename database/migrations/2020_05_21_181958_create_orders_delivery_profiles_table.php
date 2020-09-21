@@ -19,6 +19,15 @@ class CreateOrdersDeliveryProfilesTable extends Migration
             $table->string('name');
             $table->string('phone');
             $table->string('address');
+
+            $table
+                ->enum('delivery_service', [
+                    'cdek',
+                    'energy',
+                    'courier',
+                ])
+                ->comment('Служба доставки');
+
             $table->softDeletes();
             $table->timestamps();
 

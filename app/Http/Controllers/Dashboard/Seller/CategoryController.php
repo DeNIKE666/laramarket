@@ -25,7 +25,7 @@ class CategoryController extends Controller
         if (Gate::allows('is-admin')) {
             $categories = Category::getAllCategory();
 
-            return view('dashboard.shop.categories.index', compact('categories'));
+            return view('dashboard.seller.categories.index', compact('categories'));
         } else {
             return redirect()->route('buyer.profile.edit')->with('status', 'Доступ для админа');
         }
@@ -39,7 +39,7 @@ class CategoryController extends Controller
     public function create()
     {
         $parents = Category::getAllCategory();
-        return view('dashboard.shop.categories.create', compact('parents'));
+        return view('dashboard.seller.categories.create', compact('parents'));
     }
 
     /**
@@ -73,7 +73,7 @@ class CategoryController extends Controller
 
         $category = Category::create($data);
         Cache::forget('getAllCategory');
-        return redirect()->route('categories.index');
+        return redirect()->route('seller.categories.index');
     }
 
     /**
@@ -84,7 +84,7 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        return view('dashboard.shop.categories.show', compact('category'));
+        return view('dashboard.seller.categories.show', compact('category'));
     }
 
     /**
@@ -96,7 +96,7 @@ class CategoryController extends Controller
     public function edit(Category $category)
     {
         $parents = Category::defaultOrder()->withDepth()->where('id', '!=', $category->id)->get();
-        return view('dashboard.shop.categories.edit', compact('category', 'parents'));
+        return view('dashboard.seller.categories.edit', compact('category', 'parents'));
     }
 
     public function update(Request $request, Category $category)
@@ -123,21 +123,21 @@ class CategoryController extends Controller
             $category->insertBeforeNode($first);
         }
         Cache::forget('getAllCategory');
-        return redirect()->route('categories.index');
+        return redirect()->route('seller.categories.index');
     }
 
     public function up(Category $category)
     {
         $category->up();
         Cache::forget('getAllCategory');
-        return redirect()->route('categories.index');
+        return redirect()->route('seller.categories.index');
     }
 
     public function down(Category $category)
     {
         $category->down();
         Cache::forget('getAllCategory');
-        return redirect()->route('categories.index');
+        return redirect()->route('seller.categories.index');
     }
 
     public function last(Category $category)
@@ -146,7 +146,7 @@ class CategoryController extends Controller
             $category->insertAfterNode($last);
         }
         Cache::forget('getAllCategory');
-        return redirect()->route('categories.index');
+        return redirect()->route('seller.categories.index');
     }
 
     public function destroy(Category $category)
@@ -155,6 +155,6 @@ class CategoryController extends Controller
             $category->delete();
         }
         Cache::forget('getAllCategory');
-        return redirect()->route('categories.index');
+        return redirect()->route('seller.categories.index');
     }
 }

@@ -31,10 +31,12 @@ class DeliveryProfilesService
         $profile = null;
 
         if ($deliveryProfileId) {
-            $profile = $this->orderDeliveryProfilesRepository->getOwnById(
-                $deliveryProfileId,
-                auth()->user()->id
-            );
+            $profile = $this
+                ->orderDeliveryProfilesRepository
+                ->getOwnById(
+                    $deliveryProfileId,
+                    auth()->user()->id
+                );
         }
 
         if (!$profile) {
@@ -54,12 +56,15 @@ class DeliveryProfilesService
     public function store(array $request): OrdersDeliveryProfile
     {
         $profile = [
-            'user_id' => auth()->user()->id,
-            'name'    => $request['name'],
-            'phone'   => $request['phone'],
-            'address' => $request['address'],
+            'user_id'          => auth()->user()->id,
+            'name'             => $request['name'],
+            'phone'            => $request['phone'],
+            'address'          => $request['address'],
+            'delivery_service' => $request['delivery_service'],
         ];
 
-        return $this->orderDeliveryProfilesRepository->store($profile);
+        return $this
+            ->orderDeliveryProfilesRepository
+            ->store($profile);
     }
 }

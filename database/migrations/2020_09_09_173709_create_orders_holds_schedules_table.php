@@ -16,20 +16,27 @@ class CreateOrdersHoldsSchedulesTable extends Migration
         Schema::create('orders_holds_schedules', function (Blueprint $table) {
             $table->id();
 
-            $table->unsignedBigInteger('order_id');
+            $table
+                ->unsignedBigInteger('order_id')
+                ->unique();
 
             $table->boolean('is_complete')
                 ->default(false)
                 ->comment('Выполнено ли');
 
             $table
-                ->timestamp('expired_at')
-                ->comment('Дата окончания холда');
+                ->timestamp('completed_at')
+                ->nullable()
+                ->comment('Дата выполнения');
 
             $table
                 ->boolean('is_expired')
                 ->default(false)
                 ->comment('Выполнено по экспирации');
+
+            $table
+                ->timestamp('expired_at')
+                ->comment('Дата окончания холда');
 
             $table->timestamps();
 

@@ -1,0 +1,46 @@
+.order-details .order-num {
+    color : #777;
+}
+
+.order-details .order-status {
+    margin-top : 0.25rem;
+}
+
+.order-details .section-title {
+    background    : #ddd;
+    margin-bottom : 0.25rem;
+    margin-top    : 1.5rem;
+    padding       : 0.75rem 0.5rem;
+}
+
+
+.order-details .products-list,
+.order-details .products-list th,
+.order-details .products-list td {
+    border  : 1px solid #ccc;
+    padding : 0.5rem;
+}
+
+.order-details .products-list th {
+    background : #eee;
+    text-align : center;
+}
+
+.order-details .products-list tfoot td {
+    font-weight : 500;
+}
+
+.order-details .table-align-right {
+    margin-left : auto;
+}
+
+.order-details .table-align-right td {
+    padding : 0.5rem;
+}
+
+.order-details .table-align-right tr td:first-child {
+    color : #777;
+    text-align : right;
+}
+
+/* Seller table */

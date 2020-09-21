@@ -10,8 +10,9 @@ class OrdersHoldsSchedule extends Model
     protected $fillable = [
         'order_id',
         'is_complete',
-        'expired_at',
+        'completed_at',
         'is_expired',
+        'expired_at',
     ];
 
     public function order()

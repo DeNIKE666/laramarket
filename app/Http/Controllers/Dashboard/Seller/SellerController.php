@@ -12,7 +12,7 @@ class SellerController extends Controller
     public function seller_status()
     {
         return view(
-            'dashboard.shop.user.status'
+            'dashboard.seller.user.status'
 
         );
     }
@@ -30,7 +30,7 @@ class SellerController extends Controller
         }
         //$property = new Property();
         return view(
-            'dashboard.shop.user.data_seller',
+            'dashboard.seller.user.data_seller',
             compact(
                 'user',
                 'property'

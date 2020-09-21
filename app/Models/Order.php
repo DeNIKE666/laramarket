@@ -20,7 +20,7 @@ class Order extends Model
     const ORDER_STATUS_SENT = 3;
     const ORDER_STATUS_RECEIVED = 4;
     const ORDER_STATUS_CANCELED_BY_BUYER = 5;
-    const ORDER_STATUS_CANCELED_BY_SHOP = 6;
+    const ORDER_STATUS_CANCELED_BY_SELLER = 6;
     const ORDER_STATUS_REJECT = 7;
 
     /**
@@ -35,11 +35,9 @@ class Order extends Model
     protected $fillable = [
         'user_id',
         'delivery_profile_id',
+        'payment_id',
         'cost',
-        'pay_system',
-        'delivery_service',
         'status',
-        'notes',
     ];
 
     public function user()
@@ -47,21 +45,75 @@ class Order extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    /**
+     * Состав заказа
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function items()
     {
         return $this->hasMany(OrderItem::class);
     }
 
-    public function paySystem()
+    /**
+     * Состав заказа со списком товаров
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function itemsWithProducts()
     {
-        return $this->belongsTo(PaymentOption::class, 'pay_system');
+        return $this
+            ->hasMany(OrderItem::class)
+            ->with('product');
     }
 
+    /**
+     * Платеж
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function payment()
+    {
+        return $this
+            ->belongsTo(Payment::class)
+            ->with('paySystem');
+    }
+
+    /**
+     * Профиль доставки
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
     public function deliveryProfile()
     {
-        return $this->hasOne(OrdersDeliveryProfile::class);
+        return $this->belongsTo(OrdersDeliveryProfile::class);
     }
 
+    /**
+     * Холд
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function orderHold()
+    {
+        return $this->hasOne(OrdersHoldsSchedule::class);
+    }
+
+    /**
+     * Текущий статус
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function currentStatus()
+    {
+        return $this->hasOne(OrderHistoryStatuses::class)->orderByDesc('id');
+    }
+
+    /**
+     * Кэшбэк
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
     public function cashback()
     {
         return $this->hasOne(Cashback::class);

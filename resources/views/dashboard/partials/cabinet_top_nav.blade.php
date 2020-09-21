@@ -20,7 +20,7 @@
         </a>
 
         @can('is-seller')
-            <a href="{{ route('seller_status') }}"
+            <a href="{{ route('seller.seller_status') }}"
                class="lcPageContentTop__btn {{ request()->is('dashboard/seller', 'dashboard/seller/*') ? 'lcPageContentTop__btn-active btn-blue' : null }} ">
                 Кабинет продавца
             </a>

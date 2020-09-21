@@ -1,31 +1,31 @@
 (function () {
     let loading = false;
 
-    const changeStatusTpl = '\
-        <form>\
-            <div class="error" id="order_commonError" style="display: none; padding: 0 0 1rem 0; text-align: center;"></div>\
-            \
-            <div class="cardform__row">\
-                <div class="cardform__row__col1">\
-                    <label for="order_status">Статус</label>\
-                    <select id="order_status" class="input-card-full" style="margin-bottom: 0;">\
-                        {options}\
-                    </select>\
-                    <div class="error" style="display: none; padding: 10px 0;"></div>\
-                </div>\
-            </div>\
-            <div class="cardform__row" style="margin-top: 0.5rem;">\
-                <div class="cardform__row__col1">\
-                    <label for="order_notes">Описание</label>\
-                    <textarea id="order_notes" class="input-card-full" style="height: 150px; resize: none;"></textarea>\
-                    <div class="error" style="display: none; padding: 10px 0;"></div>\
-                </div>\
-            </div>\
-            <div>\
-                <button type="submit" class="btn lcPageMenu__btn form-submit">Сохранить</button>\
-            </div>\
-        </form>\
-    ';
+    const changeStatusTpl = `
+        <form>
+            <div class="error" id="order_commonError" style="display: none; padding: 0 0 1rem 0; text-align: center;"></div>
+            
+            <div class="cardform__row">
+                <div class="cardform__row__col1">
+                    <label for="order_status">Статус</label>
+                    <select id="order_status" class="input-card-full" style="margin-bottom: 0;">
+                        {options}
+                    </select>
+                    <div class="error" style="display: none; padding: 10px 0;"></div>
+                </div>
+            </div>
+            <div class="cardform__row" style="margin-top: 0.5rem;">
+                <div class="cardform__row__col1">
+                    <label for="order_notes">Описание</label>
+                    <textarea id="order_notes" class="input-card-full" style="height: 150px; resize: none;"></textarea>
+                    <div class="error" style="display: none; padding: 10px 0;"></div>
+                </div>
+            </div>
+            <div>
+                <button type="submit" class="btn lcPageMenu__btn form-submit">Сохранить</button>
+            </div>
+        </form>
+    `;
 
     /**
      * Показать модальное окно с выбором статуса

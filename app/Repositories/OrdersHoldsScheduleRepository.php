@@ -43,8 +43,7 @@ class OrdersHoldsScheduleRepository
     /**
      * Получить холд
      *
-     * @param int  $orderId
-     * @param bool $withOrder
+     * @param int $orderId
      *
      * @return Builder
      */
@@ -88,8 +87,9 @@ class OrdersHoldsScheduleRepository
             ->query()
             ->where('order_id', $orderId)
             ->update([
-                'is_complete' => true,
-                'is_expired'  => $isExpired,
+                'is_complete'  => true,
+                'completed_at' => Carbon::now(),
+                'is_expired'   => $isExpired,
             ]);
     }
 }

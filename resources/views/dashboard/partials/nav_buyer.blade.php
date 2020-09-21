@@ -10,16 +10,12 @@
    class="{{ (request()->is('dashboard/buyer/history_orders*')) ? 'active' : '' }}">
     История заказов
 </a>
-<a href="{{ route('buyer.finance.history.personal-account') }}"
-   class="{{ (request()->is('dashboard/buyer/history/withdraw')) ? 'active' : '' }}">
-    История выводов
-</a>
 <a href="{{ route('buyer.finance.history.cashback-account') }}"
    class="{{ (request()->is('dashboard/buyer/list_cashback*')) ? 'active' : '' }}">
     Кэшбэк
 </a>
 <a href="{{ route('buyer.finance.deposit_withdraw') }}"
-   class="{{ (request()->is('dashboard/buyer/user_pay*')) ? 'active' : '' }}">
+   class="{{ (request()->is('dashboard/buyer/finance/deposit-withdraw')) ? 'active' : '' }}">
     Пополнение/снятие
 </a>
 <a href="{{ route('user.tasks.index') }}"

@@ -3,26 +3,29 @@
 namespace App\Http\Controllers\Dashboard\Buyer;
 
 use App\Http\Controllers\Controller;
-use App\Models\ExternalPayment;
+use App\Http\Resources\Buyer\FinanceResource;
+use App\Models\Payment;
 use App\Models\PersonalHistoryAccount;
 use App\Models\User;
 use App\Models\Withdraw;
 use App\Repositories\CashbackScheduleRepository;
-use App\Repositories\ExternalPaymentsRepository;
+use App\Repositories\PaymentsRepository;
 use App\Repositories\PaySystemsRepository;
 use App\Repositories\PersonalHistoryAccountRepository;
 use App\Repositories\UserRepository;
 use App\Services\Payments\CommissionsService;
 use App\Services\QiwiP2P;
 use Carbon\Carbon;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class FinanceController extends Controller
 {
-    /** @var CommissionsService $comissionsService */
-    private $comissionsService;
+    /** @var CommissionsService $commissionsService */
+    private $commissionsService;
+
 
     /** @var UserRepository $userRepository */
     private $userRepository;
@@ -30,8 +33,8 @@ class FinanceController extends Controller
     /** @var PaySystemsRepository $paySystemsRepository */
     private $paySystemsRepository;
 
-    /** @var ExternalPaymentsRepository $externalPaymentsRepository */
-    private $externalPaymentsRepository;
+    /** @var PaymentsRepository $paymentsRepository */
+    private $paymentsRepository;
 
     /** @var PersonalHistoryAccountRepository $personalHistoryAccountRepository */
     private $personalHistoryAccountRepository;
@@ -41,11 +44,11 @@ class FinanceController extends Controller
 
     public function __construct()
     {
-        $this->comissionsService = app(CommissionsService::class);
+        $this->commissionsService = app(CommissionsService::class);
 
         $this->userRepository = app(UserRepository::class);
         $this->paySystemsRepository = app(PaySystemsRepository::class);
-        $this->externalPaymentsRepository = app(ExternalPaymentsRepository::class);
+        $this->paymentsRepository = app(PaymentsRepository::class);
         $this->personalHistoryAccountRepository = app(PersonalHistoryAccountRepository::class);
         $this->cashbackScheduleRepository = app(CashbackScheduleRepository::class);
     }
@@ -69,7 +72,19 @@ class FinanceController extends Controller
             ->withdrawal()
             ->get();
 
-        return view('dashboard.user.pay', compact('depositings', 'withdrawals'));
+        $paySystems = $this
+            ->paySystemsRepository
+            ->list()
+            ->get();
+
+        return view(
+            'dashboard.buyer.finance.deposit_withdraw',
+            compact(
+                'depositings',
+                'withdrawals',
+                'paySystems'
+            )
+        );
     }
 
     /**
@@ -81,15 +96,15 @@ class FinanceController extends Controller
     {
         $year = substr(Carbon::now()->format('Y'), 0, 2) . $request->input('year');
 
-        $externalPayment = $this
-            ->externalPaymentsRepository
+        $payment = $this
+            ->paymentsRepository
             ->store([
                 'user_id'         => auth()->user()->id,
                 'pay_system'      => $request->input('pay_system'),
-                'trans_direction' => ExternalPayment::DIR_IN,
-                'trans_type'      => ExternalPayment::TYPE_DEPOSIT,
+                'trans_direction' => Payment::DIR_IN,
+                'trans_type'      => Payment::TYPE_DEPOSIT,
                 'amount'          => $request->input('amount'),
-                'status'          => ExternalPayment::STATUS_PENDING,
+                'status'          => Payment::STATUS_PENDING,
             ]);
 
         (new QiwiP2P())
@@ -101,7 +116,7 @@ class FinanceController extends Controller
             ->setAmount($request->input('amount'))
             ->setCallback(route('buyer.finance.deposit_via_card_callback', [
                 'user'            => auth()->user()->id,
-                'externalPayment' => $externalPayment->id,
+                'payment' => $payment->id,
             ]))
             ->createOrder()
             ->sendPay();
@@ -110,14 +125,14 @@ class FinanceController extends Controller
     /**
      * ПЕРЕПИСАТЬ!!!
      *
-     * @param Request         $request
-     * @param User            $user
-     * @param ExternalPayment $externalPayment
+     * @param Request $request
+     * @param User    $user
+     * @param Payment $payment
      *
      * @return RedirectResponse
      * @throws \Exception
      */
-    public function depositViaCardCallback(Request $request, User $user, ExternalPayment $externalPayment)
+    public function depositViaCardCallback(Request $request, User $user, Payment $payment)
     {
         $payStatus = (new QiwiP2P())
             ->sendCallback($request->input('PaRes'), $request->input('MD'));
@@ -130,17 +145,17 @@ class FinanceController extends Controller
 
         //Статус оплаты
         $this
-            ->externalPaymentsRepository
+            ->paymentsRepository
             ->changeStatus(
-                $externalPayment->id,
-                ExternalPayment::STATUS_COMPLETE
+                $payment->id,
+                Payment::STATUS_COMPLETE
             );
 
         //Сумма пополнения с вычетом комиссии
         $amountWithComission = $this
-            ->comissionsService
-            ->paySystem($externalPayment->pay_system)
-            ->depositWithoutCommission($externalPayment->amount);
+            ->commissionsService
+            ->paySystem($payment->pay_system)
+            ->depositWithoutCommission($payment->amount);
 
         //Добавиьт на счет пользователю
         $this
@@ -157,7 +172,7 @@ class FinanceController extends Controller
                 'user_id'         => $user->id,
                 'trans_direction' => PersonalHistoryAccount::DIR_IN,
                 'trans_type'      => PersonalHistoryAccount::TYPE_DEPOSIT,
-                'pay_system_id'   => $externalPayment->pay_system,
+                'pay_system_id'   => $payment->pay_system,
                 'amount'          => $amountWithComission,
             ]);
 
@@ -188,13 +203,28 @@ class FinanceController extends Controller
     /**
      * История Персонального счета
      *
-     * @return View
+     * @return array
+     * @throws \Throwable
      */
-    public function historyOfPersonalAccount(): View
+    public function historyOfPersonalAccount(): array
     {
-        $history = $this->personalHistoryAccountRepository->historyByUser(auth()->user()->id);
+        /** @var LengthAwarePaginator $paginator */
+        $paginator = $this
+            ->personalHistoryAccountRepository
+            ->historyByUser(
+                auth()->user()->id,
+                ['id', 'desc']
+            )
+            ->paginate(10);
 
-        return view('dashboard.user.history_withdraw', compact('history'));
+        return [
+            'collection' => FinanceResource::collection($paginator),
+            'meta'       => [
+                'currentPage' => $paginator->currentPage(),
+                'perPage'     => $paginator->perPage(),
+            ],
+            'paginator'  => view('pagination.default', compact('paginator'))->render(),
+        ];
     }
 
     /**
@@ -204,7 +234,9 @@ class FinanceController extends Controller
      */
     public function historyOfCompletedCashback(): View
     {
-        $history = $this->cashbackScheduleRepository->historyCompletedByUser(auth()->user()->id);
+        $history = $this
+            ->cashbackScheduleRepository
+            ->historyCompletedByUser(auth()->user()->id);
 
         return view('dashboard.user.cashback', compact('history'));
     }

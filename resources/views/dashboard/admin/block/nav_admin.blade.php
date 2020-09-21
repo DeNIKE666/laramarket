@@ -11,7 +11,7 @@
        class="{{ (request()->is('dashboard/admin/orders*')) ? 'active' : '' }}">
         Заказы
     </a>
-    <a href="{{ route('categories.index') }}"
+    <a href="{{ route('seller.categories.index') }}"
        class="{{ (request()->is('dashboard/categories*')) ? 'active' : '' }}">
         Категории
     </a>

@@ -50,13 +50,13 @@
                 <span class="nav-link">{{ __('messages.shop') }}</span>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('products.index') }}">
+                <a class="nav-link" href="{{ route('seller.products.index') }}">
                     <span class="menu-title">{{ __('messages.products') }}</span>
                     <i class="icon-list menu-icon"></i>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('order.list') }}">
+                <a class="nav-link" href="{{ route('seller.order.list') }}">
                     <span class="menu-title">{{ __('messages.orders') }}</span>
                     <i class="icon-list menu-icon"></i>
                 </a>
@@ -91,7 +91,7 @@
                 <span class="nav-link">{{ __('messages.shop') }}</span>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('categories.index') }}">
+                <a class="nav-link" href="{{ route('seller.categories.index') }}">
                     <span class="menu-title">{{ __('messages.categories') }}</span>
                     <i class="icon-list menu-icon"></i>
                 </a>

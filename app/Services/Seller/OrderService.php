@@ -45,8 +45,7 @@ class OrderService
             ->orderRepository
             ->changeStatus(
                 $order->id,
-                $request->input('status'),
-                $request->input('notes')
+                $request->input('status')
             );
 
         //Добавить статус в историю заказа
@@ -77,7 +76,7 @@ class OrderService
             {
                 $allow = [
                     Order::ORDER_STATUS_CONFIRMED,
-                    Order::ORDER_STATUS_CANCELED_BY_SHOP,
+                    Order::ORDER_STATUS_CANCELED_BY_SELLER,
                 ];
                 break;
             }
@@ -85,7 +84,7 @@ class OrderService
             {
                 $allow = [
                     Order::ORDER_STATUS_SENT,
-                    Order::ORDER_STATUS_CANCELED_BY_SHOP,
+                    Order::ORDER_STATUS_CANCELED_BY_SELLER,
                 ];
                 break;
             }

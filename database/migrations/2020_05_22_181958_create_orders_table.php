@@ -19,32 +19,20 @@ class CreateOrdersTable extends Migration
 
             $table->unsignedBigInteger('delivery_profile_id');
 
+            $table->unsignedBigInteger('payment_id');
+
             $table->unsignedDecimal('cost');
-
-            $table->unsignedBigInteger('pay_system');
-
-            $table
-                ->enum('delivery_service', [
-                    'cdek',
-                    'energy',
-                    'courier',
-                ])
-            ->comment('Служба доставки');
 
             $table
                 ->unsignedTinyInteger('status')
                 ->default(0);
-
-            $table
-                ->string('notes')
-                ->nullable();
 
             $table->softDeletes();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('delivery_profile_id')->references('id')->on('orders_delivery_profiles');
-            $table->foreign('pay_system')->references('id')->on('payment_options');
+            $table->foreign('payment_id')->references('id')->on('payments');
         });
     }
 

@@ -36,7 +36,7 @@
             </div>
             <div name="1" class="userRegContent userRegContent-active">
 
-                {{ Form::open(['route' => [ 'user.store-application-to-seller'], 'method' => 'post', 'class' => 'forms-sample']) }}
+                {{ Form::open(['route' => ['user.store-application-to-seller'], 'method' => 'post', 'class' => 'forms-sample']) }}
                 {{ Form::hidden('type_shop', $user::TYPE1) }}
                 <div class="userRegRow">
                     <div class="userRegInp">

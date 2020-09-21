@@ -3,8 +3,6 @@
 namespace App\Repositories;
 
 use App\Models\Order;
-use App\Models\OrderItem;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 
 class OrderRepository
@@ -49,13 +47,12 @@ class OrderRepository
     /**
      * Изменить статус заказа
      *
-     * @param int         $id
-     * @param int         $status
-     * @param string|null $notes
+     * @param int $id
+     * @param int $status
      *
      * @return Order
      */
-    public function changeStatus(int $id, int $status, string $notes = null): Order
+    public function changeStatus(int $id, int $status): Order
     {
         /** @var Order $order */
         $order = $this
@@ -63,7 +60,6 @@ class OrderRepository
             ->firstOrFail();
 
         $order->status = $status;
-        $order->notes = $notes ?? $order->notes;
 
         $order->save();
 
@@ -105,28 +101,42 @@ class OrderRepository
      * Список заказов продавца по статусам
      *
      * @param array $statuses
+     * @param int   $sellerId
+     * @param array $sort
      *
-     * @return LengthAwarePaginator
+     * @return Builder
      *
      * @author Anton Reviakin
      */
-    public function listOrdersShopByStatus(array $statuses): LengthAwarePaginator
+    public function listOrdersSellerByStatus(array $statuses, int $sellerId, array $sort = ['id', 'desc']): Builder
     {
-        return Order::whereIn('status', $statuses)
-            ->whereHas('items', function ($query) {
-                $query->whereHas('product', function ($query) {
-                    $query->where('user_id', auth()->user()->id);
-                });
-            })
-            ->orderBy('id', 'desc')
-            ->paginate(10);
+        return $this
+            ->model
+            ->query()
+            ->whereIn('status', $statuses)
+            ->ofSeller($sellerId)
+            ->with('orderHold')
+            ->orderBy($sort[0], $sort[1]);
     }
 
-    public function getOrderItemsOnlyThisShop(int $order_id)
+    /**
+     * Детали заказа
+     *
+     * @param int $id
+     * @param int $sellerId
+     *
+     * @return Builder
+     */
+    public function getOrderDetailsForSeller(int $id, int $sellerId): Builder
     {
-        return OrderItem::where('order_id', $order_id)
-            ->whereHas('product', function ($query) {
-                $query->where('user_id', auth()->user()->id);
-            })->get();
+        return $this
+            ->model
+            ->query()
+            ->where('id', $id)
+            ->ofSeller($sellerId)
+            ->with('currentStatus')     //Текущий статус заказа
+            ->with('itemsWithProducts') //Продукты в заказе
+            ->with('deliveryProfile')   //Профиль доставки
+            ->with('payment');          //Оплата
     }
 }
