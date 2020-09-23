@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Shop;
 
+use App\Models\Order;
 use Illuminate\Foundation\Http\FormRequest;
 
 class OrderChangeStatusRequest extends FormRequest
@@ -23,10 +24,21 @@ class OrderChangeStatusRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             'order_id' => 'bail|required|integer',
             'status'   => 'bail|required|integer',
         ];
+
+        $cancel = [
+            Order::ORDER_STATUS_CANCELED_BY_BUYER,
+            Order::ORDER_STATUS_CANCELED_BY_SELLER,
+        ];
+
+        if (in_array($this->input('status'), $cancel)) {
+            $rules['notes'] = 'required|string|between:10,1000';
+        }
+
+        return $rules;
     }
 
     public function messages()
@@ -37,6 +49,9 @@ class OrderChangeStatusRequest extends FormRequest
 
             'status.required' => 'Не выбран статус заказа',
             'status.integer'  => 'Не выбран статус заказа',
+
+            'notes.required' => 'Введите причину отмены',
+            'notes.between'  => 'Описание должно быть от :min до :max символов',
         ];
     }
 }

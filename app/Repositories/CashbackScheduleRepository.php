@@ -9,11 +9,13 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
-class CashbackScheduleRepository extends BaseRepository
+class CashbackScheduleRepository
 {
+    /** @var CashbackSchedule $model */
+    private $model;
+
     public function __construct(CashbackSchedule $model)
     {
-        parent::__construct($model);
         $this->model = $model;
     }
 
@@ -69,24 +71,5 @@ class CashbackScheduleRepository extends BaseRepository
         return $this->model::query()
             ->where(compact('id'))
             ->update(compact('payout_complete'));
-    }
-
-    /**
-     * История начислений
-     *
-     * @param int            $userId
-     * @param array|string[] $sort
-     *
-     * @return LengthAwarePaginator
-     */
-    public function historyCompletedByUser(int $userId, array $sort = ['id', 'asc']): LengthAwarePaginator
-    {
-        return $this->model
-            ->query()
-            ->with('paySystem')
-            ->where('user_id', $userId)
-            ->where('payout_complete', true)
-            ->orderBy($sort)
-            ->paginate(10);
     }
 }

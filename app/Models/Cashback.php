@@ -26,9 +26,17 @@ class Cashback extends Model
         'period',
     ];
 
-    public function shedules()
+    public function schedules()
     {
         return $this->hasMany(CashbackSchedule::class);
+    }
+
+    public function nextCashbackPayout()
+    {
+        return $this
+            ->hasOne(CashbackSchedule::class)
+            ->where('payout_complete', false)
+            ->orderBy('id');
     }
 
     public function users()

@@ -1,3 +1,8 @@
+@php
+    /** @var \Illuminate\Pagination\LengthAwarePaginator $cashbacks */
+@endphp
+@dump($cashbacks)
+
 @extends('layouts.admin')
 
 @section('content')

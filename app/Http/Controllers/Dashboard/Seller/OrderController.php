@@ -134,8 +134,14 @@ class OrderController extends Controller
         return response($order, Response::HTTP_OK);
     }
 
-
-    public function orderDetails(int $order)
+    /**
+     * Детали заказа
+     *
+     * @param int $order
+     *
+     * @return OrderDetailsResource
+     */
+    public function orderDetails(int $order): OrderDetailsResource
     {
         $details = $this
             ->orderRepository
@@ -143,7 +149,7 @@ class OrderController extends Controller
                 $order,
                 auth()->user()->id
             )
-        ->first();
+            ->first();
 
         return OrderDetailsResource::make($details);
     }

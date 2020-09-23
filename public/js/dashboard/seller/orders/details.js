@@ -76,8 +76,8 @@
                     </div>
                 </div>
             </div>
-            <div style="margin: 2rem auto 0 auto; width: 200px;">
-                <button type="button" class="btn lcPageMenu__btn">Закрыть</button>
+            <div class="cardform__row" style="margin: 2rem auto 0 auto; width: 150px;">
+                <button type="button" class="btn lcPageMenu__btn" id="close-popup-orderDetails">Закрыть</button>
             </div>
         </form>
     `;
@@ -88,37 +88,60 @@
     const showOrderDetailsPopup = (url) => {
         $("#popup-orderDetails .popUp__body").html("");
 
-        $("#popup-orderDetails").fadeIn("normal", function () {
-            getOrderDetails(url, (details) => {
-                details = details.data;
+        //Убрать скролл страницы
+        $("body").addClass("of-disabled");
 
-                $("#popup-orderDetails .popUp__body").html(
-                    Helpers.templateParser(
-                        orderDetailsTpl,
-                        {
-                            //Шапка
-                            orderId        : details["orderId"],
-                            orderCreated   : details["orderCreated"]["formatted"],
-                            orderStatus    : details["orderStatus"]["formatted"],
-                            orderStatusDate: details["orderStatusDate"]["formatted"],
+        $("#popup-orderDetails")
+            .fadeIn("normal", function () {
+                getOrderDetails(url, (details) => {
+                    details = details.data;
 
-                            //Список товаров
-                            orderProducts: renderProducts(details["products"], details["productsTotalPrices"]),
+                    $("#popup-orderDetails .popUp__body").html(
+                        Helpers.templateParser(
+                            orderDetailsTpl,
+                            {
+                                //Шапка
+                                orderId        : details["orderId"],
+                                orderCreated   : details["orderCreated"]["formatted"],
+                                orderStatus    : details["orderStatus"]["formatted"],
+                                orderStatusDate: details["orderStatusDate"]["formatted"],
 
-                            //Доставка
-                            deliveryName   : details["deliveryName"],
-                            deliveryPhone  : details["deliveryPhone"],
-                            deliveryAddress: details["deliveryAddress"],
-                            deliveryService: details["deliveryService"]["formatted"],
+                                //Список товаров
+                                orderProducts: renderProducts(details["products"], details["productsTotalPrices"]),
 
-                            //Оплата
-                            payMethod: details["payMethod"],
-                            payStatus: details["payStatus"]["formatted"],
-                            payDate  : details["payDate"]["formatted"]
-                        }
-                    )
-                );
+                                //Доставка
+                                deliveryName   : details["deliveryName"],
+                                deliveryPhone  : details["deliveryPhone"],
+                                deliveryAddress: details["deliveryAddress"],
+                                deliveryService: details["deliveryService"]["formatted"],
+
+                                //Оплата
+                                payMethod: details["payMethod"],
+                                payStatus: details["payStatus"]["formatted"],
+                                payDate  : details["payDate"]["formatted"]
+                            }
+                        )
+                    );
+
+                    $(this).addClass("is-shown");
+
+                    addListenersForHidePopup();
+                });
             });
+    };
+
+    /**
+     * Обработчики для закрытия окна
+     */
+    const addListenersForHidePopup = () => {
+        //Закрытие по заднему слою
+        $('.popUp__layer').on("click", function () {
+            hideOrderDetailsPopup();
+        });
+
+        //Закрытие по кнопке
+        $("#close-popup-orderDetails").on("click", function () {
+            hideOrderDetailsPopup();
         });
     };
 
@@ -126,9 +149,12 @@
      * Скрыть модальное окно
      */
     const hideOrderDetailsPopup = () => {
-        $('#popup-changeOrderStatus').fadeOut("normal", function () {
-            window.location.reload();
-        });
+        $('#popup-orderDetails')
+            .stop()
+            .fadeOut("normal", function () {
+                $(this).removeClass("is-shown");
+                $("body").removeClass("of-disabled");
+            });
     };
 
     /**
@@ -143,7 +169,6 @@
 
         axios.get(url)
             .then(response => {
-                console.log(response);
                 if (undefined !== cb) cb(response.data);
             })
             .catch(error => {
@@ -214,7 +239,7 @@
     $(document).ready(function () {
         $(".order-showDetails").on("click", function (e) {
             e.preventDefault();
-            showOrderDetailsPopup($(this).data("url"));
+            showOrderDetailsPopup($(this).attr("href"));
         });
     });
 }());

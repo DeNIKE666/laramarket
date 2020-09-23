@@ -17,11 +17,11 @@
             <div class="cardform__row" style="margin-top: 0.5rem;">
                 <div class="cardform__row__col1">
                     <label for="order_notes">Описание</label>
-                    <textarea id="order_notes" class="input-card-full" style="height: 150px; resize: none;"></textarea>
+                    <textarea id="order_notes" class="input-card-full" style="height: 150px; margin-bottom: 0; resize: none;"></textarea>
                     <div class="error" style="display: none; padding: 10px 0;"></div>
                 </div>
             </div>
-            <div>
+            <div class="cardform__row" style="margin: 2rem auto 0 auto;">
                 <button type="submit" class="btn lcPageMenu__btn form-submit">Сохранить</button>
             </div>
         </form>
@@ -34,8 +34,17 @@
         const orderId = order.data("id");
         const orderStatus = order.data("status");
 
-        //Если статус заказа "Отправлен"
-        if (orderStatus === 3) return;
+        //Если статус заказа "Новый" или "Отправлен"
+        if ([0, 3].indexOf(orderStatus) > -1) {
+            $("#popup-changeOrderStatus .popUp__body")
+                .html("На данном этапе нельзя<br/>изменить статус заказа")
+                .css({
+                    "text-align" : "center",
+                    "line-height": "1.5rem",
+                });
+            $("#popup-changeOrderStatus").fadeIn();
+            return;
+        }
 
         const allowStatuses = getOrdersStatusByCurrentStatus(orderStatus);
 
@@ -94,7 +103,7 @@
         for (const key in allowStatusesKeys) {
             const status = {
                 status: allowStatusesKeys[key],
-                title: ordersStatus[allowStatusesKeys[key]]
+                title : ordersStatus[allowStatusesKeys[key]]
             };
 
             allowStatuses.push(status);
@@ -116,8 +125,8 @@
 
         const data = {
             order_id: orderId,
-            status: $("#order_status").val(),
-            notes: $("#order_notes").val()
+            status  : $("#order_status").val(),
+            notes   : $("#order_notes").val()
         };
 
         axios.patch(`/dashboard/seller/order/${orderId}/status`, data)

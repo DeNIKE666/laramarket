@@ -8,7 +8,7 @@ use App\Models\Cashback;
 use App\Models\CashbackSchedule;
 use App\Models\Order;
 use App\Models\OrderItem;
-use App\Repositories\CashbackScheduleRepository;
+use App\Repositories\CashbackRepository;
 use App\Repositories\PaymentsScheduleRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Response;
@@ -27,7 +27,7 @@ class CashbackScheduleService
 
     public function __construct()
     {
-        $this->cashbackScheduleRepository = app(CashbackScheduleRepository::class);
+        $this->cashbackScheduleRepository = app(CashbackRepository::class);
     }
 
     /**

@@ -8,7 +8,6 @@ use App\Models\Payment;
 use App\Models\PersonalHistoryAccount;
 use App\Models\User;
 use App\Models\Withdraw;
-use App\Repositories\CashbackScheduleRepository;
 use App\Repositories\PaymentsRepository;
 use App\Repositories\PaySystemsRepository;
 use App\Repositories\PersonalHistoryAccountRepository;
@@ -39,9 +38,6 @@ class FinanceController extends Controller
     /** @var PersonalHistoryAccountRepository $personalHistoryAccountRepository */
     private $personalHistoryAccountRepository;
 
-    /** @var CashbackScheduleRepository $cashbackScheduleRepository */
-    private $cashbackScheduleRepository;
-
     public function __construct()
     {
         $this->commissionsService = app(CommissionsService::class);
@@ -50,7 +46,6 @@ class FinanceController extends Controller
         $this->paySystemsRepository = app(PaySystemsRepository::class);
         $this->paymentsRepository = app(PaymentsRepository::class);
         $this->personalHistoryAccountRepository = app(PersonalHistoryAccountRepository::class);
-        $this->cashbackScheduleRepository = app(CashbackScheduleRepository::class);
     }
 
     /**
@@ -115,7 +110,7 @@ class FinanceController extends Controller
             ->setCvc($request->input('cvv'))
             ->setAmount($request->input('amount'))
             ->setCallback(route('buyer.finance.deposit_via_card_callback', [
-                'user'            => auth()->user()->id,
+                'user'    => auth()->user()->id,
                 'payment' => $payment->id,
             ]))
             ->createOrder()
@@ -225,19 +220,5 @@ class FinanceController extends Controller
             ],
             'paginator'  => view('pagination.default', compact('paginator'))->render(),
         ];
-    }
-
-    /**
-     * История начислений Кэшбэка
-     *
-     * @return View
-     */
-    public function historyOfCompletedCashback(): View
-    {
-        $history = $this
-            ->cashbackScheduleRepository
-            ->historyCompletedByUser(auth()->user()->id);
-
-        return view('dashboard.user.cashback', compact('history'));
     }
 }

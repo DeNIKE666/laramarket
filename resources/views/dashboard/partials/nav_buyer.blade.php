@@ -10,8 +10,8 @@
    class="{{ (request()->is('dashboard/buyer/history_orders*')) ? 'active' : '' }}">
     История заказов
 </a>
-<a href="{{ route('buyer.finance.history.cashback-account') }}"
-   class="{{ (request()->is('dashboard/buyer/list_cashback*')) ? 'active' : '' }}">
+<a href="{{ route('buyer.cashback.index') }}"
+   class="{{ (request()->is('dashboard/buyer/cashback*')) ? 'active' : '' }}">
     Кэшбэк
 </a>
 <a href="{{ route('buyer.finance.deposit_withdraw') }}"

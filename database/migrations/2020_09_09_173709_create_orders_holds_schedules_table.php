@@ -36,6 +36,7 @@ class CreateOrdersHoldsSchedulesTable extends Migration
 
             $table
                 ->timestamp('expired_at')
+                ->nullable()
                 ->comment('Дата окончания холда');
 
             $table->timestamps();

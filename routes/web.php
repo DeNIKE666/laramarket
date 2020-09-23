@@ -117,6 +117,9 @@ Route::group(
         //Изменить статус заказа
         Route::patch('/order/{order}/status', 'OrderController@changeStatus')->name('order.change_status');
 
+        #################### CASHBACK ####################
+        Route::get('/cashback', 'CashbackController@index')->name('cashback.index');
+
         #################### ФИНАНСЫ ####################
         //Пополнение и вывод
         Route::get('/finance/deposit-withdraw', 'FinanceController@depositOrWithdrawForm')->name('finance.deposit_withdraw');
@@ -130,7 +133,6 @@ Route::group(
 
         //История движения средств
         Route::get('/finance/history/personal', 'FinanceController@historyOfPersonalAccount')->name('finance.history.personal-account');
-        Route::get('/finance/history/cashback', 'FinanceController@historyOfCompletedCashback')->name('finance.history.cashback-account');
 
         //Route::get('/data_seller', 'UserController@data_seller')->name('data_seller');
 //        Route::resource('/messages', 'MessageController');

@@ -18,11 +18,11 @@
         const ordersStatus = @json(__('orders/status'));
     </script>
 
-    <script src="{{ asset('js/helpers.js') }}"></script>
     <script src="{{ asset('js/dashboard/seller/orders/changeStatus.js') }}"></script>
 @endpush
 
 @section('content')
+    {{-- Модальное окно изменения статуса заказа --}}
     <div id="popup-changeOrderStatus" class="popUp popUp-pay">
         <div class="popUp__content" style="justify-content: start; height: fit-content;">
             <div class="popUp__title">
@@ -95,7 +95,7 @@
                                               d="M15.013,3.923 L14.346,4.590 L11.233,1.478 L11.900,0.810 C12.196,0.514 12.641,0.514 12.938,0.810 L15.013,2.886 C15.309,3.182 15.309,3.627 15.013,3.923 ZM6.080,12.896 L2.935,9.751 L10.168,2.519 L13.312,5.663 L6.080,12.896 ZM0.412,15.412 L1.894,10.816 L5.007,13.929 L0.412,15.412 Z"
                                         />
                                    </svg>
-                                   <a class="order-changeDetails" data-id="{{ $order->id }}" href="#">
+                                   <a class="order-showDetails" href="{{ route('seller.order.details', ['order' => $order->id]) }}">
                                         Детали заказа
                                    </a>
                                 </span>

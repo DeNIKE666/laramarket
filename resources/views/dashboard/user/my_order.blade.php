@@ -28,7 +28,7 @@
                             <p style="text-align: center;"></p>
                         </div>
                     </div>
-                    <div class="cardform__row" style="margin-top: 20px;">
+                    <div class="cardform__row" style="margin-top: 1rem;">
                         <button type="button" class="btn lcPageMenu__btn" id="statusConfirm_button">
                             @lang('orders/actions.confirm')
                         </button>

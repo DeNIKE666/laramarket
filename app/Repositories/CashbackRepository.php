@@ -5,6 +5,7 @@ namespace App\Repositories;
 
 
 use App\Models\Cashback;
+use Illuminate\Database\Eloquent\Builder;
 
 class CashbackRepository
 {
@@ -87,5 +88,25 @@ class CashbackRepository
             ->update([
                 'period' => $period,
             ]);
+    }
+
+    /**
+     * История начислений
+     *
+     * @param int            $userId
+     * @param array|string[] $sort
+     *
+     * @return Builder
+     */
+    public function listInProgress(int $userId, array $sort = ['id', 'desc']): Builder
+    {
+        return $this
+            ->model
+            ->query()
+            ->with('nextCashbackPayout')
+            ->with('schedules')
+            ->where('user_id', $userId)
+            ->where('status', 2)
+            ->orderBy($sort[0], $sort[1]);
     }
 }
